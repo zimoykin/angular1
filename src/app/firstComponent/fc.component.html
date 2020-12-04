@@ -1,0 +1,13 @@
+<div class="card">
+    <h2> {{ title }} </h2>
+    <div class='flex'> 
+        <div class="card">
+        <p> {{about}} </p>
+    </div>
+        <div class='card'>
+            <img src="{{imageUrl}}"/>
+        </div>  
+    </div>
+   <input type="text" (input)="inputHandler($event)">
+    
+</div>
