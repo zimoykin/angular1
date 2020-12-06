@@ -5,14 +5,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { fcComponent } from './firstComponent/fc.component';
 import { FormComponent } from './form/form.component';
+import { HeaderComponent } from './header/header.component';
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 @NgModule({
   declarations: [
     AppComponent,
     fcComponent,
-    FormComponent
+    FormComponent,
+    HeaderComponent
   ],
   imports: [
+    MDBBootstrapModule.forRoot(),
     BrowserModule,
     AppRoutingModule
   ],

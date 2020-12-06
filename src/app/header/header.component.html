@@ -1,0 +1,51 @@
+<header>
+    <nav class="navbar navbar-expand-md" id="navbar">
+        <div class="container">
+            <div class="nav-toggler" id="nav-toggler">
+                <span> menu1 </span>
+                <span> menu2 </span>
+                <span> menu3 </span>
+                <span> menu4 </span>
+            </div>
+            <div>
+                <button class="btn btn-light" id="loginButton" (click)="clickLogin()">
+                    {{ loginName }}
+                </button>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+
+<div class="LoginNav" id='loginPanel' [style.width.%]="showPanel()">
+       
+    <div class="row">
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+            <button class="bg-dark text-light" (click)="clickLogin()"> X Close </button>
+        </div>
+        <div class="col-md-6"></div>
+    </div>
+
+    <div class="card bg-dark">
+        <div class="card-body">
+            <form #userLogin action="javascript:void(0);" (submit)="login(userLogin.value)">
+                <div class="form-group">
+                    <label for="login"> Username or email </label>
+                    <input type="username" name="login" class="form-control" id="login" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password"> Password </label>
+                    <input type="password" name="password" class="form-control" id="password" required>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-success">
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

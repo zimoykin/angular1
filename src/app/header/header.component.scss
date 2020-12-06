@@ -1,0 +1,76 @@
+.nav-toggler {
+    display: block;
+    margin: 0 auto;
+    width: 1450px;
+    padding: 3px;
+    transition: 1;
+}
+
+.nav-toggler span {
+    border: 3px solid white;
+    border-radius: 1vh;
+    padding: 0.5rem;
+    margin: 0.3rem;
+    background-color: rgb(255, 215, 255);
+    cursor: pointer;
+}
+
+.nav-toggler :hover {
+    background-color: black;
+    color: rgb(255, 215, 255);
+    border: 2px solid salmon;
+}
+
+.login button {
+    background-color: transparent;
+    border-radius: 20px;
+    border: 3px solid seagreen;
+    color: seagreen;
+}
+
+header {
+    width: 100%;
+    background-color: lightgray;
+    position: fixed;
+    z-index: 997;
+}
+
+
+.LoginNav {
+    position: fixed;
+    width: 350px;
+    height: 100%;
+    z-index: 998;
+    background-color: rgba(0,0,0,0.7);
+    right: 0;
+    overflow-x: hidden;
+    transition: 0.5s;
+}
+
+#formContent {
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
+    background: #fff;
+    padding: 30px;
+    width: 90%;
+    max-width: 450px;
+    position: relative;
+    padding: 0px;
+    -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+    text-align: center;
+  }
+
+.menuitem {
+    text-align: right;
+    font-weight: lighter;
+    width: 75%;
+    padding: 2px;
+    margin: 5px;
+    color: black;
+    cursor: pointer;
+}
+.menuitem:hover {
+    background-color: lemonchiffon;
+    cursor: pointer;
+}
