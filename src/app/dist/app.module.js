@@ -11,7 +11,7 @@ var platform_browser_1 = require("@angular/platform-browser");
 var core_1 = require("@angular/core");
 var app_routing_module_1 = require("./app-routing.module");
 var app_component_1 = require("./app.component");
-var fc_component_1 = require("./firstComponent/fc.component");
+var blog_component_1 = require("./blog/blog.component");
 var form_component_1 = require("./form/form.component");
 var header_component_1 = require("./header/header.component");
 var angular_bootstrap_md_1 = require("angular-bootstrap-md");
@@ -23,7 +23,7 @@ var AppModule = /** @class */ (function () {
         core_1.NgModule({
             declarations: [
                 app_component_1.AppComponent,
-                fc_component_1.fcComponent,
+                blog_component_1.blogComponent,
                 form_component_1.FormComponent,
                 header_component_1.HeaderComponent
             ],

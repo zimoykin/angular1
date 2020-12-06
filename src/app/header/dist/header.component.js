@@ -8,6 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.HeaderComponent = void 0;
 var core_1 = require("@angular/core");
+var Constants_1 = require("../../Model/Constants");
+var jwt_decode_1 = require("jwt-decode");
 var HeaderComponent = /** @class */ (function () {
     function HeaderComponent(httpClient, cookieService) {
         this.httpClient = httpClient;
@@ -42,6 +44,21 @@ var HeaderComponent = /** @class */ (function () {
         else {
             this.loginName = "login";
         }
+        var token = this.cookieService.get('jwt');
+        if (token != null && token != '') {
+            var decoded = jwt_decode_1["default"](token);
+            console.log(decoded);
+            console.log(Math.floor((new Date).getTime() / 1000));
+            if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
+                console.log('token is expired');
+                this.refresh().subscribe(function (nw) {
+                    console.log('wwwww');
+                });
+            }
+            else {
+                console.log('token is ok');
+            }
+        }
     };
     HeaderComponent.prototype.clickLogin = function () {
         var _this = this;
@@ -67,7 +84,7 @@ var HeaderComponent = /** @class */ (function () {
         });
     };
     HeaderComponent.prototype.authorize = function (login, password) {
-        var uri = "http://10.0.0.102:8000/api/users/login";
+        var uri = Constants_1.Constants.server + "/api/users/login";
         var loginpass = (login + ":" + password);
         loginpass = btoa(loginpass);
         var authrizationData = ("Basic " + loginpass);
@@ -77,6 +94,19 @@ var HeaderComponent = /** @class */ (function () {
         return this.httpClient.post(uri, null, { headers: {
                 'Authorization': authrizationData
             } });
+    };
+    HeaderComponent.prototype.refresh = function () {
+        var _this = this;
+        var ref = localStorage.getItem('ref');
+        var uri = Constants_1.Constants.server + "api/users/refresh";
+        var body = JSON.stringify({ refreshToken: ref });
+        var result = this.httpClient.post(uri, body).subscribe(function (response) {
+            console.log(response);
+            _this.cookieService.set('jwt', response.accessToken);
+            _this.cookieService.set('username', response.username);
+            localStorage.setItem('ref', response.refreshToken);
+            return true;
+        });
     };
     __decorate([
         core_1.HostListener("window:scroll", ["$event"])

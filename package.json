@@ -23,6 +23,8 @@
     "@angular/router": "~9.0.3",
     "@material-ui/icons": "^4.11.2",
     "angular-bootstrap-md": "^10.1.1",
+    "jwt-decode": "^3.1.2",
+    "material-ui-icons": "^1.0.0-beta.36",
     "ngx-cookie-service": "^11.0.2",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",

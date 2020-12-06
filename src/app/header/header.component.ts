@@ -1,7 +1,12 @@
 import { Component, HostListener, ElementRef, ViewChild, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponseBase } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service'
+import { CookieService } from 'ngx-cookie-service'; 
+import { Constants as K, DecodedToken, response as resp, response } from '../../Model/Constants'
+import jwtDecode from 'jwt-decode'
+import { Refresh } from '@material-ui/icons';
+import { R3ResolvedDependencyType } from '@angular/compiler';
+import { promise } from 'protractor';
 
 @Component({
   selector: 'app-header',
@@ -49,8 +54,25 @@ export class HeaderComponent implements OnInit {
       this.loginName = "login"
    }
 
-  }
+   const token = this.cookieService.get('jwt')
+   if (token != null && token != '') {
+      let decoded: DecodedToken = jwtDecode(token)
+      console.log(decoded)
+      console.log ( Math.floor((new Date).getTime() / 1000)  )
+      if ( Math.floor((new Date).getTime() / 1000) > decoded.exp ) {
+          console.log ( 'token is expired' )
+        
+        this.refresh().subscribe ( nw =>  {
+            console.log('wwwww')
+        }
+          
+      } else {
+        console.log ( 'token is ok' )
+      }
+   }
 
+
+  }
 
   clickLogin () {
     this.showPanelLogin = !this.showPanelLogin
@@ -83,7 +105,7 @@ export class HeaderComponent implements OnInit {
 
     authorize (login, password): Observable<any> {
 
-      const uri = "http://10.0.0.102:8000/api/users/login"
+      const uri = `${K.server}/api/users/login`
       let loginpass = ( login + ":" + password )
       loginpass = btoa(loginpass)
 
@@ -93,8 +115,27 @@ export class HeaderComponent implements OnInit {
       console.log (password)
 
       return this.httpClient.post <any> (uri, null, { headers: { 
-            'Authorization' : authrizationData 
+          'Authorization' : authrizationData 
       }}  )
 
     }
+
+    refresh () : Observable<boolean> {
+
+      const ref = localStorage.getItem( 'ref' )
+      const uri = `${K.server}api/users/refresh`
+      const body = JSON.stringify( { refreshToken: ref } )
+
+      let result = this.httpClient.post(uri, body).subscribe ( (response: response) => { 
+
+        console.log(response)
+        this.cookieService.set('jwt', response.accessToken)
+        this.cookieService.set('username', response.username)
+        localStorage.setItem('ref', response.refreshToken)
+          
+        return true
+
+      })
+    }
+
 }
