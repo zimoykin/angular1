@@ -7,6 +7,7 @@ import { fcComponent } from './firstComponent/fc.component';
 import { FormComponent } from './form/form.component';
 import { HeaderComponent } from './header/header.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
   imports: [
     MDBBootstrapModule.forRoot(),
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule
   ],
   providers: [],

@@ -15,6 +15,7 @@ var fc_component_1 = require("./firstComponent/fc.component");
 var form_component_1 = require("./form/form.component");
 var header_component_1 = require("./header/header.component");
 var angular_bootstrap_md_1 = require("angular-bootstrap-md");
+var http_1 = require("@angular/common/http");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -29,6 +30,7 @@ var AppModule = /** @class */ (function () {
             imports: [
                 angular_bootstrap_md_1.MDBBootstrapModule.forRoot(),
                 platform_browser_1.BrowserModule,
+                http_1.HttpClientModule,
                 app_routing_module_1.AppRoutingModule
             ],
             providers: [],

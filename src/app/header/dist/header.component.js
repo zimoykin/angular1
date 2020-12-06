@@ -9,7 +9,9 @@ exports.__esModule = true;
 exports.HeaderComponent = void 0;
 var core_1 = require("@angular/core");
 var HeaderComponent = /** @class */ (function () {
-    function HeaderComponent() {
+    function HeaderComponent(httpClient, cookieService) {
+        this.httpClient = httpClient;
+        this.cookieService = cookieService;
         this.navElement = null;
         this.loginName = "login";
         this.showPanelLogin = false;
@@ -32,7 +34,15 @@ var HeaderComponent = /** @class */ (function () {
             this.navElement.classList.remove("navbar-shadow");
         }
     };
-    HeaderComponent.prototype.ngOnInit = function () { };
+    HeaderComponent.prototype.ngOnInit = function () {
+        var userNamne = this.cookieService.get('username');
+        if (userNamne != '') {
+            this.loginName = userNamne;
+        }
+        else {
+            this.loginName = "login";
+        }
+    };
     HeaderComponent.prototype.clickLogin = function () {
         var _this = this;
         this.showPanelLogin = !this.showPanelLogin;
@@ -47,8 +57,26 @@ var HeaderComponent = /** @class */ (function () {
     HeaderComponent.prototype.showPanel = function () {
         return this.showPanelLogin ? 45 : 0;
     };
-    HeaderComponent.prototype.login = function (data) {
-        console.log(data.password);
+    HeaderComponent.prototype.login = function (login, password) {
+        var _this = this;
+        this.authorize(login.value, password.value).subscribe(function (response) {
+            console.log(response);
+            _this.cookieService.set('jwt', response.accessToken);
+            _this.cookieService.set('username', response.username);
+            localStorage.setItem('ref', response.refreshToken);
+        });
+    };
+    HeaderComponent.prototype.authorize = function (login, password) {
+        var uri = "http://10.0.0.102:8000/api/users/login";
+        var loginpass = (login + ":" + password);
+        loginpass = btoa(loginpass);
+        var authrizationData = ("Basic " + loginpass);
+        console.log(authrizationData);
+        console.log(login);
+        console.log(password);
+        return this.httpClient.post(uri, null, { headers: {
+                'Authorization': authrizationData
+            } });
     };
     __decorate([
         core_1.HostListener("window:scroll", ["$event"])

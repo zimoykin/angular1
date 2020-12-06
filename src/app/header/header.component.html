@@ -30,7 +30,7 @@
 
     <div class="card bg-dark">
         <div class="card-body">
-            <form #userLogin action="javascript:void(0);" (submit)="login(userLogin.value)">
+            <form #userLogin action="javascript:void(0);" (submit)="login(userLogin.login, userLogin.password)">
                 <div class="form-group">
                     <label for="login"> Username or email </label>
                     <input type="username" name="login" class="form-control" id="login" required>
