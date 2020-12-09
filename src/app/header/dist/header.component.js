@@ -8,57 +8,39 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.HeaderComponent = void 0;
 var core_1 = require("@angular/core");
-var Constants_1 = require("../../Model/Constants");
-var jwt_decode_1 = require("jwt-decode");
+var AuthrizationService_1 = require("../_services/AuthrizationService");
 var HeaderComponent = /** @class */ (function () {
     function HeaderComponent(httpClient, cookieService) {
         this.httpClient = httpClient;
         this.cookieService = cookieService;
         this.navElement = null;
-        this.loginName = "login";
         this.showPanelLogin = false;
+        this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
     }
     HeaderComponent.prototype.ngAfterViewInit = function () {
-        this.navElement = document.getElementById("navbar");
+        this.navElement = document.getElementById('navbar');
     };
-    //@ViewChild('loginPanel') loginPanel: ElementRef;
     HeaderComponent.prototype.onScroll = function ($event) {
         var scrollFactor = 100;
         var opacity = (window.pageYOffset / scrollFactor);
         opacity = opacity < 1 ? opacity : 1;
         if (opacity <= 1) {
-            this.navElement.style.backgroundColor = "rgba(255, 215, 235, " + opacity + ")";
+            this.navElement.style.backgroundColor = 'rgba(255, 215, 235, ' + opacity + ')';
         }
         if (window.pageYOffset / scrollFactor > 1) {
-            this.navElement.classList.add("navbar-shadow");
+            this.navElement.classList.add('navbar-shadow');
         }
         else {
-            this.navElement.classList.remove("navbar-shadow");
+            this.navElement.classList.remove('navbar-shadow');
         }
     };
     HeaderComponent.prototype.ngOnInit = function () {
+        var _this = this;
         var userNamne = this.cookieService.get('username');
-        if (userNamne != '') {
-            this.loginName = userNamne;
-        }
-        else {
-            this.loginName = "login";
-        }
-        var token = this.cookieService.get('jwt');
-        if (token != null && token != '') {
-            var decoded = jwt_decode_1["default"](token);
-            console.log(decoded);
-            console.log(Math.floor((new Date).getTime() / 1000));
-            if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
-                console.log('token is expired');
-                this.refresh().subscribe(function (nw) {
-                    console.log('wwwww');
-                });
+        this.loginName.subscribe(function (observer) {
+            if (_this.auth.isJwtOk()) {
             }
-            else {
-                console.log('token is ok');
-            }
-        }
+        });
     };
     HeaderComponent.prototype.clickLogin = function () {
         var _this = this;
@@ -75,41 +57,12 @@ var HeaderComponent = /** @class */ (function () {
         return this.showPanelLogin ? 45 : 0;
     };
     HeaderComponent.prototype.login = function (login, password) {
-        var _this = this;
-        this.authorize(login.value, password.value).subscribe(function (response) {
-            console.log(response);
-            _this.cookieService.set('jwt', response.accessToken);
-            _this.cookieService.set('username', response.username);
-            localStorage.setItem('ref', response.refreshToken);
-        });
-    };
-    HeaderComponent.prototype.authorize = function (login, password) {
-        var uri = Constants_1.Constants.server + "/api/users/login";
-        var loginpass = (login + ":" + password);
-        loginpass = btoa(loginpass);
-        var authrizationData = ("Basic " + loginpass);
-        console.log(authrizationData);
-        console.log(login);
-        console.log(password);
-        return this.httpClient.post(uri, null, { headers: {
-                'Authorization': authrizationData
-            } });
-    };
-    HeaderComponent.prototype.refresh = function () {
-        var _this = this;
-        var ref = localStorage.getItem('ref');
-        var uri = Constants_1.Constants.server + "api/users/refresh";
-        var body = JSON.stringify({ refreshToken: ref });
-        var result = this.httpClient.post(uri, body).subscribe(function (response) {
-            console.log(response);
-            _this.cookieService.set('jwt', response.accessToken);
-            _this.cookieService.set('username', response.username);
-            localStorage.setItem('ref', response.refreshToken);
-            return true;
+        this.auth.authorize(login.value, password.value).subscribe(function (val) {
+            console.log(val);
         });
     };
     __decorate([
-        core_1.HostListener("window:scroll", ["$event"])
+        core_1.HostListener('window:scroll', ['$event'])
     ], HeaderComponent.prototype, "onScroll");
     HeaderComponent = __decorate([
         core_1.Component({

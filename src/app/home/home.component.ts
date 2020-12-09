@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service'
-import { Constants as K } from '../../Model/Constants'
+import { CookieService } from 'ngx-cookie-service';
+import { Constants as K } from '../../Model/Constants';
+import { Authorization } from '../_services/AuthrizationService'
+import { BlogModel } from '../../Model/BlogModel'
 
-
-export interface Blog {
-  title: string
-  description: string
-  imagesrc: string
-  id: string
-}
 
 @Component({
   selector: 'app-home',
@@ -20,42 +15,44 @@ export interface Blog {
 
 export class HomeComponent implements OnInit {
 
-  list: Blog[] = []
+  list: BlogModel[] = [];
 
-  constructor ( private httpClient: HttpClient, private cookieService: CookieService ) { }
-
+  constructor( private httpClient: HttpClient, private cookieService: CookieService ) { }
+  auth = new Authorization(this.cookieService, this.httpClient)
 
   ngOnInit(): void {
 
-    this.getAllBlog().subscribe (
+    this.getAllBlogs().subscribe (
       response => {
-          response.map ( post => {
-              this.list.push ({ title: post.title, 
+          response.map ( (post: BlogModel) => {
+              this.list.push ({ title: post.title,
                 description: post.description,
-                imagesrc: post.image,
-                id: post.id })
-          })
-  
+                image: post.image,
+                id: post.id });
+          });
+
        }
-    )
+    );
 
   }
 
-  getAllBlog(): Observable<any> {
+  getAllBlogs() : Observable <[BlogModel]> {
 
-    let accessToken = this.cookieService.get('jwt')
+    const blogs = new Observable<[BlogModel]>(obser => {
 
-    if (accessToken == null || accessToken == '') {
-      return
-    }
+      if (this.auth.isJwtOk) {
 
-    const token = `Bearer ${accessToken}`
-
-    return this.httpClient.get(`${K.server}/api/posts`, {
-      headers: {
-        'Authorization': token
+        this.httpClient.get(`${K.server}api/posts`, {
+          headers: { Authorization: this.auth.token }
+        }).subscribe ( (blogs: [BlogModel]) => {
+          obser.next (blogs)
+        })
       }
+
     })
+
+    return blogs
+
   }
 
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core'
-import { Blog } from '../home/home.component'
+import { BlogModel } from '../../Model/BlogModel'
 
 @Component ({
     selector: 'app-blog',
@@ -9,7 +9,7 @@ import { Blog } from '../home/home.component'
 
 export class blogComponent implements OnInit {
 
-    @Input() blog: Blog;
+    @Input() blog: BlogModel;
     @Input() index: number;
 
     ngOnInit () {}
