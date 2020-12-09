@@ -1,7 +1,7 @@
 import { Observable, observable, of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient } from '@angular/common/http';
-import { Constants as K, DecodedToken, response } from '../../Model/Constants';
+import { Constants as K, DecodedToken } from '../../Model/Constants';
 import jwtDecode from 'jwt-decode';
 import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';

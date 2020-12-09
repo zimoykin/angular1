@@ -10,9 +10,3 @@ export interface DecodedToken {
     name: string
     id: string
 }
-
-export class response {
-    accessToken: string;
-    refreshToken: string;
-    username: string
-  }

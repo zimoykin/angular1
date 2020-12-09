@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.response = exports.Constants = void 0;
+exports.Constants = void 0;
 var Constants = /** @class */ (function () {
     function Constants() {
     }
@@ -8,9 +8,3 @@ var Constants = /** @class */ (function () {
     return Constants;
 }());
 exports.Constants = Constants;
-var response = /** @class */ (function () {
-    function response() {
-    }
-    return response;
-}());
-exports.response = response;
