@@ -9,7 +9,7 @@
             </div>
             <div>
                 <button class="btn btn-light" id="loginButton" (click)="clickLogin()">
-                    {{ loginName }}
+                    {{ (loginName | async) }}
                 </button>
             </div>
         </div>

@@ -8,9 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.Authorization = void 0;
 var rxjs_1 = require("rxjs");
+var http_1 = require("@angular/common/http");
 var Constants_1 = require("../../Model/Constants");
 var jwt_decode_1 = require("jwt-decode");
-var operators_1 = require("rxjs/operators");
 var core_1 = require("@angular/core");
 // const stream$ = of(38,39,40,41,42);
 //
@@ -35,29 +35,41 @@ var Authorization = /** @class */ (function () {
         this.http = http;
         this.token = "Bearer " + this.cookieService.get('jwt');
     }
+    ///////////////////
     Authorization.prototype.isJwtOk = function () {
         var _this = this;
+        console.log("1 is jwt ok?");
         var token = this.cookieService.get('jwt');
-        if (token == null || token == undefined || token == '') {
+        var ref = localStorage.getItem('ref');
+        if (token == '' && ref != '') {
+            console.log("refresh?");
+            this.refresh().subscribe(function (val) {
+                return _this.isJwtOk();
+            });
+        }
+        else if (token == '') {
+            console.log('back');
             return false;
         }
         var decoded = jwt_decode_1["default"](token);
         if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
-            this.refresh().pipe(operators_1.map(function (val) {
-                return _this.isJwtOk();
-            }));
+            console.log("jwt explaim");
+            this.refresh().subscribe(function (val) {
+                console.log('check again');
+                _this.isJwtOk();
+            });
         }
         else {
+            console.log("jwt is ok");
             return true;
         }
     };
     Authorization.prototype.saveUser = function (user) {
         var _this = this;
-        var saved$ = new rxjs_1.Observable(function (obser) {
+        var saved$ = new rxjs_1.Observable(function () {
             _this.cookieService.set('jwt', user.accessToken);
             _this.cookieService.set('username', user.username);
             localStorage.setItem('ref', user.refreshToken);
-            obser.next(true);
         });
         return saved$;
     };
@@ -85,14 +97,22 @@ var Authorization = /** @class */ (function () {
     };
     Authorization.prototype.refresh = function () {
         var _this = this;
+        console.log("ref token start");
         var ref = localStorage.getItem('ref');
         var uri = Constants_1.Constants.server + "api/users/refresh";
         var body = JSON.stringify({ refreshToken: ref });
-        return this.http.post(uri, body).pipe(operators_1.map(function (data) {
-            _this.saveUser(data).subscribe(function (val) {
+        var headers = new http_1.HttpHeaders();
+        headers = headers.append('Content-Type', 'application/json');
+        var user$ = new rxjs_1.Observable(function (obser) {
+            _this.http.post(uri, body, { headers: headers })
+                .subscribe(function (user) {
+                console.log('2');
+                _this.saveUser(user);
+                obser.next(user);
+                obser.complete();
             });
-            return data;
-        }));
+        });
+        return user$;
     };
     Authorization = __decorate([
         core_1.Injectable({ providedIn: 'root' })

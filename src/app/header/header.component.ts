@@ -12,8 +12,10 @@ import { Observable } from 'rxjs';
 
 export class HeaderComponent implements OnInit {
 
-  navElement: HTMLElement = null;
+  navElement: HTMLElement = null
+
   public loginName: Observable <string>
+  
   showPanelLogin = false;
 
   auth = new Authorization(this.cookieService, this.httpClient)
@@ -47,14 +49,18 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
 
-   const userNamne = this.cookieService.get ('username');
+    const userName = this.cookieService.get('username')
+    this.loginName = new Observable<string>(obser => {
+      if (userName != '') { obser.next(userName) }
+      else { obser.next('LOGIN') }
+    })
 
-   this.loginName.subscribe( observer => {
-     
-    if (this.auth.isJwtOk()) {
+    this.loginName.subscribe(observer => {
 
-    }
-   })
+      if (this.auth.isJwtOk()) {
+
+      }
+    })
 
   }
 

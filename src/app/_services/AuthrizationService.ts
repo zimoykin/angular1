@@ -1,11 +1,12 @@
 import { Observable, observable, of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Constants as K, DecodedToken } from '../../Model/Constants';
 import jwtDecode from 'jwt-decode';
 import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { User } from '../../Model/User';
+import { HeaderComponent as hat} from '../header/header.component'
 
 // const stream$ = of(38,39,40,41,42);
 //
@@ -36,22 +37,34 @@ export class Authorization {
 
   public token = `Bearer ${this.cookieService.get('jwt')}`
 
+
+  ///////////////////
   isJwtOk(): boolean {
 
-    const token = this.cookieService.get('jwt');
+    console.log (`1 is jwt ok?`)
 
-    if (token == null || token == undefined || token == '') {
+    const token = this.cookieService.get('jwt')
+    const ref = localStorage.getItem ('ref')
+
+    if (token == '' && ref != '') {
+      console.log (`refresh?`)
+      this.refresh().subscribe( val => {
+        return this.isJwtOk()
+      })
+    } else if (token == '') {
+      console.log ('back')
       return false
     }
-
+    
     const decoded: DecodedToken = jwtDecode(token);
     if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
-
-      this.refresh().pipe(
-        map( val => {
-            return this.isJwtOk()
-          }))
+      console.log (`jwt explaim`)
+      this.refresh().subscribe( (val:User) => {
+        console.log('check again')
+        this.isJwtOk()
+        })
     } else { 
+      console.log (`jwt is ok`)
       return true
     }
 
@@ -59,14 +72,12 @@ export class Authorization {
 
   saveUser (user: User) : Observable <boolean> {
 
-    const saved$ = new Observable <boolean> ( obser => {
+    const saved$ = new Observable <boolean> ( () => {
 
       this.cookieService.set ('jwt', user.accessToken)
       this.cookieService.set ('username', user.username)
 
       localStorage.setItem ('ref', user.refreshToken)
-
-      obser.next (true)
 
     })
 
@@ -105,15 +116,26 @@ export class Authorization {
 
   refresh() : Observable<User> {
 
-    const ref = localStorage.getItem('ref');
-    const uri = `${K.server}api/users/refresh`;
-    const body = JSON.stringify({ refreshToken: ref });
+    console.log (`ref token start`)
 
-    return this.http.post(uri, body).pipe(map((data: User) => {
-      this.saveUser(data).subscribe ( (val:boolean) => {
+    const ref = localStorage.getItem('ref')
+    const uri = `${K.server}api/users/refresh`
+    const body = JSON.stringify({ refreshToken: ref })
+  
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+
+    const user$ = new Observable <User> ( obser => {
+      this.http.post(uri, body, { headers })
+      .subscribe ( (user:User) => {
+        console.log('2')
+        this.saveUser(user)
+        obser.next(user)
+        obser.complete()
       })
-      return data;
-    }));
+    }) 
+
+    return user$
 
   }
 

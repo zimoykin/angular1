@@ -9,6 +9,7 @@ exports.__esModule = true;
 exports.HeaderComponent = void 0;
 var core_1 = require("@angular/core");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
+var rxjs_1 = require("rxjs");
 var HeaderComponent = /** @class */ (function () {
     function HeaderComponent(httpClient, cookieService) {
         this.httpClient = httpClient;
@@ -36,7 +37,15 @@ var HeaderComponent = /** @class */ (function () {
     };
     HeaderComponent.prototype.ngOnInit = function () {
         var _this = this;
-        var userNamne = this.cookieService.get('username');
+        var userName = this.cookieService.get('username');
+        this.loginName = new rxjs_1.Observable(function (obser) {
+            if (userName != '') {
+                obser.next(userName);
+            }
+            else {
+                obser.next('LOGIN');
+            }
+        });
         this.loginName.subscribe(function (observer) {
             if (_this.auth.isJwtOk()) {
             }

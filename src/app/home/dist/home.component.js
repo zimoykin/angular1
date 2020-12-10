@@ -32,12 +32,19 @@ var HomeComponent = /** @class */ (function () {
     HomeComponent.prototype.getAllBlogs = function () {
         var _this = this;
         var blogs = new rxjs_1.Observable(function (obser) {
-            if (_this.auth.isJwtOk) {
+            if (_this.auth.isJwtOk()) {
+                console.log("get jwt" + _this.auth.token);
+                if (_this.auth.token == '' || _this.auth.token == null) {
+                    throw console.error('error');
+                }
                 _this.httpClient.get(Constants_1.Constants.server + "api/posts", {
                     headers: { Authorization: _this.auth.token }
                 }).subscribe(function (blogs) {
                     obser.next(blogs);
                 });
+            }
+            else {
+                console.log("jwt isn't yet ok");
             }
         });
         return blogs;

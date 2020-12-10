@@ -40,13 +40,20 @@ export class HomeComponent implements OnInit {
 
     const blogs = new Observable<[BlogModel]>(obser => {
 
-      if (this.auth.isJwtOk) {
+      if (this.auth.isJwtOk()) {
+        console.log (`get jwt${this.auth.token}`)
+
+        if ( this.auth.token == '' || this.auth.token == null ) {
+          throw console.error('error');
+        }
 
         this.httpClient.get(`${K.server}api/posts`, {
           headers: { Authorization: this.auth.token }
         }).subscribe ( (blogs: [BlogModel]) => {
           obser.next (blogs)
         })
+      } else {
+        console.log (`jwt isn't yet ok`)
       }
 
     })
