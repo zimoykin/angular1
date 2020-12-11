@@ -65,13 +65,11 @@ var Authorization = /** @class */ (function () {
         }
     };
     Authorization.prototype.saveUser = function (user) {
-        var _this = this;
-        var saved$ = new rxjs_1.Observable(function () {
-            _this.cookieService.set('jwt', user.accessToken);
-            _this.cookieService.set('username', user.username);
-            localStorage.setItem('ref', user.refreshToken);
-        });
-        return saved$;
+        console.log('4 save user');
+        this.cookieService.set('jwt', user.accessToken);
+        this.cookieService.set('username', user.username);
+        localStorage.setItem('ref', user.refreshToken);
+        return true;
     };
     Authorization.prototype.authorize = function (login, password) {
         var _this = this;
@@ -86,11 +84,7 @@ var Authorization = /** @class */ (function () {
                     Authorization: authrizationData
                 }
             }).subscribe(function (val) {
-                _this.saveUser(val).subscribe(function (saved) {
-                    if (saved) {
-                        obser.next(val);
-                    }
-                });
+                _this.saveUser(val);
             });
         });
         return user$;
@@ -108,7 +102,8 @@ var Authorization = /** @class */ (function () {
                 .subscribe(function (user) {
                 console.log('2');
                 _this.saveUser(user);
-                obser.next(user);
+                //obser.next(user)
+                console.log('3');
                 obser.complete();
             });
         });

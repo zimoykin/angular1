@@ -9,6 +9,7 @@ import { HeaderComponent } from './header/header.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
+import { BlogViewComponent } from './blog-view/blog-view.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { HomeComponent } from './home/home.component';
     blogComponent,
     FormComponent,
     HeaderComponent,
-    HomeComponent
+    HomeComponent,
+    BlogViewComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

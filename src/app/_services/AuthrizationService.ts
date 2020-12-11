@@ -70,18 +70,16 @@ export class Authorization {
 
   }
 
-  saveUser (user: User) : Observable <boolean> {
-
-    const saved$ = new Observable <boolean> ( () => {
-
+  saveUser (user: User) : boolean {
+      console.log('4 save user')
+   
       this.cookieService.set ('jwt', user.accessToken)
       this.cookieService.set ('username', user.username)
 
       localStorage.setItem ('ref', user.refreshToken)
+    
+      return true
 
-    })
-
-    return saved$
   }
 
 
@@ -102,9 +100,7 @@ export class Authorization {
           Authorization: authrizationData
         }
       }).subscribe ( (val: User) => {
-        this.saveUser(val).subscribe ( (saved: boolean) => {
-          if (saved) {  obser.next(val) }
-        })
+        this.saveUser(val)
       })
 
 
@@ -130,7 +126,8 @@ export class Authorization {
       .subscribe ( (user:User) => {
         console.log('2')
         this.saveUser(user)
-        obser.next(user)
+        //obser.next(user)
+        console.log('3')
         obser.complete()
       })
     }) 
