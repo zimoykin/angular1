@@ -18,6 +18,9 @@ var blogComponent = /** @class */ (function () {
     __decorate([
         core_1.Input()
     ], blogComponent.prototype, "index");
+    __decorate([
+        core_1.Input()
+    ], blogComponent.prototype, "isFullVersion");
     blogComponent = __decorate([
         core_1.Component({
             selector: 'app-blog',

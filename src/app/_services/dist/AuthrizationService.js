@@ -108,6 +108,14 @@ var Authorization = /** @class */ (function () {
         });
         return user$;
     };
+    Authorization.prototype.logout = function () {
+        var _this = this;
+        return new rxjs_1.Observable(function (obser) {
+            _this.cookieService.deleteAll();
+            localStorage.removeItem('ref');
+            obser.next(true);
+        });
+    };
     Authorization = __decorate([
         core_1.Injectable({ providedIn: 'root' })
     ], Authorization);

@@ -12,10 +12,12 @@ var router_1 = require("@angular/router");
 var home_component_1 = require("./home/home.component");
 var blog_view_component_1 = require("./blog-view/blog-view.component");
 var contact_view_component_1 = require("./contact-view/contact-view.component");
+var user_view_component_1 = require("./user-view/user-view.component");
 var routes = [
     { path: 'home', component: home_component_1.HomeComponent },
     { path: 'blog/:blogid', component: blog_view_component_1.BlogViewComponent },
     { path: 'contact', component: contact_view_component_1.ContactViewComponent },
+    { path: 'user/:userid', component: user_view_component_1.UserViewComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 var AppRoutingModule = /** @class */ (function () {

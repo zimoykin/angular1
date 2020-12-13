@@ -136,4 +136,14 @@ export class Authorization {
   }
 
 
+  logout () : Observable<boolean>{
+    return new Observable<boolean>( obser => { 
+
+      this.cookieService.deleteAll()
+      localStorage.removeItem('ref')
+      obser.next(true)
+      
+    })
+  }
+
 }

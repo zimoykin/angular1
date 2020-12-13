@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { BlogViewComponent } from './blog-view/blog-view.component';
 import { ContactViewComponent } from './contact-view/contact-view.component';
+import { UserViewComponent } from './user-view/user-view.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ContactViewComponent } from './contact-view/contact-view.component';
     HeaderComponent,
     HomeComponent,
     BlogViewComponent,
-    ContactViewComponent
+    ContactViewComponent,
+    UserViewComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

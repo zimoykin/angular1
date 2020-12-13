@@ -1,7 +1,17 @@
 <div class="card">
 
-    <a routerLink="/blog/{{ blog.id }}"> 
-        {{ blog.title }} 
+    <div *ngIf="isFullVersion">
+        <div class='bg-dark text-light w-100'>
+            <span> author: </span>
+            <a 
+            routerLink="/user/{{blog.user.id}}"> 
+                {{ blog.user.username }}
+            </a>
+        </div>
+    </div>
+
+    <a routerLink="/blog/{{ blog.id }}">
+        {{ blog.title }}
     </a>
 
     <div>

@@ -14,11 +14,8 @@ import { User } from 'src/Model/User'
 export class HeaderComponent implements OnInit {
 
   navElement: HTMLElement = null
-
   loginName: Observable<string>
-
   showPanelLogin = false
-
   auth = new Authorization(this.cookieService, this.httpClient)
 
   constructor(private httpClient: HttpClient, private cookieService: CookieService) { }
@@ -54,7 +51,7 @@ export class HeaderComponent implements OnInit {
       else { obser.next('LOGIN') }
     })
 
-    this.loginName.subscribe( observer => {
+    this.loginName.subscribe(observer => {
 
       if (this.auth.isJwtOk()) {
 
@@ -74,17 +71,29 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  clickLogOut() {
+
+    this.auth.logout().subscribe((val: boolean) => {
+      if (val) {
+        this.loginName = new Observable<string>(obser => { obser.next('') })
+      }
+    }
+    )
+  }
+
+
   showPanel() {
     return this.showPanelLogin ? 45 : 0;
   }
 
   login(login, password) {
-    this.auth.authorize(login.value, password.value).subscribe( (val:User) => {
+    this.auth.authorize(login.value, password.value).subscribe((val: User) => {
       console.log("q" + val)
-      this.loginName = new Observable <string> ( (obser) => { 
-        obser.next(val.username) } )
-        console.log("q" + val)
-        this.showPanelLogin = false
+      this.loginName = new Observable<string>((obser) => {
+        obser.next(val.username)
+      })
+      console.log("q" + val)
+      this.showPanelLogin = false
     })
   }
 

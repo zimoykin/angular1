@@ -62,6 +62,14 @@ var HeaderComponent = /** @class */ (function () {
             }, 25000);
         }
     };
+    HeaderComponent.prototype.clickLogOut = function () {
+        var _this = this;
+        this.auth.logout().subscribe(function (val) {
+            if (val) {
+                _this.loginName = new rxjs_1.Observable(function (obser) { obser.next(''); });
+            }
+        });
+    };
     HeaderComponent.prototype.showPanel = function () {
         return this.showPanelLogin ? 45 : 0;
     };

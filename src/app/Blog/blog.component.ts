@@ -11,6 +11,7 @@ export class blogComponent implements OnInit {
 
     @Input() blog: BlogModel;
     @Input() index: number;
+    @Input() isFullVersion: boolean
 
     ngOnInit () {}
 

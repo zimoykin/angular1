@@ -25,7 +25,8 @@ var HomeComponent = /** @class */ (function () {
                 _this.list.push({ title: post.title,
                     description: post.description,
                     image: post.image,
-                    id: post.id });
+                    id: post.id,
+                    user: post.user });
             });
         });
     };
