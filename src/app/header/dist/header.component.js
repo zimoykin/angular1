@@ -66,8 +66,14 @@ var HeaderComponent = /** @class */ (function () {
         return this.showPanelLogin ? 45 : 0;
     };
     HeaderComponent.prototype.login = function (login, password) {
+        var _this = this;
         this.auth.authorize(login.value, password.value).subscribe(function (val) {
-            console.log(val);
+            console.log("q" + val);
+            _this.loginName = new rxjs_1.Observable(function (obser) {
+                obser.next(val.username);
+            });
+            console.log("q" + val);
+            _this.showPanelLogin = false;
         });
     };
     __decorate([

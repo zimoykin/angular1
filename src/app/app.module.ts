@@ -10,6 +10,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
 import { BlogViewComponent } from './blog-view/blog-view.component';
+import { ContactViewComponent } from './contact-view/contact-view.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { BlogViewComponent } from './blog-view/blog-view.component';
     FormComponent,
     HeaderComponent,
     HomeComponent,
-    BlogViewComponent
+    BlogViewComponent,
+    ContactViewComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

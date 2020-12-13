@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { User } from '../../Model/User';
 import { HeaderComponent as hat} from '../header/header.component'
+import { ObserveOnSubscriber } from 'rxjs/internal/operators/observeOn';
 
 // const stream$ = of(38,39,40,41,42);
 //
@@ -34,8 +35,7 @@ export class Authorization {
     private cookieService: CookieService,
     private http: HttpClient) { }
 
-
-  public token = `Bearer ${this.cookieService.get('jwt')}`
+  public token:string = `Bearer ${this.cookieService.get('jwt')}`
 
 
   ///////////////////
@@ -101,6 +101,7 @@ export class Authorization {
         }
       }).subscribe ( (val: User) => {
         this.saveUser(val)
+        obser.next(val)
       })
 
 
@@ -126,8 +127,6 @@ export class Authorization {
       .subscribe ( (user:User) => {
         console.log('2')
         this.saveUser(user)
-        //obser.next(user)
-        console.log('3')
         obser.complete()
       })
     }) 

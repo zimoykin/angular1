@@ -85,6 +85,7 @@ var Authorization = /** @class */ (function () {
                 }
             }).subscribe(function (val) {
                 _this.saveUser(val);
+                obser.next(val);
             });
         });
         return user$;
@@ -102,8 +103,6 @@ var Authorization = /** @class */ (function () {
                 .subscribe(function (user) {
                 console.log('2');
                 _this.saveUser(user);
-                //obser.next(user)
-                console.log('3');
                 obser.complete();
             });
         });

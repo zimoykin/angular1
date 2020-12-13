@@ -1,12 +1,22 @@
 <header>
     <nav class="navbar navbar-expand-md" id="navbar">
         <div class="container">
-            <div class="nav-toggler" id="nav-toggler">
-                <span> menu1 </span>
-                <span> menu2 </span>
-                <span> menu3 </span>
-                <span> menu4 </span>
+
+            <div>
+                <a class='p-1' routerLink='/home'>
+                    <button class="btn btn-light" id="homeButton">
+                        home
+                    </button>
+                </a>
+
+                <a class='p-1' routerLink='/contact'>
+                    <button class="btn btn-light" id="contactsButton">
+                        contacts
+                    </button>
+                </a>
+
             </div>
+
             <div>
                 <button class="btn btn-light" id="loginButton" (click)="clickLogin()">
                     {{ (loginName | async) }}

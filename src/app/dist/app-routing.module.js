@@ -10,10 +10,13 @@ exports.AppRoutingModule = void 0;
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var home_component_1 = require("./home/home.component");
-var blog_component_1 = require("./blog/blog.component");
+var blog_view_component_1 = require("./blog-view/blog-view.component");
+var contact_view_component_1 = require("./contact-view/contact-view.component");
 var routes = [
     { path: 'home', component: home_component_1.HomeComponent },
-    { path: 'Blog', component: blog_component_1.blogComponent }
+    { path: 'blog/:blogid', component: blog_view_component_1.BlogViewComponent },
+    { path: 'contact', component: contact_view_component_1.ContactViewComponent },
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
