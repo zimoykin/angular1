@@ -3,16 +3,24 @@
     <div *ngIf="isFullVersion">
         <div class='bg-dark text-light w-100'>
             <span> author: </span>
-            <a 
-            routerLink="/user/{{blog.user.id}}"> 
+            <a routerLink="/user/{{blog.user.id}}">
                 {{ blog.user.username }}
             </a>
         </div>
     </div>
-
-    <a routerLink="/blog/{{ blog.id }}">
-        {{ blog.title }}
-    </a>
+    <div>
+        <div class="btn-group" role="group">
+    
+            <div class="container">
+            <button class="btn btn-light" routerLink="/blog/{{ blog.id }}">
+                {{ blog.title }}
+            </button>
+            <a class="badge badge-dark" routerLink="/edit/{{blog.id}}">
+                edit
+            </a>
+            </div>
+        </div>
+    </div>
 
     <div>
         <img src="{{blog.image}}" />

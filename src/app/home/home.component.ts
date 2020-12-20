@@ -16,25 +16,22 @@ import { BlogModel } from '../../Model/BlogModel'
 export class HomeComponent implements OnInit {
 
   list: BlogModel[] = []
-
+  isLoaded: boolean = false
 
   constructor( private httpClient: HttpClient, private cookieService: CookieService ) { }
   auth = new Authorization(this.cookieService, this.httpClient)
 
   ngOnInit(): void {
 
-    this.getAllBlogs().subscribe (
+    this.getAllBlogs().subscribe(
       response => {
-          response.map ( (post: BlogModel) => {
-              this.list.push ({ title: post.title,
-                description: post.description,
-                image: post.image,
-                id: post.id,
-                user: post.user });
-          });
+        this.isLoaded = true
+        response.map((post: BlogModel) => {
+          this.list.push( post );
+        })
 
-       }
-    );
+      }
+    )
 
   }
 

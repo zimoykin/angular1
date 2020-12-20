@@ -16,17 +16,15 @@ var HomeComponent = /** @class */ (function () {
         this.httpClient = httpClient;
         this.cookieService = cookieService;
         this.list = [];
+        this.isLoaded = false;
         this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
     }
     HomeComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.getAllBlogs().subscribe(function (response) {
+            _this.isLoaded = true;
             response.map(function (post) {
-                _this.list.push({ title: post.title,
-                    description: post.description,
-                    image: post.image,
-                    id: post.id,
-                    user: post.user });
+                _this.list.push(post);
             });
         });
     };

@@ -30,7 +30,7 @@
 
 <div class="LoginNav" id='loginPanel' [style.width.%]="showPanel()">
 
-    <div *ngIf="( loginName| async ) !='LOGIN'"> 
+    <div *ngIf="( loginName | async ) !='LOGIN'"> 
         <div class="w-100 p-5 m-3 h-100">
             <div class="d-flex justify-content-center">
                 <span class=' w-100 bg-light text-info'> HI {{ loginName | async }} click logout! </span>    

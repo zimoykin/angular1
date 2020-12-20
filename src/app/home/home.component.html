@@ -1,8 +1,18 @@
 
-<div> 
-    <app-blog
-    *ngFor="let iterPost of list"
-    [blog]="iterPost"
-    [isFullVersion]=false
-    ></app-blog>
+<div *ngIf="!isLoaded">
+    <div class="center"> 
+         <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>
+
+  <div *ngIf="isLoaded">
+   
+    <div> 
+        <app-blog
+        *ngFor="let iterPost of list"
+        [blog]="iterPost"
+        [isFullVersion]=false
+        ></app-blog>
+    </div>
+    
 </div>

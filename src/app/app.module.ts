@@ -12,6 +12,7 @@ import { HomeComponent } from './home/home.component';
 import { BlogViewComponent } from './blog-view/blog-view.component';
 import { ContactViewComponent } from './contact-view/contact-view.component';
 import { UserViewComponent } from './user-view/user-view.component';
+import { EditPostViewComponent } from './edit-post-view/edit-post-view.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { UserViewComponent } from './user-view/user-view.component';
     HomeComponent,
     BlogViewComponent,
     ContactViewComponent,
-    UserViewComponent
+    UserViewComponent,
+    EditPostViewComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
