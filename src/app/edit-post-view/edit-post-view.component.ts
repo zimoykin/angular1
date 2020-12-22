@@ -26,15 +26,16 @@ export class EditPostViewComponent implements OnInit {
         obser.next(param.get('blogid'))
       })
     }).subscribe( (val) => {
-      console.log(val)
-      if (this.auth.isJwtOk) {
-          this.httpClient.get(`${K.server}api/posts/${val}`,{ headers: { Authorization: this.auth.token } }).subscribe ( (blogObject: BlogModel) => {
+      if (val != 'new') {
+        if (this.auth.isJwtOk) {
+          this.httpClient.get(`${K.server}api/posts/${val}`, { headers: { Authorization: this.auth.token } }).subscribe((blogObject: BlogModel) => {
 
-              console.log (blogObject)
-              this.blogObj = blogObject
+            console.log(blogObject)
+            this.blogObj = blogObject
 
           })
-      }
+        }
+      } //else new blog
     })
 
 
@@ -47,15 +48,20 @@ export class EditPostViewComponent implements OnInit {
   save ( title:string, description:string, place:string, tags:string ) {
    
     if (this.blogObj != null ) {
-
+      console.log('update here')
       this.httpClient.put(`${K.server}api/posts/${this.blogObj.id}`, { title: title,
          description:description, place: place, tags: tags}, { headers: { Authrization: this.auth.token}}
       ).subscribe ( () => {
-
+        window.location.href = '\home'
       })
 
     } else {
-      //post new blog
+      console.log('create here')
+      this.httpClient.post(`${K.server}api/posts/`, { title: title,
+        description:description, place: place, tags: tags}, { headers: { Authrization: this.auth.token}}
+      ).subscribe ( () => {
+        window.location.href = '\home'
+      })
     }
 
   }

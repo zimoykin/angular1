@@ -52,15 +52,7 @@ var HeaderComponent = /** @class */ (function () {
         });
     };
     HeaderComponent.prototype.clickLogin = function () {
-        var _this = this;
         this.showPanelLogin = !this.showPanelLogin;
-        if (this.showPanelLogin) {
-            setTimeout(function () {
-                if (_this.showPanelLogin) {
-                    _this.clickLogin();
-                }
-            }, 25000);
-        }
     };
     HeaderComponent.prototype.clickLogOut = function () {
         var _this = this;
@@ -71,16 +63,15 @@ var HeaderComponent = /** @class */ (function () {
         });
     };
     HeaderComponent.prototype.showPanel = function () {
-        return this.showPanelLogin ? 45 : 0;
+        console.log('show nav panel');
+        return this.showPanelLogin ? '45' : '0';
     };
     HeaderComponent.prototype.login = function (login, password) {
         var _this = this;
         this.auth.authorize(login.value, password.value).subscribe(function (val) {
-            console.log("q" + val);
             _this.loginName = new rxjs_1.Observable(function (obser) {
                 obser.next(val.username);
             });
-            console.log("q" + val);
             _this.showPanelLogin = false;
         });
     };

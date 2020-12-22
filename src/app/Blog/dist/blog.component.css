@@ -1,0 +1,23 @@
+.card {
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px dotted #cccccc;
+}
+
+p {
+  margin-bottom: 5rem;
+}
+
+h2 {
+  text-align: center;
+}
+
+.flex {
+  display: flex;
+}
+
+img {
+  width: 400px;
+  height: 400px;
+  margin: 3rem auto;
+}

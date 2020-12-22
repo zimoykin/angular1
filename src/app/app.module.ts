@@ -13,6 +13,8 @@ import { BlogViewComponent } from './blog-view/blog-view.component';
 import { ContactViewComponent } from './contact-view/contact-view.component';
 import { UserViewComponent } from './user-view/user-view.component';
 import { EditPostViewComponent } from './edit-post-view/edit-post-view.component';
+import { BackgroundViewComponent } from './background-view/background-view.component';
+import { CalendarComponent } from './calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { EditPostViewComponent } from './edit-post-view/edit-post-view.component
     BlogViewComponent,
     ContactViewComponent,
     UserViewComponent,
-    EditPostViewComponent
+    EditPostViewComponent,
+    BackgroundViewComponent,
+    CalendarComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

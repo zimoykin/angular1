@@ -25,13 +25,14 @@ var EditPostViewComponent = /** @class */ (function () {
                 obser.next(param.get('blogid'));
             });
         }).subscribe(function (val) {
-            console.log(val);
-            if (_this.auth.isJwtOk) {
-                _this.httpClient.get(Constants_1.Constants.server + "api/posts/" + val, { headers: { Authorization: _this.auth.token } }).subscribe(function (blogObject) {
-                    console.log(blogObject);
-                    _this.blogObj = blogObject;
-                });
-            }
+            if (val != 'new') {
+                if (_this.auth.isJwtOk) {
+                    _this.httpClient.get(Constants_1.Constants.server + "api/posts/" + val, { headers: { Authorization: _this.auth.token } }).subscribe(function (blogObject) {
+                        console.log(blogObject);
+                        _this.blogObj = blogObject;
+                    });
+                }
+            } //else new blog
         });
     };
     EditPostViewComponent.prototype.getTags = function () {
@@ -39,12 +40,18 @@ var EditPostViewComponent = /** @class */ (function () {
     };
     EditPostViewComponent.prototype.save = function (title, description, place, tags) {
         if (this.blogObj != null) {
+            console.log('update here');
             this.httpClient.put(Constants_1.Constants.server + "api/posts/" + this.blogObj.id, { title: title,
                 description: description, place: place, tags: tags }, { headers: { Authrization: this.auth.token } }).subscribe(function () {
+                window.location.href = '\home';
             });
         }
         else {
-            //post new blog
+            console.log('create here');
+            this.httpClient.post(Constants_1.Constants.server + "api/posts/", { title: title,
+                description: description, place: place, tags: tags }, { headers: { Authrization: this.auth.token } }).subscribe(function () {
+                window.location.href = '\home';
+            });
         }
     };
     EditPostViewComponent = __decorate([

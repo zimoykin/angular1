@@ -1,44 +1,66 @@
-<header>
-    <nav class="navbar navbar-expand-md" id="navbar">
-        <div class="container">
 
-            <div>
-                <a class='p-1' routerLink='/home'>
-                    <button class="btn btn-light" id="homeButton">
-                        home
+    <header>
+        <nav class="navbar navbar-expand-md" id="navbar">
+            <div class="container">
+    
+                <div>
+                    <a class='p-1' routerLink='/home'>
+                        <button class="btn btn-light" id="homeButton">
+                            home
+                        </button>
+                    </a>
+    
+                    <a class='p-1' routerLink='/contact'>
+                        <button class="btn btn-light" id="contactsButton">
+                            contacts
+                        </button>
+                    </a>
+    
+                    <a class='p-1' routerLink='/edit/new'>
+                        <button class="btn btn-light" id="newButton">
+                            new blog
+                        </button>
+                    </a>
+
+                    <a class='p-1' routerLink='/calendar'>
+                        <button class="btn btn-light" id="calendar">
+                            Calendar
+                        </button>
+                    </a>
+    
+                </div>
+    
+                <div>
+                    <button class="btn btn-light" id="loginButton" (click)="clickLogin()">
+                        {{ (loginName | async) }}
                     </button>
-                </a>
-
-                <a class='p-1' routerLink='/contact'>
-                    <button class="btn btn-light" id="contactsButton">
-                        contacts
-                    </button>
-                </a>
-
+                </div>
             </div>
-
-            <div>
-                <button class="btn btn-light" id="loginButton" (click)="clickLogin()">
-                    {{ (loginName | async) }}
-                </button>
-            </div>
-        </div>
-    </nav>
-</header>
+        </nav>
+    </header>
 
 
 
-<div class="LoginNav" id='loginPanel' [style.width.%]="showPanel()">
+<div class="LoginNav" id='loginPanel' 
+    [ngStyle]="{'width': showPanelLogin ? '35%' : '0' }"
+>
 
     <div *ngIf="( loginName | async ) !='LOGIN'"> 
         <div class="w-100 p-5 m-3 h-100">
+            <!-- image -->
+            <div class='container'>
+                <img style='max-width: 200px; max-height: 200px; margin:0 auto;' class='rounded-circle' src="https://images.freeimages.com/images/large-previews/25d/eagle-1523807.jpg"> 
+            </div>
             <div class="d-flex justify-content-center">
                 <span class=' w-100 bg-light text-info'> HI {{ loginName | async }} click logout! </span>    
             </div> 
             <div class="d-flex justify-content-center">
                 <button class='btn btn-danger' (click)="clickLogOut()">
                     logout
-                </button>  
+                </button> 
+                <button class='btn btn-info' (click)='clickLogin()'>
+                    close 
+                </button> 
             </div> 
         </div>
     </div>

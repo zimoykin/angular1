@@ -17,6 +17,7 @@ var HomeComponent = /** @class */ (function () {
         this.cookieService = cookieService;
         this.list = [];
         this.isLoaded = false;
+        this.backElement = null;
         this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
     }
     HomeComponent.prototype.ngOnInit = function () {
@@ -27,6 +28,7 @@ var HomeComponent = /** @class */ (function () {
                 _this.list.push(post);
             });
         });
+        this.backElement = document.getElementById('background');
     };
     HomeComponent.prototype.getAllBlogs = function () {
         var _this = this;
@@ -48,6 +50,14 @@ var HomeComponent = /** @class */ (function () {
         });
         return blogs;
     };
+    HomeComponent.prototype.onScroll = function ($event) {
+        var scrollFactor = 100;
+        console.log(window.screen.height);
+        this.backElement.style.backgroundImage = 'url (https://picjumbo.com/wp-content/uploads/beautiful-tuscan-landscape-around-pienza-town-italy-2210x1473.jpg)';
+    };
+    __decorate([
+        core_1.HostListener('window:scroll', ['$event'])
+    ], HomeComponent.prototype, "onScroll");
     HomeComponent = __decorate([
         core_1.Component({
             selector: 'app-home',

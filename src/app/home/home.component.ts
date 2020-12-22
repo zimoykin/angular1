@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
 
   list: BlogModel[] = []
   isLoaded: boolean = false
+  backElement = null
 
   constructor( private httpClient: HttpClient, private cookieService: CookieService ) { }
   auth = new Authorization(this.cookieService, this.httpClient)
@@ -32,7 +33,8 @@ export class HomeComponent implements OnInit {
 
       }
     )
-
+    
+    this.backElement = document.getElementById('background') as HTMLElement;
   }
 
   getAllBlogs() : Observable <[BlogModel]> {
@@ -60,5 +62,16 @@ export class HomeComponent implements OnInit {
     return blogs
 
   }
+
+
+  @HostListener('window:scroll', ['$event'])
+  
+  onScroll($event: Event) {
+    const scrollFactor = 100;
+    console.log(window.screen.height)
+
+    this.backElement.style.backgroundImage = 'url (https://picjumbo.com/wp-content/uploads/beautiful-tuscan-landscape-around-pienza-town-italy-2210x1473.jpg)'
+  }
+
 
 }

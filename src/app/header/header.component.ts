@@ -25,9 +25,7 @@ export class HeaderComponent implements OnInit {
   }
 
   @HostListener('window:scroll', ['$event'])
-
   onScroll($event: Event) {
-
     const scrollFactor = 100;
     let opacity = (window.pageYOffset / scrollFactor);
     opacity = opacity < 1 ? opacity : 1;
@@ -62,13 +60,6 @@ export class HeaderComponent implements OnInit {
 
   clickLogin() {
     this.showPanelLogin = !this.showPanelLogin;
-    if (this.showPanelLogin) {
-      setTimeout(() => {
-        if (this.showPanelLogin) {
-          this.clickLogin();
-        }
-      }, 25000);
-    }
   }
 
   clickLogOut() {
@@ -83,16 +74,18 @@ export class HeaderComponent implements OnInit {
 
 
   showPanel() {
-    return this.showPanelLogin ? 45 : 0;
+    console.log ('show nav panel')
+
+    return this.showPanelLogin ? '45' : '0';
   }
 
   login(login, password) {
     this.auth.authorize(login.value, password.value).subscribe((val: User) => {
-      console.log("q" + val)
+    
       this.loginName = new Observable<string>((obser) => {
         obser.next(val.username)
       })
-      console.log("q" + val)
+     
       this.showPanelLogin = false
     })
   }

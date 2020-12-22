@@ -14,12 +14,14 @@ var blog_view_component_1 = require("./blog-view/blog-view.component");
 var edit_post_view_component_1 = require("./edit-post-view/edit-post-view.component");
 var contact_view_component_1 = require("./contact-view/contact-view.component");
 var user_view_component_1 = require("./user-view/user-view.component");
+var calendar_component_1 = require("../app/calendar/calendar.component");
 var routes = [
     { path: 'home', component: home_component_1.HomeComponent },
     { path: 'blog/:blogid', component: blog_view_component_1.BlogViewComponent },
     { path: 'edit/:blogid', component: edit_post_view_component_1.EditPostViewComponent },
     { path: 'contact', component: contact_view_component_1.ContactViewComponent },
     { path: 'user/:userid', component: user_view_component_1.UserViewComponent },
+    { path: 'calendar', component: calendar_component_1.CalendarComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 var AppRoutingModule = /** @class */ (function () {
@@ -27,7 +29,7 @@ var AppRoutingModule = /** @class */ (function () {
     }
     AppRoutingModule = __decorate([
         core_1.NgModule({
-            imports: [router_1.RouterModule.forRoot(routes)],
+            imports: [router_1.RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
             exports: [router_1.RouterModule]
         })
     ], AppRoutingModule);
