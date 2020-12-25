@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpResponseBase } from '@angular/common/http'
 import { CookieService } from 'ngx-cookie-service'
 import { Authorization } from '../_services/AuthrizationService'
 import { Observable } from 'rxjs'
-import { User } from 'src/Model/User'
+import { User } from '../_model/User'
 
 @Component({
   selector: 'app-header',

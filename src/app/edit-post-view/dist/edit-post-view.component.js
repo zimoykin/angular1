@@ -10,7 +10,7 @@ exports.EditPostViewComponent = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
-var Constants_1 = require("../../Model/Constants");
+var Constants_1 = require("../_model/Constants");
 var EditPostViewComponent = /** @class */ (function () {
     function EditPostViewComponent(route, httpClient, cookieService) {
         this.route = route;

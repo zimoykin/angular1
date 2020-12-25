@@ -9,7 +9,7 @@ exports.__esModule = true;
 exports.HomeComponent = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
-var Constants_1 = require("../../Model/Constants");
+var Constants_1 = require("../_model/Constants");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var HomeComponent = /** @class */ (function () {
     function HomeComponent(httpClient, cookieService) {

@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
-import { BlogModel } from 'src/Model/BlogModel'
+import { BlogModel } from '../_model/BlogModel'
 import { Authorization } from '../_services/AuthrizationService' 
-import { Constants as K } from '../../Model/Constants'
+import { Constants as K } from '../_model/Constants'
 
 @Component({
   selector: 'app-edit-post-view',

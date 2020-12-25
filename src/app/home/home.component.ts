@@ -2,9 +2,9 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
-import { Constants as K } from '../../Model/Constants';
+import { Constants as K } from '../_model/Constants';
 import { Authorization } from '../_services/AuthrizationService'
-import { BlogModel } from '../../Model/BlogModel'
+import { BlogModel } from '../_model/BlogModel'
 
 
 @Component({

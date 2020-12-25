@@ -4,8 +4,8 @@ import { Observable } from 'rxjs'
 import { Authorization } from '../_services/AuthrizationService'
 import { HttpClient} from '@angular/common/http'
 import { CookieService } from 'ngx-cookie-service'
-import { Constants as K } from '../../Model/Constants'
-import { BlogModel } from '../../Model/BlogModel'
+import { Constants as K } from '../_model/Constants'
+import { BlogModel } from '../_model/BlogModel'
 
 @Component({
   selector: 'app-blog-view',
