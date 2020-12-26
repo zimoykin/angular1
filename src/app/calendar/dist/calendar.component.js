@@ -26,14 +26,22 @@ var CalendarComponent = /** @class */ (function () {
         var startOfMonth = new Date(this.$dt.getFullYear(), this.$dt.getMonth(), 1);
         var endOfMonth = new Date(this.$dt.getFullYear(), this.$dt.getMonth() + 1, 0);
         this.month = new Month_1.Month(_month, _year);
-        //add day before
+        //add day before and first week
         console.log(0 - startOfMonth.getDay());
         var week = new Month_1.Week('1');
-        for (var dayBefore = (0 - startOfMonth.getDay()); dayBefore < 0; dayBefore++) {
+        for (var dayBefore = (0 - startOfMonth.getDay() + (startOfMonth.getDay() == 0 ? -6 : 1)); dayBefore < 0; dayBefore++) {
             var curDay = new Date(startOfMonth.getTime() + (86400 * 1000 * dayBefore));
             console.log(curDay);
             week.days.push(new Month_1.Day(curDay, curDay.getDay() == 0 || curDay.getDay() == 6 ? true : false));
         }
+        week.days.sort(function (a, b) {
+            if (a.date > b.date) {
+                return 1;
+            }
+            if (a.date < b.date) {
+                return -1;
+            }
+        });
         for (var dayofWeek = 0; week.days.length < 7; dayofWeek++) {
             var curDay = new Date(startOfMonth.getTime() + (86400 * 1000 * dayofWeek));
             week.days.push(new Month_1.Day(curDay, curDay.getDay() == 0 || curDay.getDay() == 6 ? true : false));
@@ -52,6 +60,14 @@ var CalendarComponent = /** @class */ (function () {
             }
             lastDayOfWeek = week_1.days[week_1.days.length - 1].date;
             console.log(lastDayOfWeek);
+            week_1.days.sort(function (a, b) {
+                if (a.date > b.date) {
+                    return 1;
+                }
+                if (a.date < b.date) {
+                    return -1;
+                }
+            });
             this.month.week.push(week_1);
         }
     };

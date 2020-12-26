@@ -35,16 +35,26 @@ export class CalendarComponent implements OnInit {
 
     this.month = new Month( _month, _year)
 
-    //add day before
+    //add day before and first week
     console.log( 0 - startOfMonth.getDay() )
     let week = new Week( '1' )
 
-    for ( let dayBefore = (0 - startOfMonth.getDay()); dayBefore < 0; dayBefore++ ) {
+    for ( let dayBefore = ( 0 - startOfMonth.getDay() + ( startOfMonth.getDay() == 0?  -6 : 1 ) ); dayBefore < 0; dayBefore++ ) {
        let curDay = new Date ( startOfMonth.getTime() + ( 86400 * 1000 *  dayBefore))
        console.log ( curDay )
        week.days.push ( new Day (curDay, curDay.getDay() == 0 || curDay.getDay() == 6 ? true : false) )
     }
     
+    week.days.sort ( ( a, b ) => {
+
+      if (a.date > b.date) {
+        return 1
+      }
+      if (a.date < b.date) {
+        return -1
+      }
+
+    })
 
     for ( let dayofWeek = 0; week.days.length < 7;  dayofWeek++) {
       let curDay = new Date ( startOfMonth.getTime() + ( 86400 * 1000 * dayofWeek))
@@ -73,6 +83,19 @@ export class CalendarComponent implements OnInit {
 
       lastDayOfWeek = week.days[ week.days.length - 1 ].date;
       console.log( lastDayOfWeek );
+
+      week.days.sort ( ( a, b ) => {
+
+        if (a.date > b.date) {
+          return 1
+        }
+  
+        if (a.date < b.date) {
+          return -1
+        }
+  
+      })
+
       this.month.week.push(week)
 
     }
