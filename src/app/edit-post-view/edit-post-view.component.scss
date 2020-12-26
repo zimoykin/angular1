@@ -1,0 +1,11 @@
+.card {
+    background-color: rgba($color: gray, $alpha: 0.3);
+    border-style: none;
+}
+
+.card label {
+    background-color:rgba($color: black, $alpha: 1);
+    color: blanchedalmond;
+    padding: .3rem;
+    border-radius: .3rem;
+}

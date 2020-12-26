@@ -27,16 +27,34 @@ var EditPostViewComponent = /** @class */ (function () {
         }).subscribe(function (val) {
             if (val != 'new') {
                 if (_this.auth.isJwtOk) {
-                    _this.httpClient.get(Constants_1.Constants.server + "api/posts/" + val, { headers: { Authorization: _this.auth.token } }).subscribe(function (blogObject) {
+                    _this.httpClient.get(Constants_1.Constants.server + "api/posts/" + val, { headers: { Authorization: _this.auth.token } })
+                        .subscribe(function (blogObject) {
                         console.log(blogObject);
                         _this.blogObj = blogObject;
                     });
                 }
-            } //else new blog
+            } //
+            else {
+                console.log('111');
+                if (localStorage.getItem('blog')) {
+                    console.log('2222');
+                    var draft = JSON.parse(localStorage.getItem('blog'));
+                    document.getElementById('title').value = draft.title;
+                    document.getElementById('description').value = draft.description;
+                    document.getElementById('place').value = draft.place;
+                    document.getElementById('tags').value = draft.tags;
+                }
+            }
         });
     };
     EditPostViewComponent.prototype.getTags = function () {
         return '#' + this.blogObj.tags.join(' #');
+    };
+    EditPostViewComponent.prototype.clear = function () {
+        document.getElementById('title').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('place').value = '';
+        document.getElementById('tags').value = '';
     };
     EditPostViewComponent.prototype.save = function (title, description, place, tags) {
         if (this.blogObj != null) {
@@ -53,6 +71,15 @@ var EditPostViewComponent = /** @class */ (function () {
                 window.location.href = '\home';
             });
         }
+    };
+    EditPostViewComponent.prototype.draft = function (title, description, place, tags) {
+        console.log(title);
+        localStorage.setItem("blog", JSON.stringify({
+            title: title,
+            description: description,
+            place: place,
+            tags: tags
+        }));
     };
     EditPostViewComponent = __decorate([
         core_1.Component({

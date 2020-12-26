@@ -28,14 +28,24 @@ export class EditPostViewComponent implements OnInit {
     }).subscribe( (val) => {
       if (val != 'new') {
         if (this.auth.isJwtOk) {
-          this.httpClient.get(`${K.server}api/posts/${val}`, { headers: { Authorization: this.auth.token } }).subscribe((blogObject: BlogModel) => {
-
+          this.httpClient.get(`${K.server}api/posts/${val}`, { headers: { Authorization: this.auth.token } })
+          .subscribe((blogObject: BlogModel) => {
             console.log(blogObject)
             this.blogObj = blogObject
-
           })
         }
-      } //else new blog
+      } //
+      else {
+        console.log ('111')
+        if ( localStorage.getItem('blog') ) {
+            console.log ('2222')
+            let draft = JSON.parse( localStorage.getItem('blog') )
+            document.getElementById('title').value = draft.title
+            document.getElementById('description').value = draft.description
+            document.getElementById('place').value = draft.place
+            document.getElementById('tags').value = draft.tags
+        }
+      }
     })
 
 
@@ -43,6 +53,13 @@ export class EditPostViewComponent implements OnInit {
 
   getTags () : string {
     return '#' + this.blogObj.tags.join(' #')
+  }
+
+  clear () {
+    document.getElementById('title').value = ''
+    document.getElementById('description').value = ''
+    document.getElementById('place').value = ''
+    document.getElementById('tags').value = ''
   }
 
   save ( title:string, description:string, place:string, tags:string ) {
@@ -64,6 +81,16 @@ export class EditPostViewComponent implements OnInit {
       })
     }
 
+  }
+
+  draft (title:string, description:string, place:string, tags:string) {
+    console.log (title)
+    localStorage.setItem("blog", JSON.stringify({
+      title: title, 
+      description: description,
+      place: place,
+      tags: tags
+    }))
   }
 
 }

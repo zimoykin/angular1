@@ -20,6 +20,9 @@ var CalendarComponent = /** @class */ (function () {
         this.$dt.setMonth(this.$dt.getMonth() + month);
         this.GetBuildThisMonth();
     };
+    CalendarComponent.prototype.chooseDay = function (date) {
+        console.log(date);
+    };
     CalendarComponent.prototype.GetBuildThisMonth = function () {
         var _month = this.$dt.toLocaleDateString('en', { month: 'long' });
         var _year = this.$dt.getFullYear().toString();
@@ -51,24 +54,27 @@ var CalendarComponent = /** @class */ (function () {
         var lastDayOfWeek = week.days[week.days.length - 1].date;
         console.log(lastDayOfWeek);
         this.month.week.push(week);
-        for (var numberWeek = 2; numberWeek < 6; numberWeek++) {
+        for (var numberWeek = 2; numberWeek < 7; numberWeek++) {
             var week_1 = new Month_1.Week(numberWeek.toString());
-            for (var dayOfWeek = 1; dayOfWeek < 8; dayOfWeek++) {
-                var curDay = new Date(lastDayOfWeek.getTime() + (86400 * 1000 * dayOfWeek));
-                week_1.days.push(new Month_1.Day(curDay, curDay.getDay() == 0 || curDay.getDay() == 6 ? true : false));
-                console.log(week_1);
+            var firstDayWeek = new Date(lastDayOfWeek.getTime() + 86400 * 1000);
+            if (firstDayWeek.getMonth() == startOfMonth.getMonth()) {
+                for (var dayOfWeek = 1; dayOfWeek < 8; dayOfWeek++) {
+                    var curDay = new Date(lastDayOfWeek.getTime() + (86400 * 1000 * dayOfWeek));
+                    week_1.days.push(new Month_1.Day(curDay, curDay.getDay() == 0 || curDay.getDay() == 6 ? true : false));
+                    console.log(week_1);
+                }
+                lastDayOfWeek = week_1.days[week_1.days.length - 1].date;
+                console.log(lastDayOfWeek);
+                week_1.days.sort(function (a, b) {
+                    if (a.date > b.date) {
+                        return 1;
+                    }
+                    if (a.date < b.date) {
+                        return -1;
+                    }
+                });
+                this.month.week.push(week_1);
             }
-            lastDayOfWeek = week_1.days[week_1.days.length - 1].date;
-            console.log(lastDayOfWeek);
-            week_1.days.sort(function (a, b) {
-                if (a.date > b.date) {
-                    return 1;
-                }
-                if (a.date < b.date) {
-                    return -1;
-                }
-            });
-            this.month.week.push(week_1);
         }
     };
     CalendarComponent = __decorate([

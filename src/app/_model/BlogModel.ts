@@ -9,6 +9,7 @@ export class BlogModel {
     user: User
     tags: [string]
     place: Place
+    created: string
 
   }
 

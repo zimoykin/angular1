@@ -20,8 +20,19 @@
                 <textarea class="form-control" id='tags' placeholder="tags">{{blogObj !=null ? getTags() : ""}}</textarea>
             </div>
 
-            <button type="submit" class="btn btn-success"
-                (click)="save(BlogObj.title, BlogObj.description, BlogObj.place, BlogObj.tags)">save</button>
+            <button type="submit" class="btn btn-success m-1"
+                (click)="save(BlogObj.title.value, BlogObj.description.value, BlogObj.place.value, BlogObj.tags.value)">
+                save
+            </button>
+
+            <button type="submit" class="btn btn-info m-1"
+                (click)="draft(BlogObj.title.value, BlogObj.description.value, BlogObj.place.value, BlogObj.tags.value)">
+                in draft
+            </button>
+            <button type="submit" class="btn btn-light m-1"
+                (click)="clear()">
+                clear
+            </button>
         </form>
     </div>
 </div>

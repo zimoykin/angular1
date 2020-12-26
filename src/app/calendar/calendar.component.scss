@@ -15,6 +15,17 @@
     vertical-align: middle;
 }
 
+.anotherMonthDay {
+    display: inline-table;
+    width: 4rem;
+    height: 4rem;
+    background-color: rgba($color: gray, $alpha: 0.3);
+    border-radius: 2rem;
+    margin: 0.1rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
 .normalDay:hover{
     background-color: rgba($color: lemonchiffon, $alpha: 0.5);
 }
@@ -39,16 +50,13 @@
 }
 
 .calendarMonth {
-   
     background-color: rgba($color: lemonchiffon, $alpha: 0);
-    
     border-radius: 5px;
-    padding-right: 0;
-    
+    padding-right: 0;   
 }
 
 #calendar {
-    padding-top: 15rem;
+    padding-top: 20rem;
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -62,4 +70,14 @@
     background-color: rgba($color: lemonchiffon, $alpha: 0);
     position: absolute;
     
+}
+
+.blogs-links {
+    background-color: rgba($color: lemonchiffon, $alpha: 0.3);
+    border-radius: 2rem;
+    height: 5rem;
+}
+.blogsOfDay {
+    background-color: rgba($color: gray, $alpha: 0.3);
+    border-radius: 2rem;
 }

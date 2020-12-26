@@ -1,0 +1,11 @@
+.card {
+  background-color: rgba(128, 128, 128, 0.3);
+  border-style: none;
+}
+
+.card label {
+  background-color: black;
+  color: blanchedalmond;
+  padding: 0.3rem;
+  border-radius: 0.3rem;
+}

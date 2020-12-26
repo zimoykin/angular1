@@ -8,6 +8,16 @@ child {
   transform: translateX(-50%);
 }
 
+#home-view {
+  padding-top: 20rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  vertical-align: middle;
+}
+
 .lds-roller {
   display: inline-block;
   position: relative;

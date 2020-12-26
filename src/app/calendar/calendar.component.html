@@ -1,31 +1,60 @@
 <div id='calendar'>
     <div id='calendarcard'>
         <div class='calendarMonth' id='month'>
-            
-            <button class='btn btn-link' (click)='nextMonth(-1)' >
+
+            <button class='btn btn-link' (click)='nextMonth(-1)'>
                 previus
             </button>
 
             <span class='btn btn--link'> {{ month.title }} {{ month.year }} </span>
 
-            <button class='btn btn-link' (click)='nextMonth(1)' >
+            <button class='btn btn-link' (click)='nextMonth(1)'>
                 next
             </button>
 
-            <div class='calendarweek' id='calndarWeek' *ngFor="let numberWeek of month.week">
+            <div class='calendarweek' id='calndarWeek' 
+            *ngFor="let numberWeek of month.week">
 
                 <div id='day' class="day" *ngFor="let numberDay of numberWeek.days">
 
                     <div id='dayOff' class='dayOff' 
-                    *ngIf="numberDay.isDayOff">
+                    (click)="chooseDay(numberDay.date)"
+                    *ngIf="numberDay.isDayOff && numberDay.date.toLocaleDateString('en', { month: 'long' }) == month.title">
                         <span> {{ numberDay.date.getDate() }} </span>
                     </div>
 
-                    <div id='normalDay' class='normalDay' 
-                    *ngIf="!numberDay.isDayOff">
-                    <span> {{ numberDay.date.getDate() }} </span>
+                    <div id='anotherMonthDay' class='anotherMonthDay' 
+                    *ngIf="numberDay.isDayOff && numberDay.date.toLocaleDateString('en', { month: 'long' }) != month.title"
+                    >
+                        <span> {{ numberDay.date.getDate() }} </span>
                     </div>
+
+                    <div id='normalDay' class='normalDay'
+                    *ngIf="!numberDay.isDayOff && numberDay.date.toLocaleDateString('en', { month: 'long' }) == month.title"
+                    (click)="chooseDay(numberDay.date)">
+                        <span> {{ numberDay.date.getDate() }} </span>
+                    </div>
+                    
+                    <div id='anotherMonthDay' class='anotherMonthDay' 
+                    *ngIf="!numberDay.isDayOff && numberDay.date.toLocaleDateString('en', { month: 'long' }) != month.title"
+                    >
+                        <span> {{ numberDay.date.getDate() }} </span>
+                    </div>
+
                 </div>
+            </div>
+
+            <div class='blogs-links'>
+
+                <span> 
+                    blogs:
+                </span>
+
+                <div class='blogsOfDay'
+                *ngFor="let blog of blogs">
+                    <a routerLink="/blog/{{ blog.id }}"> {{ blog.title }} </a>
+                </div>
+
             </div>
 
         </div>
