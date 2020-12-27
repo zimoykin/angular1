@@ -1,34 +1,26 @@
-<div class="card">
 
-    <div *ngIf="isFullVersion">
-        <div class='bg-dark text-light w-100'>
-            <span> author: </span>
-            <a routerLink="/user/{{blog.user.id}}">
-                {{ blog.user.username }}
-            </a>
-        </div>
+<div *ngIf="isFullVersion">
+    <div class='bg-dark text-light w-100'>
+        <span> author: </span>
+        <a routerLink="/user/{{blog.user.id}}">
+            {{ blog.user.username }}
+        </a>
+    </div>
+</div>
+
+<div class='card'>
+    <div class='title'>
+        <a routerLink="/blog/{{ blog.id }}">
+            {{ blog.title }}  
+        </a>
+        <a routerLink="/edit/{{ blog.id }}">
+            (edit)
+        </a>
     </div>
     <div>
-        <div class="btn-group" role="group">
-
-
-            <button class="btn btn-light" routerLink="/blog/{{ blog.id }}">
-                {{ blog.title }}
-            </button>
-
-            <a class="badge badge-dark" routerLink="/edit/{{blog.id}}">
-                edit
-            </a>
-        </div>
-
+        <img src="{{ blog.image }}" />
     </div>
-
-    <div class="card">
-        <img src="{{blog.image}}" />
+    <div>
+        <p> {{ blog.description }} </p>
     </div>
-
-    <div class="card">
-        <p> {{blog.description}} </p>
-    </div>
-
 </div>

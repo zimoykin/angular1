@@ -71,11 +71,12 @@
 
 .blogs-links {
   background-color: rgba(255, 250, 205, 0.3);
-  border-radius: 2rem;
+  border-radius: 0.5rem;
   height: 5rem;
+  margin-top: 0.5rem;
 }
 
 .blogsOfDay {
   background-color: rgba(128, 128, 128, 0.3);
-  border-radius: 2rem;
+  border-radius: 0.5rem;
 }

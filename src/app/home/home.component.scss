@@ -1,21 +1,12 @@
 
-parent {
-    position: relative;
-}
-child {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-#home-view {
-  padding-top: 20rem;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  vertical-align: middle;
+#homeview {
+    padding-top: 20rem;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    vertical-align: middle;
 }
 
 .lds-roller {

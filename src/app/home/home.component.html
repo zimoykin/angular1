@@ -1,29 +1,22 @@
-<div class="home-view w-100">
-    <div class="container">
-        <div class="w-100 h-100">
-            <div class="parent">
-                <div class="child">
-                    <div *ngIf="!isLoaded">
-                        <div>
-                            <div class="lds-roller">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div *ngIf="!isLoaded">
+    <div id="homeview">
+        <div>
+            <div class="lds-roller">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
         </div>
-        <div *ngIf="isLoaded">
-            <div>
-                <app-blog *ngFor="let iterPost of list" [blog]="iterPost" [isFullVersion]=false></app-blog>
-            </div>
-        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoaded">
+    <div>
+        <app-blog *ngFor="let iterPost of list" [blog]="iterPost" [isFullVersion]=false></app-blog>
     </div>
 </div>

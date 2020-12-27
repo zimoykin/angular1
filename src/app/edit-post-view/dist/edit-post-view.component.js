@@ -37,12 +37,15 @@ var EditPostViewComponent = /** @class */ (function () {
             else {
                 console.log('111');
                 if (localStorage.getItem('blog')) {
-                    console.log('2222');
                     var draft = JSON.parse(localStorage.getItem('blog'));
-                    document.getElementById('title').value = draft.title;
-                    document.getElementById('description').value = draft.description;
-                    document.getElementById('place').value = draft.place;
-                    document.getElementById('tags').value = draft.tags;
+                    var title = document.getElementById('title');
+                    title.value = draft.title;
+                    var description = document.getElementById('description');
+                    description.value = draft.description;
+                    var place = document.getElementById('place');
+                    place.value = draft.place;
+                    var tags = document.getElementById('tags');
+                    tags.value = draft.tags;
                 }
             }
         });
@@ -51,10 +54,14 @@ var EditPostViewComponent = /** @class */ (function () {
         return '#' + this.blogObj.tags.join(' #');
     };
     EditPostViewComponent.prototype.clear = function () {
-        document.getElementById('title').value = '';
-        document.getElementById('description').value = '';
-        document.getElementById('place').value = '';
-        document.getElementById('tags').value = '';
+        var title = document.getElementById('title');
+        title.value = '';
+        var description = document.getElementById('description');
+        description.value = '';
+        var place = document.getElementById('place');
+        place.value = '';
+        var tags = document.getElementById('tags');
+        tags.value = '';
     };
     EditPostViewComponent.prototype.save = function (title, description, place, tags) {
         if (this.blogObj != null) {

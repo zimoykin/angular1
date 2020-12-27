@@ -1,12 +1,28 @@
+
 .card {
-    padding: .5rem 1rem;
-    margin-bottom: 1rem;
-    border: 1px dotted #cccccc;
+    padding-top: .5rem;
+    background-color: rgba($color: black, $alpha: 0.2);
+    border-style: none;
+}
+
+.card a {
+    padding: .2rem;
+    margin-right: 0.2rem;
+    color: White;
+    background-color: rgba($color: black, $alpha: 0.3);
+    border-radius: .3rem;
+}
+.card img {
+    padding: 1rem;
+    border-radius: .1rem;
 }
 
 p{
     margin-bottom: 5rem;
+    background-color: rgba($color: white, $alpha: 0.7);
+    padding: 1rem;
 }
+
 h2{
     text-align: center;
 }
@@ -16,6 +32,5 @@ h2{
 img {
     width: 400px;
     height: 400px;
-    margin: 3rem auto;
-    
+    margin: 3rem auto;  
 }

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
-import { BlogModel } from '../_model/BlogModel'
+import { BlogDraft, BlogModel } from '../_model/BlogModel'
 import { Authorization } from '../_services/AuthrizationService' 
 import { Constants as K } from '../_model/Constants'
 
@@ -38,12 +38,15 @@ export class EditPostViewComponent implements OnInit {
       else {
         console.log ('111')
         if ( localStorage.getItem('blog') ) {
-            console.log ('2222')
-            let draft = JSON.parse( localStorage.getItem('blog') )
-            document.getElementById('title').value = draft.title
-            document.getElementById('description').value = draft.description
-            document.getElementById('place').value = draft.place
-            document.getElementById('tags').value = draft.tags
+            let draft = JSON.parse( localStorage.getItem('blog') ) as BlogDraft
+            let title = document.getElementById('title') as HTMLInputElement
+            title.value = draft.title
+            let description = document.getElementById('description') as HTMLInputElement
+            description.value = draft.description
+            let place = document.getElementById('place') as HTMLInputElement
+            place.value = draft.place
+            let tags = document.getElementById('tags') as HTMLInputElement
+            tags.value = draft.tags
         }
       }
     })
@@ -56,10 +59,14 @@ export class EditPostViewComponent implements OnInit {
   }
 
   clear () {
-    document.getElementById('title').value = ''
-    document.getElementById('description').value = ''
-    document.getElementById('place').value = ''
-    document.getElementById('tags').value = ''
+    let title = document.getElementById('title') as HTMLInputElement
+    title.value = ''
+    let description = document.getElementById('description') as HTMLInputElement
+    description.value = ''
+    let place = document.getElementById('place') as HTMLInputElement
+    place.value = ''
+    let tags = document.getElementById('tags') as HTMLInputElement
+    tags.value = ''
   }
 
   save ( title:string, description:string, place:string, tags:string ) {

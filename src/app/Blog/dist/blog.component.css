@@ -1,11 +1,26 @@
 .card {
-  padding: 0.5rem 1rem;
-  margin-bottom: 1rem;
-  border: 1px dotted #cccccc;
+  padding-top: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-style: none;
+}
+
+.card a {
+  padding: 0.2rem;
+  margin-right: 0.2rem;
+  color: White;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 0.3rem;
+}
+
+.card img {
+  padding: 1rem;
+  border-radius: 0.1rem;
 }
 
 p {
   margin-bottom: 5rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 1rem;
 }
 
 h2 {

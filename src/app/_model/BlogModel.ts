@@ -24,3 +24,11 @@ export class BlogModel {
     title: string 
     description: string
   }
+
+
+  export class BlogDraft {
+    title: string
+    description: string
+    place: string
+    tags: string
+  }

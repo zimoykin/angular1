@@ -1,10 +1,12 @@
 .card {
-    margin: 1rem;
-    padding-left: 1rem;
-    height: 5rem;
+    height: 10rem;
     background-color: rgba($color: black, $alpha: 0.2);
     border-style: none;
+    border-radius: 0.5rem;
+    padding: 1rem;
 }
+
 .card a {
     color: rosybrown;
 }
+
