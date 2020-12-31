@@ -122,7 +122,6 @@ export class EditPostViewComponent implements OnInit {
           }
         })
 
-
     } else {
 
       this.httpClient.request<BlogModel>(new HttpRequest('POST', `${K.server}api/blogs/`,
