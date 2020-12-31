@@ -10,11 +10,35 @@
                 <textarea class="form-control" id="description"
                     placeholder="description">{{ blogObj !=null ? blogObj.description : ""}}</textarea>
             </div>
-            <div class="form-group">
+
+
+            <!-- <div class="form-group">
                 <label for='place'> Place </label>
                 <textarea class="form-control" id='place'
-                    placeholder="place">{{blogObj !=null ? blogObj.place.title + ", " + blogObj.place.country.title : ""}}</textarea>
-            </div>
+                    placeholder="place">{{blogObj !=null ? blogObj.place.title + ", " + blogObj.place.country.title : ""}}
+                </textarea>
+            </div> -->
+
+            
+                <mat-form-field class="example-full-width w-100 bg-light p-2">
+                  <input id='place'
+                         type="text"
+                         placeholder="place"
+                         aria-label="Text"
+                         matInput
+                         [formControl]='myControl'
+                         [matAutocomplete]="auto"
+                         >
+                  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)='selectedPlace($event.option.value)'>
+                    <mat-option 
+                    *ngFor="let place of filteredPlaces | async" 
+                    [value]="place.title"
+                    >
+                      {{ place.title }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+             
             <div class="form-group">
                 <label for='tags'> tags </label>
                 <textarea class="form-control" id='tags' placeholder="tags">{{blogObj !=null ? getTags() : ""}}</textarea>

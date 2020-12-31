@@ -1,10 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
-import { BlogDraft, BlogModel } from '../_model/BlogModel'
-import { Authorization } from '../_services/AuthrizationService' 
+import { map, startWith } from 'rxjs/operators';
+import { BlogDraft, BlogModel, Place } from '../_model/BlogModel'
+import { Authorization } from '../_services/AuthrizationService'
 import { Constants as K } from '../_model/Constants'
 
 @Component({
@@ -14,39 +16,62 @@ import { Constants as K } from '../_model/Constants'
 })
 export class EditPostViewComponent implements OnInit {
 
-  blogObj?: BlogModel  
+  blogObj?: BlogModel
+  isRequestSend: boolean
+  placeid:string
 
-  constructor(private route: ActivatedRoute, private httpClient: HttpClient, private cookieService: CookieService ) { }
+  myControl = new FormControl()
+  places: Place[]
+  filteredPlaces: Observable<Place[]>;
+
+  constructor(private route: ActivatedRoute, private httpClient: HttpClient, private cookieService: CookieService) { }
   auth = new Authorization(this.cookieService, this.httpClient)
 
   ngOnInit(): void {
+
+    this.$getPlaces('').subscribe((places) => {
+      console.log(places)
+      this.isRequestSend = false
+      this.places = places
+
+      this.filteredPlaces = this.myControl.valueChanges
+        .pipe(
+          startWith(''),
+          map(value => this._filter(value))
+        );
+
+    })
 
     const blogid = new Observable<string>(obser => {
       this.route.paramMap.subscribe((param) => {
         obser.next(param.get('blogid'))
       })
-    }).subscribe( (val) => {
+    }).subscribe((val) => {
       if (val != 'new') {
         if (this.auth.isJwtOk) {
-          this.httpClient.get(`${K.server}api/posts/${val}`, { headers: { Authorization: this.auth.token } })
-          .subscribe((blogObject: BlogModel) => {
-            console.log(blogObject)
-            this.blogObj = blogObject
-          })
+          this.httpClient.get<BlogModel>(`${K.server}api/blogs/${val}`,
+            {
+              headers:
+                { Authorization: this.auth.token }
+            })
+            .subscribe((blogObject: BlogModel) => {
+              console.log(blogObject)
+              this.blogObj = blogObject
+            })
         }
       } //
       else {
-        console.log ('111')
-        if ( localStorage.getItem('blog') ) {
-            let draft = JSON.parse( localStorage.getItem('blog') ) as BlogDraft
-            let title = document.getElementById('title') as HTMLInputElement
-            title.value = draft.title
-            let description = document.getElementById('description') as HTMLInputElement
-            description.value = draft.description
-            let place = document.getElementById('place') as HTMLInputElement
-            place.value = draft.place
-            let tags = document.getElementById('tags') as HTMLInputElement
-            tags.value = draft.tags
+        console.log('111')
+        if (localStorage.getItem('blog')) {
+          let draft = JSON.parse(localStorage.getItem('blog')) as BlogDraft
+          let title = document.getElementById('title') as HTMLInputElement
+          title.value = draft.title
+          let description = document.getElementById('description') as HTMLInputElement
+          description.value = draft.description
+          let place = document.getElementById('place') as HTMLInputElement
+          place.value = draft.place
+          let tags = document.getElementById('tags') as HTMLInputElement
+          tags.value = draft.tags
         }
       }
     })
@@ -54,11 +79,9 @@ export class EditPostViewComponent implements OnInit {
 
   }
 
-  getTags () : string {
-    return '#' + this.blogObj.tags.join(' #')
-  }
+  getTags(): string { return '#' + this.blogObj.tags.join(' #') }
 
-  clear () {
+  clear() {
     let title = document.getElementById('title') as HTMLInputElement
     title.value = ''
     let description = document.getElementById('description') as HTMLInputElement
@@ -69,35 +92,106 @@ export class EditPostViewComponent implements OnInit {
     tags.value = ''
   }
 
-  save ( title:string, description:string, place:string, tags:string ) {
-   
-    if (this.blogObj != null ) {
+  save(title: string, description: string, tags: string) {
+
+    const headers = new HttpHeaders({
+      'Authorization': this.auth.token
+    })
+
+    if (this.blogObj != null) {
+
       console.log('update here')
-      this.httpClient.put(`${K.server}api/posts/${this.blogObj.id}`, { title: title,
-         description:description, place: place, tags: tags}, { headers: { Authrization: this.auth.token}}
-      ).subscribe ( () => {
-        window.location.href = '\home'
-      })
+      // this.httpClient.put(`${K.server}api/blogs/${this.blogObj.id}`, {
+      //   title: title,
+      //   description: description, placeId: this.placeid, tags: tags
+      // }, { headers: { Authrization: this.auth.token } }
+      // ).subscribe(() => {
+      //   window.location.href = '\home'
+      // })
+
+      this.httpClient.request<BlogModel>(new HttpRequest('PUT', `${K.server}api/blogs/${this.blogObj.id}`,
+        JSON.stringify({
+          title: title, description: description, placeId: this.placeid, tags: tags
+        })
+        , { headers: headers }))
+        .subscribe((blog) => {
+          if (blog != undefined) {
+            console.log(blog)
+            this.clear()
+            window.location.href = '\home'
+          }
+        })
+
 
     } else {
-      console.log('create here')
-      this.httpClient.post(`${K.server}api/posts/`, { title: title,
-        description:description, place: place, tags: tags}, { headers: { Authrization: this.auth.token}}
-      ).subscribe ( () => {
-        window.location.href = '\home'
-      })
-    }
 
+      this.httpClient.request<BlogModel>(new HttpRequest('POST', `${K.server}api/blogs/`,
+        JSON.stringify({
+          title: title, description: description, placeId: this.placeid, tags: tags
+        })
+        , { headers: headers }))
+        .subscribe((blog) => {
+          if (blog != undefined) {
+            console.log(blog)
+            this.clear()
+            window.location.href = '\home'
+          }
+        })
+    }
   }
 
-  draft (title:string, description:string, place:string, tags:string) {
-    console.log (title)
+  private _filter(value: string): Place[] {
+    console.log(value)
+    return this.places.filter((val) => {
+      return val.title.toLowerCase().includes(value.toLowerCase())
+    }
+    )
+  }
+
+  draft(title: string, description: string, place: string, tags: string) {
+    console.log(title)
     localStorage.setItem("blog", JSON.stringify({
-      title: title, 
+      title: title,
       description: description,
       place: place,
       tags: tags
     }))
   }
+
+  selectedPlace($event: string) {
+    console.log ( $event )
+    this.placeid = ''
+
+    let filtred = this.places.filter ( val => {
+      return val.title === $event
+    })
+
+
+    if ( filtred.length > 0 ) {
+      this.placeid = filtred[0].id
+    }
+
+  }
+
+  $getPlaces(title: string): Observable<Place[]> {
+    console.log('request send: ' + title)
+
+    if (title != '') {
+
+      return this.httpClient.get<[Place]>(`${K.server}api/places/title/${title}`,
+        { headers: new HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) })
+
+    } else {
+
+      return this.httpClient.get<[Place]>(`${K.server}api/places/`,
+        { headers: new HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) })
+
+    }
+
+  }
+
+  /////
+
+
 
 }

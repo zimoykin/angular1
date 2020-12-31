@@ -52,21 +52,58 @@
 .calendarMonth {
     background-color: rgba($color: lemonchiffon, $alpha: 0);
     border-radius: 5px;
-    padding-right: 0;   
+    padding-right: 0;  
+   
+}
+.calendarMonth a {
+    display: inline-table;
+    width: 2rem;
+    height: 2rem;
+    background-color: rgba($color: lemonchiffon, $alpha: 0.3);
+    border-radius: 1rem;
+    margin: 0.1rem;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: lighter;
+    font-size: 16px;
+    align-items: center;
+    //text-align: center;
+    //vertical-align: -webkit-baseline-middle;
+}
+.calendarMonth h3 {
+    color: black;
+    background-color: rgba($color: lemonchiffon, $alpha: 0.1);
+    padding: 0.3rem;
+    font-size: 19px;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    font-weight: lighter;
+
+    vertical-align: -webkit-baseline-middle;
+    vertical-align: middle;
+    text-align: center;
+    align-items: center;
+
+}
+.calendarMonth span {
+    vertical-align: -webkit-baseline-middle;
+    vertical-align: middle;
+    text-align: center;
+    justify-content: center;
+
 }
 
+
 #calendar {
-    padding-top: 20rem;
+    //padding-top: 20rem;
     overflow: hidden;
     display: flex;
     justify-content: center;
-    align-items: center;
     text-align: center;
-    vertical-align: middle;
 }
 
 #calendarcard {
-    margin: .2rem;
+    //margin: .2rem;
     background-color: rgba($color: lemonchiffon, $alpha: 0);
     position: absolute;
     

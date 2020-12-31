@@ -1,6 +1,6 @@
 .card {
     height: 10rem;
-    background-color: rgba($color: black, $alpha: 0.2);
+    background-color: rgba($color: gray, $alpha: 0.3);
     border-style: none;
     border-radius: 0.5rem;
     padding: 1rem;
@@ -8,5 +8,6 @@
 
 .card a {
     color: rosybrown;
+    padding-top: .5rem;
 }
 

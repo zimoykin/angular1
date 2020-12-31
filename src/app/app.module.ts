@@ -15,6 +15,12 @@ import { UserViewComponent } from './user-view/user-view.component';
 import { EditPostViewComponent } from './edit-post-view/edit-post-view.component';
 import { BackgroundViewComponent } from './background-view/background-view.component';
 import { CalendarComponent } from './calendar/calendar.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 
 @NgModule({
   declarations: [
@@ -34,7 +40,12 @@ import { CalendarComponent } from './calendar/calendar.component';
     MDBBootstrapModule.forRoot(),
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

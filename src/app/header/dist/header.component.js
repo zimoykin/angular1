@@ -10,6 +10,7 @@ exports.HeaderComponent = void 0;
 var core_1 = require("@angular/core");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var rxjs_1 = require("rxjs");
+var Constants_1 = require("../_model/Constants");
 var HeaderComponent = /** @class */ (function () {
     function HeaderComponent(httpClient, cookieService) {
         this.httpClient = httpClient;
@@ -37,6 +38,7 @@ var HeaderComponent = /** @class */ (function () {
     };
     HeaderComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.menu = Constants_1.Constants.defaultMenu();
         var userName = this.cookieService.get('username');
         this.loginName = new rxjs_1.Observable(function (obser) {
             if (userName != '') {

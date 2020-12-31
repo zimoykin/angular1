@@ -4,6 +4,7 @@ import { CookieService } from 'ngx-cookie-service'
 import { Authorization } from '../_services/AuthrizationService'
 import { Observable } from 'rxjs'
 import { User } from '../_model/User'
+import { Constants as K, ElemntMenu} from '../_model/Constants'
 
 @Component({
   selector: 'app-header',
@@ -17,6 +18,7 @@ export class HeaderComponent implements OnInit {
   loginName: Observable<string>
   showPanelLogin = false
   auth = new Authorization(this.cookieService, this.httpClient)
+  menu: Array<ElemntMenu>
 
   constructor(private httpClient: HttpClient, private cookieService: CookieService) { }
 
@@ -42,6 +44,8 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.menu = K.defaultMenu()
 
     const userName = this.cookieService.get('username')
     this.loginName = new Observable<string>(obser => {

@@ -9,9 +9,14 @@ exports.__esModule = true;
 exports.CalendarComponent = void 0;
 var core_1 = require("@angular/core");
 var Month_1 = require("../_model/Month");
+var Constants_1 = require("../_model/Constants");
+var AuthrizationService_1 = require("../_services/AuthrizationService");
 var CalendarComponent = /** @class */ (function () {
-    function CalendarComponent() {
+    function CalendarComponent(http, coockie) {
+        this.http = http;
+        this.coockie = coockie;
         this.$dt = new Date();
+        this.auth = new AuthrizationService_1.Authorization(this.coockie, this.http);
     }
     CalendarComponent.prototype.ngOnInit = function () {
         this.GetBuildThisMonth();
@@ -22,6 +27,18 @@ var CalendarComponent = /** @class */ (function () {
     };
     CalendarComponent.prototype.chooseDay = function (date) {
         console.log(date);
+        this.getBlogsOnDay(date);
+    };
+    CalendarComponent.prototype.getBlogsOnDay = function (date) {
+        var _this = this;
+        this.http.get(Constants_1.Constants.server + "api/blogs/onday/" + date.toLocaleDateString(), {
+            headers: {
+                Authorization: this.auth.token
+            }
+        })
+            .subscribe(function (blogs) {
+            _this.blogs = blogs;
+        });
     };
     CalendarComponent.prototype.GetBuildThisMonth = function () {
         var _month = this.$dt.toLocaleDateString('en', { month: 'long' });

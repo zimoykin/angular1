@@ -17,7 +17,11 @@ exports.HomeComponent = void 0;
 
 var core_1 = require("@angular/core");
 
-var Constants_1 = require("../../Model/Constants");
+var rxjs_1 = require("rxjs");
+
+var Constants_1 = require("../_model/Constants");
+
+var AuthrizationService_1 = require("../_services/AuthrizationService");
 
 var HomeComponent =
 /** @class */
@@ -26,37 +30,55 @@ function () {
     this.httpClient = httpClient;
     this.cookieService = cookieService;
     this.list = [];
+    this.isLoaded = false;
+    this.backElement = null;
+    this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
   }
 
   HomeComponent.prototype.ngOnInit = function () {
     var _this = this;
 
-    this.getAllBlog().subscribe(function (response) {
+    this.getAllBlogs().subscribe(function (response) {
+      _this.isLoaded = true;
       response.map(function (post) {
-        _this.list.push({
-          title: post.title,
-          description: post.description,
-          imagesrc: post.image,
-          id: post.id
-        });
+        _this.list.push(post);
       });
     });
+    this.backElement = document.getElementById('background');
   };
 
-  HomeComponent.prototype.getAllBlog = function () {
-    var accessToken = this.cookieService.get('jwt');
+  HomeComponent.prototype.getAllBlogs = function () {
+    var _this = this;
 
-    if (accessToken == null || accessToken == '') {
-      return;
-    }
+    var blogs = new rxjs_1.Observable(function (obser) {
+      if (_this.auth.isJwtOk()) {
+        console.log("get jwt" + _this.auth.token);
 
-    var token = "Bearer " + accessToken;
-    return this.httpClient.get(Constants_1.Constants.server + "api/posts", {
-      headers: {
-        Authorization: token
+        if (_this.auth.token == '' || _this.auth.token == null) {
+          throw console.error('error');
+        }
+
+        _this.httpClient.get(Constants_1.Constants.server + "api/blogs", {
+          headers: {
+            Authorization: _this.auth.token
+          }
+        }).subscribe(function (blogs) {
+          obser.next(blogs);
+        });
+      } else {
+        console.log("jwt isn't yet ok");
       }
     });
+    return blogs;
   };
+
+  HomeComponent.prototype.onScroll = function ($event) {
+    var scrollFactor = 100;
+    console.log(window.screen.height);
+    this.backElement.style.backgroundImage = 'url (https://picjumbo.com/wp-content/uploads/beautiful-tuscan-landscape-around-pienza-town-italy-2210x1473.jpg)';
+  };
+
+  __decorate([core_1.HostListener('window:scroll', ['$event'])], HomeComponent.prototype, "onScroll");
 
   HomeComponent = __decorate([core_1.Component({
     selector: 'app-home',

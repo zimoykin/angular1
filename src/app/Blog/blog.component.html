@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<div class='card'>
+<div class='card w-100'>
     <div class='title'>
         <a routerLink="/blog/{{ blog.id }}">
             {{ blog.title }}  
@@ -17,10 +17,14 @@
             (edit)
         </a>
     </div>
-    <div>
-        <img src="{{ blog.image }}" />
-    </div>
-    <div>
-        <p> {{ blog.description }} </p>
+    <div class='blog d-flex flex-row align-items-start'>
+
+        <div class='img'>
+            <img src="{{ blog.image }}" />
+        </div>
+        <div>
+            <p> {{ blog.description }} </p>
+        </div>
+
     </div>
 </div>

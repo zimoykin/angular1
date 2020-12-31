@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
           throw console.error('error');
         }
 
-        this.httpClient.get(`${K.server}api/posts`, {
+        this.httpClient.get(`${K.server}api/blogs`, {
           headers: { Authorization: this.auth.token }
         }).subscribe ( (blogs: [BlogModel]) => {
           obser.next (blogs)

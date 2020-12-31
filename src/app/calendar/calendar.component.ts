@@ -1,6 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { BlogModel } from '../_model/BlogModel';
 import { Day, Month, Week } from '../_model/Month';
+import { Constants as K } from '../_model/Constants'
+import { Authorization } from '../_services/AuthrizationService' 
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-calendar',
@@ -12,24 +16,34 @@ export class CalendarComponent implements OnInit {
   month: Month
   blogs: [BlogModel]
   $dt = new Date()
+  auth: Authorization = new Authorization(this.coockie, this.http)
 
-  constructor() { }
+  constructor( private http: HttpClient, private coockie: CookieService ) { }
 
   ngOnInit(): void {
     this.GetBuildThisMonth()
   }
 
   nextMonth(month: number) {
-
     this.$dt.setMonth(this.$dt.getMonth() + month)
     this.GetBuildThisMonth()
-
   }
 
   chooseDay (date: Date) {
     console.log (date)
+    this.getBlogsOnDay(date)
+  }
 
-    
+  getBlogsOnDay (date: Date) {
+
+    this.http.get<[BlogModel]>(`${K.server}api/blogs/onday/${date.toLocaleDateString()}`, { 
+      headers: {
+        Authorization: this.auth.token
+      }})
+      .subscribe ( blogs => {
+        this.blogs = blogs
+      }
+    )
   }
 
   GetBuildThisMonth() {

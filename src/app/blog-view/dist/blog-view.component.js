@@ -27,7 +27,7 @@ var BlogViewComponent = /** @class */ (function () {
         }).subscribe(function (val) {
             console.log(val);
             if (_this.auth.isJwtOk) {
-                _this.httpClient.get(Constants_1.Constants.server + "api/posts/" + val, { headers: { Authorization: _this.auth.token } }).subscribe(function (blogObject) {
+                _this.httpClient.get(Constants_1.Constants.server + "api/blogs/" + val, { headers: { Authorization: _this.auth.token } }).subscribe(function (blogObject) {
                     console.log(blogObject);
                     _this.blogObj = blogObject;
                 });

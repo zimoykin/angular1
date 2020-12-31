@@ -1,6 +1,6 @@
 .card {
   height: 10rem;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(128, 128, 128, 0.3);
   border-style: none;
   border-radius: 0.5rem;
   padding: 1rem;
@@ -8,4 +8,5 @@
 
 .card a {
   color: rosybrown;
+  padding-top: 0.5rem;
 }

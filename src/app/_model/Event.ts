@@ -1,8 +1,8 @@
 
-export class Event {
+// export class Event {
 
-    date: Date
-    title: string
-    description: string
+//     date: Date
+//     title: string
+//     description: string
 
-}
+// }

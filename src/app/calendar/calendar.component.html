@@ -2,15 +2,15 @@
     <div id='calendarcard'>
         <div class='calendarMonth' id='month'>
 
-            <button class='btn btn-link' (click)='nextMonth(-1)'>
-                previus
-            </button>
-
-            <span class='btn btn--link'> {{ month.title }} {{ month.year }} </span>
-
-            <button class='btn btn-link' (click)='nextMonth(1)'>
-                next
-            </button>
+            <h3> 
+                <a (click)='nextMonth(-1)'>
+                    <span>{{'<'}}</span>
+                </a>
+                {{ month.title }} {{ month.year }} 
+                <a (click)='nextMonth(1)'>
+                    <span>{{'>'}}</span>
+                </a>
+            </h3>
 
             <div class='calendarweek' id='calndarWeek' 
             *ngFor="let numberWeek of month.week">

@@ -16,6 +16,17 @@ var form_component_1 = require("./form/form.component");
 var header_component_1 = require("./header/header.component");
 var angular_bootstrap_md_1 = require("angular-bootstrap-md");
 var http_1 = require("@angular/common/http");
+var home_component_1 = require("./home/home.component");
+var blog_view_component_1 = require("./blog-view/blog-view.component");
+var contact_view_component_1 = require("./contact-view/contact-view.component");
+var user_view_component_1 = require("./user-view/user-view.component");
+var edit_post_view_component_1 = require("./edit-post-view/edit-post-view.component");
+var background_view_component_1 = require("./background-view/background-view.component");
+var calendar_component_1 = require("./calendar/calendar.component");
+var forms_1 = require("@angular/forms");
+var autocomplete_1 = require("@angular/material/autocomplete");
+var input_1 = require("@angular/material/input");
+var animations_1 = require("@angular/platform-browser/animations");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -25,13 +36,25 @@ var AppModule = /** @class */ (function () {
                 app_component_1.AppComponent,
                 blog_component_1.blogComponent,
                 form_component_1.FormComponent,
-                header_component_1.HeaderComponent
+                header_component_1.HeaderComponent,
+                home_component_1.HomeComponent,
+                blog_view_component_1.BlogViewComponent,
+                contact_view_component_1.ContactViewComponent,
+                user_view_component_1.UserViewComponent,
+                edit_post_view_component_1.EditPostViewComponent,
+                background_view_component_1.BackgroundViewComponent,
+                calendar_component_1.CalendarComponent
             ],
             imports: [
                 angular_bootstrap_md_1.MDBBootstrapModule.forRoot(),
                 platform_browser_1.BrowserModule,
                 http_1.HttpClientModule,
-                app_routing_module_1.AppRoutingModule
+                app_routing_module_1.AppRoutingModule,
+                input_1.MatInputModule,
+                autocomplete_1.MatAutocompleteModule,
+                forms_1.FormsModule,
+                forms_1.ReactiveFormsModule,
+                animations_1.BrowserAnimationsModule
             ],
             providers: [],
             bootstrap: [app_component_1.AppComponent]

@@ -28,7 +28,7 @@ export class BlogViewComponent implements OnInit {
     }).subscribe( (val) => {
       console.log(val)
       if (this.auth.isJwtOk) {
-          this.httpClient.get(`${K.server}api/posts/${val}`,{ headers: { Authorization: this.auth.token } }).subscribe ( (blogObject: BlogModel) => {
+          this.httpClient.get(`${K.server}api/blogs/${val}`,{ headers: { Authorization: this.auth.token } }).subscribe ( (blogObject: BlogModel) => {
 
               console.log (blogObject)
               this.blogObj = blogObject

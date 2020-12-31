@@ -38,7 +38,7 @@ var HomeComponent = /** @class */ (function () {
                 if (_this.auth.token == '' || _this.auth.token == null) {
                     throw console.error('error');
                 }
-                _this.httpClient.get(Constants_1.Constants.server + "api/posts", {
+                _this.httpClient.get(Constants_1.Constants.server + "api/blogs", {
                     headers: { Authorization: _this.auth.token }
                 }).subscribe(function (blogs) {
                     obser.next(blogs);
