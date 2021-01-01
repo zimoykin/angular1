@@ -3,11 +3,10 @@ h1 {
 }
 
 .container {
-  padding-top: 4rem;
+  padding-top: 5rem;
 }
 
 #form {
-  padding-top: 4rem;
   overflow: hidden;
   display: flex;
   justify-content: center;

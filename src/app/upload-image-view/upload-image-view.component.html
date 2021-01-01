@@ -1,0 +1,7 @@
+
+<div class="container bg-light w-100" appDnd (fileDropped)="onFileDropped($event)">
+
+    <input title="qq" type="file" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event.target.files)"/>
+    <h3>Drag and drop file here</h3>
+
+  </div>

@@ -27,6 +27,8 @@ var forms_1 = require("@angular/forms");
 var autocomplete_1 = require("@angular/material/autocomplete");
 var input_1 = require("@angular/material/input");
 var animations_1 = require("@angular/platform-browser/animations");
+var select_1 = require("@angular/material/select/");
+var upload_image_view_component_1 = require("./upload-image-view/upload-image-view.component");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -43,7 +45,8 @@ var AppModule = /** @class */ (function () {
                 user_view_component_1.UserViewComponent,
                 edit_post_view_component_1.EditPostViewComponent,
                 background_view_component_1.BackgroundViewComponent,
-                calendar_component_1.CalendarComponent
+                calendar_component_1.CalendarComponent,
+                upload_image_view_component_1.UploadImageViewComponent
             ],
             imports: [
                 angular_bootstrap_md_1.MDBBootstrapModule.forRoot(),
@@ -54,7 +57,8 @@ var AppModule = /** @class */ (function () {
                 autocomplete_1.MatAutocompleteModule,
                 forms_1.FormsModule,
                 forms_1.ReactiveFormsModule,
-                animations_1.BrowserAnimationsModule
+                animations_1.BrowserAnimationsModule,
+                select_1.MatSelectModule
             ],
             providers: [],
             bootstrap: [app_component_1.AppComponent]

@@ -19,6 +19,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSelectModule} from '@angular/material/select/';
+import { UploadImageViewComponent } from './upload-image-view/upload-image-view.component';
+
 
 
 
@@ -34,7 +37,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     UserViewComponent,
     EditPostViewComponent,
     BackgroundViewComponent,
-    CalendarComponent
+    CalendarComponent,
+    UploadImageViewComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),
@@ -45,7 +49,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatAutocompleteModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

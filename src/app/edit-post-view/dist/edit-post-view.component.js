@@ -44,6 +44,8 @@ var EditPostViewComponent = /** @class */ (function () {
                         .subscribe(function (blogObject) {
                         console.log(blogObject);
                         _this.blogObj = blogObject;
+                        document.getElementById('place').value = blogObject.place.title;
+                        _this.placeid = blogObject.place.id;
                     });
                 }
             } //
@@ -77,25 +79,31 @@ var EditPostViewComponent = /** @class */ (function () {
     EditPostViewComponent.prototype.save = function (title, description, tags) {
         var _this = this;
         var headers = new http_1.HttpHeaders({
-            'Authorization': this.auth.token
+            'Authorization': this.auth.token,
+            'Content-Type': 'application/json'
         });
+        console.log(this.file);
         if (this.blogObj != null) {
             console.log('update here');
-            // this.httpClient.put(`${K.server}api/blogs/${this.blogObj.id}`, {
-            //   title: title,
-            //   description: description, placeId: this.placeid, tags: tags
-            // }, { headers: { Authrization: this.auth.token } }
-            // ).subscribe(() => {
-            //   window.location.href = '\home'
-            // })
-            this.httpClient.request(new http_1.HttpRequest('PUT', Constants_1.Constants.server + "api/blogs/" + this.blogObj.id, JSON.stringify({
+            console.log(this.file);
+            this.httpClient.put(Constants_1.Constants.server + "api/blogs/" + this.blogObj.id, JSON.stringify({
                 title: title, description: description, placeId: this.placeid, tags: tags
-            }), { headers: headers }))
+            }), { headers: headers })
                 .subscribe(function (blog) {
                 if (blog != undefined) {
                     console.log(blog);
                     _this.clear();
-                    window.location.href = '\home';
+                    //u-p-l-o-a-d-s"
+                    // const formData: FormData = new FormData();
+                    // formData.append('file', this.file, this.file.fileName);
+                    var data = new FormData();
+                    data.append('file', _this.file);
+                    _this.httpClient.post(Constants_1.Constants.server + "api/blogs/uploads/" + _this.blogObj.id, data, { headers: new http_1.HttpHeaders({
+                            'Authorization': _this.auth.token
+                        }) }).subscribe(function (val) {
+                        console.log(val);
+                    });
+                    // window.location.href = '\home'
                 }
             });
         }

@@ -17,9 +17,11 @@
                     [matAutocomplete]="auto">
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
                     (optionSelected)='selectedPlace($event.option.value)'>
-                    <mat-option *ngFor="let place of filteredPlaces | async" [value]="place.title">
-                        {{ place.title }}
-                    </mat-option>
+                       
+                        <mat-option *ngFor="let place of filteredPlaces | async" [value]="place.title">
+                            {{ place.title }}
+                        </mat-option>
+                   
                 </mat-autocomplete>
             </mat-form-field>
 
@@ -28,6 +30,8 @@
                 <textarea class="form-control" id='tags'
                     placeholder="tags">{{blogObj !=null ? getTags() : ""}}</textarea>
             </div>
+
+            <app-upload-image-view [main]='this'></app-upload-image-view>
 
             <button type="submit" class="btn btn-success m-1"
                 (click)="save(BlogObj.title.value, BlogObj.description.value, BlogObj.tags.value)">

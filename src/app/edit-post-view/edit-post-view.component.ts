@@ -19,10 +19,12 @@ export class EditPostViewComponent implements OnInit {
   blogObj?: BlogModel
   isRequestSend: boolean
   placeid:string
+  public file: any 
 
   myControl = new FormControl()
   places: Place[]
-  filteredPlaces: Observable<Place[]>;
+  filteredPlaces: Observable<Place[]>
+  selected: string
 
   constructor(private route: ActivatedRoute, private httpClient: HttpClient, private cookieService: CookieService) { }
   auth = new Authorization(this.cookieService, this.httpClient)
@@ -56,7 +58,9 @@ export class EditPostViewComponent implements OnInit {
             })
             .subscribe((blogObject: BlogModel) => {
               console.log(blogObject)
-              this.blogObj = blogObject
+              this.blogObj = blogObject;
+              (<HTMLInputElement>document.getElementById('place')).value = blogObject.place.title
+              this.placeid = blogObject.place.id
             })
         }
       } //
@@ -95,30 +99,43 @@ export class EditPostViewComponent implements OnInit {
   save(title: string, description: string, tags: string) {
 
     const headers = new HttpHeaders({
-      'Authorization': this.auth.token
+      'Authorization': this.auth.token,
+      'Content-Type': 'application/json'
     })
+
+    console.log(this.file)
 
     if (this.blogObj != null) {
 
       console.log('update here')
-      // this.httpClient.put(`${K.server}api/blogs/${this.blogObj.id}`, {
-      //   title: title,
-      //   description: description, placeId: this.placeid, tags: tags
-      // }, { headers: { Authrization: this.auth.token } }
-      // ).subscribe(() => {
-      //   window.location.href = '\home'
-      // })
+      console.log (this.file)
 
-      this.httpClient.request<BlogModel>(new HttpRequest('PUT', `${K.server}api/blogs/${this.blogObj.id}`,
+      this.httpClient.put<BlogModel>(`${K.server}api/blogs/${this.blogObj.id}`,
         JSON.stringify({
           title: title, description: description, placeId: this.placeid, tags: tags
-        })
-        , { headers: headers }))
+        }),
+        { headers: headers })
         .subscribe((blog) => {
           if (blog != undefined) {
             console.log(blog)
             this.clear()
-            window.location.href = '\home'
+
+            //u-p-l-o-a-d-s"
+            // const formData: FormData = new FormData();
+            // formData.append('file', this.file, this.file.fileName);
+            const data = new FormData()
+            data.append('file', this.file)
+            this.httpClient.post<BlogModel>(`${K.server}api/blogs/uploads/${this.blogObj.id}`, 
+            data, 
+             {headers: new HttpHeaders({
+              'Authorization': this.auth.token
+            })}).subscribe(
+                (val) => {
+                  console.log (val)
+                }
+            )
+
+           // window.location.href = '\home'
           }
         })
 
@@ -139,7 +156,8 @@ export class EditPostViewComponent implements OnInit {
     }
   }
 
-  private _filter(value: string): Place[] {
+  private 
+  _filter(value: string): Place[] {
     console.log(value)
     return this.places.filter((val) => {
       return val.title.toLowerCase().includes(value.toLowerCase())
