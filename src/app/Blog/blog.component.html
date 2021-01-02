@@ -9,21 +9,39 @@
 </div>
 
 <div class='card w-100'>
-    <div class='title'>
-        <a routerLink="/blog/{{ blog.id }}">
-            {{ blog.title }}  
-        </a>
-        <a routerLink="/edit/{{ blog.id }}">
-            (edit)
-        </a>
-    </div>
-    <div class='blog d-flex flex-row align-items-start'>
-
-        <div class='img'>
-            <img src="{{ blog.image }}" />
+    <div class='title d-flex'>
+        <div class='w-75'>
+            <h2><a routerLink="/blog/{{ blog.id }}">{{ blog.title }}</a></h2>
         </div>
-        <div>
-            <p> {{ blog.description }} </p>
+        <div class='w-25'>
+            <h2><a routerLink="/edit/{{ blog.id }}">(edit)</a></h2>
+        </div>
+    </div>
+
+    <div class='blog align-items-start'>
+
+        <!-- d-flex flex-row <div class='img'>
+            <img src="{{ blog.image }}" />
+        </div> -->
+        <!-- <div class='div_img'
+            [style.background-image]="'url(' + blog.image  + ')'"
+            [style.width.px]='450'
+            [style.height.px]='450'> 
+        </div> -->
+
+        <picture>
+            <img
+                src="{{ blog.image }}"
+                alt="pictures"
+                style="object-fit: cover;"
+                loading="lazy"
+                width="100%"
+                height="450px"
+            />
+        </picture>
+
+        <div class='description'>
+            <p class=''> {{ blog.description }} </p>
         </div>
 
     </div>

@@ -116,7 +116,7 @@ export class EditPostViewComponent implements OnInit {
         }),
         { headers: headers })
         .subscribe((blog) => {
-          if (blog != undefined) {
+          if (blog != undefined && this.file != undefined) {
             console.log(blog)
             this.clear()
 

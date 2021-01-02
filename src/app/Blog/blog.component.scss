@@ -11,15 +11,18 @@
     padding: .2rem;
     margin-right: 0.2rem;
     color: White;
-    background-color: rgba($color: black, $alpha: 0.3);
+    //background-color: rgba($color: black, $alpha: 0.3);
     border-radius: .3rem;
     font-weight: lighter;
 }
-.card img {
+.div_img {
    // padding: 1rem;
-    border-radius: .1rem;
-    max-width: 700px;
-    max-height: 700px;
+    border-radius: 2rem;
+    background-color: rgba($color: white, $alpha: 0.5);
+    max-height: 450px;
+    max-width: 450px;
+    min-width: 450px;
+    min-height: 450px;
 }
 
 .blog{
@@ -29,7 +32,6 @@
 
 p{
     margin-bottom: 5rem;
-    background-color: rgba($color: white, $alpha: 0.7);
     padding: 1rem;
     font-weight: lighter;
 }
@@ -37,6 +39,9 @@ p{
 h2{
     text-align: center;
     font-weight: lighter;
+    background-color: rgba($color: lemonchiffon, $alpha: .4);
+    padding: .1rem;
+    margin: 0;
 }
 
 .flex {
@@ -47,4 +52,9 @@ h2{
     text-align: end;
     width: 100%;
     font-weight: lighter;
+}
+.description{
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: white, $alpha: 0.5);
 }

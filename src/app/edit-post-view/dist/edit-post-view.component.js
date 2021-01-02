@@ -90,7 +90,7 @@ var EditPostViewComponent = /** @class */ (function () {
                 title: title, description: description, placeId: this.placeid, tags: tags
             }), { headers: headers })
                 .subscribe(function (blog) {
-                if (blog != undefined) {
+                if (blog != undefined && _this.file != undefined) {
                     console.log(blog);
                     _this.clear();
                     //u-p-l-o-a-d-s"
