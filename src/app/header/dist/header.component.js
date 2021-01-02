@@ -25,9 +25,9 @@ var HeaderComponent = /** @class */ (function () {
     HeaderComponent.prototype.onScroll = function ($event) {
         var scrollFactor = 100;
         var opacity = (window.pageYOffset / scrollFactor);
-        opacity = opacity < 1 ? opacity : 1;
+        opacity = opacity < 0.7 ? opacity : 0.7;
         if (opacity <= 1) {
-            this.navElement.style.backgroundColor = 'rgba(255, 215, 235, ' + opacity + ')';
+            this.navElement.style.backgroundColor = 'rgba(185, 222, 223, ' + opacity + ')';
         }
         if (window.pageYOffset / scrollFactor > 1) {
             this.navElement.classList.add('navbar-shadow');

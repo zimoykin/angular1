@@ -83,7 +83,7 @@ export class EditPostViewComponent implements OnInit {
 
   }
 
-  getTags(): string { return '#' + this.blogObj.tags.join(' #') }
+  public getTags(blog: BlogModel): string { return '#' + blog.tags.join(' #') }
 
   clear() {
     let title = document.getElementById('title') as HTMLInputElement

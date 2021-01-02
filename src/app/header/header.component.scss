@@ -11,7 +11,7 @@
     border-radius: 1vh;
     padding: 0.5rem;
     margin: 0.3rem;
-    background-color: rgb(255, 215, 255);
+    //background-color: rgb(255, 215, 255);
     cursor: pointer;
 }
 
@@ -21,19 +21,15 @@
     border: 2px solid salmon;
 }
 
-.login button {
-    background-color: transparent;
-    border-radius: 20px;
-    border: 3px solid seagreen;
-    color: seagreen;
-}
+
 
 header {
     width: 100%;
-    background-color: lightgray;
+    background-color: rgba($color: #65a1a0, $alpha: 0.7);
     position: fixed;
     z-index: 997;
     font-weight: lighter;
+    margin-left: 1px;
 }
 
 
@@ -70,27 +66,28 @@ header {
   }
 
 .menuitem {
-   justify-content: start;
+    justify-content: start;
     font-weight: lighter;
-   
-    padding: .2rem;
-    margin: .2rem;
     color: black;
     cursor: pointer;
-    font-weight: lighter;
+    padding: .5rem;
+    border-radius: .5rem;
+    border-style: none;
+    background-color: rgba($color: #B9DEDF, $alpha: 0.7);
+    margin-right: .5rem;
 }
 
 .menuitemLogin {
-    justify-content: end;
+
+     justify-content: end;
      font-weight: lighter;
-     padding: .2rem;
-     margin: .2rem;
      color: black;
      cursor: pointer;
-     font-weight: lighter;
+    // background-color: rgba($color: #65a1a0, $alpha: 0.7);
+
  }
 
 .menuitem:hover {
-    background-color: lemonchiffon;
+
     cursor: pointer;
 }

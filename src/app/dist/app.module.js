@@ -12,7 +12,6 @@ var core_1 = require("@angular/core");
 var app_routing_module_1 = require("./app-routing.module");
 var app_component_1 = require("./app.component");
 var blog_component_1 = require("./blog/blog.component");
-var form_component_1 = require("./form/form.component");
 var header_component_1 = require("./header/header.component");
 var angular_bootstrap_md_1 = require("angular-bootstrap-md");
 var http_1 = require("@angular/common/http");
@@ -29,6 +28,7 @@ var input_1 = require("@angular/material/input");
 var animations_1 = require("@angular/platform-browser/animations");
 var select_1 = require("@angular/material/select/");
 var upload_image_view_component_1 = require("./upload-image-view/upload-image-view.component");
+var footerview_component_1 = require("./footerview/footerview.component");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -37,7 +37,6 @@ var AppModule = /** @class */ (function () {
             declarations: [
                 app_component_1.AppComponent,
                 blog_component_1.blogComponent,
-                form_component_1.FormComponent,
                 header_component_1.HeaderComponent,
                 home_component_1.HomeComponent,
                 blog_view_component_1.BlogViewComponent,
@@ -46,7 +45,8 @@ var AppModule = /** @class */ (function () {
                 edit_post_view_component_1.EditPostViewComponent,
                 background_view_component_1.BackgroundViewComponent,
                 calendar_component_1.CalendarComponent,
-                upload_image_view_component_1.UploadImageViewComponent
+                upload_image_view_component_1.UploadImageViewComponent,
+                footerview_component_1.FooterviewComponent
             ],
             imports: [
                 angular_bootstrap_md_1.MDBBootstrapModule.forRoot(),

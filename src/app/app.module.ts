@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { blogComponent } from './blog/blog.component';
-import { FormComponent } from './form/form.component';
 import { HeaderComponent } from './header/header.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { HttpClientModule } from '@angular/common/http';
@@ -21,6 +20,10 @@ import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule} from '@angular/material/select/';
 import { UploadImageViewComponent } from './upload-image-view/upload-image-view.component';
+import { FooterviewComponent } from './footerview/footerview.component';
+import { TagsViewComponent } from './tags-view/tags-view.component';
+import { LocationViewComponent } from './location-view/location-view.component';
+import { AuthorViewComponent } from './author-view/author-view.component';
 
 
 
@@ -29,7 +32,6 @@ import { UploadImageViewComponent } from './upload-image-view/upload-image-view.
   declarations: [
     AppComponent,
     blogComponent,
-    FormComponent,
     HeaderComponent,
     HomeComponent,
     BlogViewComponent,
@@ -38,7 +40,11 @@ import { UploadImageViewComponent } from './upload-image-view/upload-image-view.
     EditPostViewComponent,
     BackgroundViewComponent,
     CalendarComponent,
-    UploadImageViewComponent
+    UploadImageViewComponent,
+    FooterviewComponent,
+    TagsViewComponent,
+    LocationViewComponent,
+    AuthorViewComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

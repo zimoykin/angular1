@@ -28,7 +28,7 @@
             <div class="form-group">
                 <label for='tags'> tags </label>
                 <textarea class="form-control" id='tags'
-                    placeholder="tags">{{blogObj !=null ? getTags() : ""}}</textarea>
+                    placeholder="tags">{{blogObj !=null ? getTags(blogObj) : ""}}</textarea>
             </div>
 
             <app-upload-image-view [main]='this'></app-upload-image-view>

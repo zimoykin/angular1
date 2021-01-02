@@ -16,7 +16,8 @@ var BackgroundViewComponent = /** @class */ (function () {
         this.imageURL = this.updateBackGroundImageURL();
     };
     BackgroundViewComponent.prototype.updateBackGroundImageURL = function () {
-        return "url('" + 'https://images.freeimages.com/images/large-previews/773/koldalen-4-1384902.jpg' + "')";
+        //return  `url('${'https://images.freeimages.com/images/large-previews/773/koldalen-4-1384902.jpg'}')`
+        return 'https://images.freeimages.com/images/large-previews/773/koldalen-4-1384902.jpg';
     };
     BackgroundViewComponent = __decorate([
         core_1.Component({

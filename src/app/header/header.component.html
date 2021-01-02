@@ -2,41 +2,27 @@
     <nav class="navbar navbar-expand-md" id="navbar">
         <div class='container'>
 
-            <div class='menuitem' *ngFor="let Elmenu of menu">
-                
-
+            <div class='d-flex w-100'>
+                <div *ngFor="let Elmenu of menu">
                     <a class='mr-1' routerLink={{Elmenu.route}}>
                         <button class="btn btn-light font-weight-light" id="homeButton">
                             {{Elmenu.title}}
                         </button>
                     </a>
+                </div>
 
-                 
-
-                <!-- <a class='m-1' routerLink='/contact'>
-                        <button class="btn btn-light font-weight-light" id="contactsButton">
-                            contacts
-                        </button>
-                    </a>
-                    
-                    <a class='m-1' routerLink='/edit/new'>
-                        <button class="btn btn-light font-weight-light" id="newButton">
-                            new blog
-                        </button>
-                    </a>
-                    
-                    <a class='m-1' routerLink='/calendar'>
-                        <button class="btn btn-light font-weight-light" id="calendar">
-                            calendar
-                        </button>
-                    </a> -->
             </div>
 
-            <div class='menuitemLogin'>
-                <button class="btn btn-light font-weight-light" id="loginButton" (click)="clickLogin()">
-                    {{ (loginName | async) }}
-                </button>
+            <div>
+                <div class='menuitemLogin'>
+                    <button class="btn btn-light font-weight-light" id="loginButton" (click)="clickLogin()">
+                        {{ (loginName | async) }}
+                    </button>
+                </div>
             </div>
+
+
+
         </div>
     </nav>
 </header>

@@ -65,7 +65,7 @@ var EditPostViewComponent = /** @class */ (function () {
             }
         });
     };
-    EditPostViewComponent.prototype.getTags = function () { return '#' + this.blogObj.tags.join(' #'); };
+    EditPostViewComponent.prototype.getTags = function (blog) { return '#' + blog.tags.join(' #'); };
     EditPostViewComponent.prototype.clear = function () {
         var title = document.getElementById('title');
         title.value = '';

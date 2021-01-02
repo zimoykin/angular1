@@ -10,11 +10,11 @@
 
 <div class='card w-100'>
     <div class='title d-flex'>
-        <div class='w-75'>
+        <div class='w-100'>
             <h2><a routerLink="/blog/{{ blog.id }}">{{ blog.title }}</a></h2>
         </div>
-        <div class='w-25'>
-            <h2><a routerLink="/edit/{{ blog.id }}">(edit)</a></h2>
+        <div class=''>
+            <h2 style="text-align: right;"><a routerLink="/edit/{{ blog.id }}">(edit)</a></h2>
         </div>
     </div>
 
@@ -41,8 +41,11 @@
         </picture>
 
         <div class='description'>
-            <p class=''> {{ blog.description }} </p>
+            <span> {{ blog.description }} </span>
         </div>
+            <div class='tags' *ngFor="let item of blog.tags">
+                <a routerLink="/tag/{{ item }}">{{ "#" + item }}</a>
+            </div>
 
     </div>
 </div>

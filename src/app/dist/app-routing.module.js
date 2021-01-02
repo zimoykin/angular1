@@ -15,6 +15,9 @@ var edit_post_view_component_1 = require("./edit-post-view/edit-post-view.compon
 var contact_view_component_1 = require("./contact-view/contact-view.component");
 var user_view_component_1 = require("./user-view/user-view.component");
 var calendar_component_1 = require("../app/calendar/calendar.component");
+var location_view_component_1 = require("../app/location-view/location-view.component");
+var tags_view_component_1 = require("../app/tags-view/tags-view.component");
+var author_view_component_1 = require("../app/author-view/author-view.component");
 var routes = [
     { path: 'home', component: home_component_1.HomeComponent },
     { path: 'blog/:blogid', component: blog_view_component_1.BlogViewComponent },
@@ -22,6 +25,9 @@ var routes = [
     { path: 'contacts', component: contact_view_component_1.ContactViewComponent },
     { path: 'user/:userid', component: user_view_component_1.UserViewComponent },
     { path: 'calendar', component: calendar_component_1.CalendarComponent },
+    { path: 'location/:location', component: location_view_component_1.LocationViewComponent },
+    { path: 'tag/:tag', component: tags_view_component_1.TagsViewComponent },
+    { path: 'author/:userid', component: author_view_component_1.AuthorViewComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 var AppRoutingModule = /** @class */ (function () {

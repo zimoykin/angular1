@@ -6,6 +6,9 @@ import { EditPostViewComponent as editView } from './edit-post-view/edit-post-vi
 import { ContactViewComponent } from './contact-view/contact-view.component'
 import { UserViewComponent as userView } from './user-view/user-view.component'
 import { CalendarComponent } from '../app/calendar/calendar.component'
+import { LocationViewComponent } from '../app/location-view/location-view.component'
+import { TagsViewComponent } from '../app/tags-view/tags-view.component'
+import { AuthorViewComponent } from '../app/author-view/author-view.component'
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -14,6 +17,9 @@ const routes: Routes = [
   { path: 'contacts', component: ContactViewComponent },
   { path: 'user/:userid', component: userView },
   { path: 'calendar', component: CalendarComponent },
+  { path: 'location/:location', component: LocationViewComponent },
+  { path: 'tag/:tag', component: TagsViewComponent },
+  { path: 'author/:userid', component: AuthorViewComponent },
   { path: '',  redirectTo: '/home', pathMatch: 'full' },
 ];
 

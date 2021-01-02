@@ -12,6 +12,7 @@ export class Constants {
         menus.push ( new ElemntMenu('new blog', '/edit/new') )
         menus.push ( new ElemntMenu('calendar', '/calendar') )
         menus.push ( new ElemntMenu('contacts', '/contacts') )
+        menus.push ( new ElemntMenu('places', '/places') )
 
         return menus
 

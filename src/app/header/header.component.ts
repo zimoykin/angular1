@@ -30,10 +30,10 @@ export class HeaderComponent implements OnInit {
   onScroll($event: Event) {
     const scrollFactor = 100;
     let opacity = (window.pageYOffset / scrollFactor);
-    opacity = opacity < 1 ? opacity : 1;
+    opacity = opacity < 0.7 ? opacity : 0.7;
 
     if (opacity <= 1) {
-      this.navElement.style.backgroundColor = 'rgba(255, 215, 235, ' + opacity + ')'
+      this.navElement.style.backgroundColor = 'rgba(185, 222, 223, ' + opacity + ')'
     }
 
     if (window.pageYOffset / scrollFactor > 1) {

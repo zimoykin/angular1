@@ -16,7 +16,8 @@ export class BackgroundViewComponent implements OnInit {
   }
 
   updateBackGroundImageURL() : string {
-    return  `url('${'https://images.freeimages.com/images/large-previews/773/koldalen-4-1384902.jpg'}')`
+    //return  `url('${'https://images.freeimages.com/images/large-previews/773/koldalen-4-1384902.jpg'}')`
+    return 'https://images.freeimages.com/images/large-previews/773/koldalen-4-1384902.jpg'
   }
 
 }
