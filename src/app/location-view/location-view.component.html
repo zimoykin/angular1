@@ -1,1 +1,58 @@
-<p>location-view works!</p>
+<div *ngIf="willCreateNew != ''" style="z-index: 1000; position: fixed; top: 0;
+right: 0;
+bottom: 0;
+left: 0;
+width: 100%; height: 100%; 
+background-color: rgba(49, 46, 65, .7);
+transition: 1s;">
+    <div style="position: fixed; top: 25%; left: 25%; width: 50%; height: 50%; background-color: rgba(185, 222, 223, .7);
+    border-radius: 1rem; padding: 2rem;">
+
+        <h2 style="text-align: center; font-weight: lighter;"> Create new {{willCreateNew}} </h2>
+        <form #new_country action="javascript:void(0);">
+            <div class='w-100'>
+                <input class='w-100 mb-3 form-control' placeholder='title' id='title' type='text' aria-label="Text"
+                    required>
+                <input class='w-100 mb-3 form-control' placeholder='description' id='description' type='text'
+                    aria-label="Text" required>
+            </div>
+            <div class='w-100' style='display: inline; justify-items: center;'>
+                <button type="submit" class="btn btn-success mr-1"
+                    (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value)"> save </button>
+                <button type="reset" class="btn btn-danger mr-1" (click)="saveCountryPlace(false)"> cancel </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class='card w-100'>
+
+    <div style="display: flex; justify-items: right;">
+
+        <mat-form-field class="example-full-width w-100 bg-light p-2">
+            <input #country id='country' type="text" placeholder="country" aria-label="Text" matInput
+                [formControl]='myControl' [matAutocomplete]="auto" (focusout)='selectedCountry(country.value)'>
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                (optionSelected)='selectedCountry($event.option.value)'>
+                <mat-option *ngFor="let place of filtred | async" [value]="place.title">
+                    {{ place.title }}
+                </mat-option>
+
+            </mat-autocomplete>
+        </mat-form-field>
+        <button style="outline: none; border: none; width: 3rem; height: 3rem; border-radius: .5rem; border-style: none; text-decoration-style: none; 
+        background-color: rgba(185, 222, 223, .7)" (click)="addNewCountry()">
+            +
+        </button>
+
+    </div>
+
+    <div *ngFor="let item of places">
+        <a routerLink="/places/{{ item.id }}">{{item.title}}</a>
+    </div>
+    <div *ngIf="selected!=''">
+        <button class='btn btn-light'
+        (click)="addNewPlace()"> create new place </button>
+    </div>
+
+</div>

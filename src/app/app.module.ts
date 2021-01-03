@@ -26,7 +26,7 @@ import { LocationViewComponent } from './location-view/location-view.component';
 import { AuthorViewComponent } from './author-view/author-view.component';
 
 
-
+//https://www.design-seeds.com/in-nature/nature-made/nature-tones-40/
 
 @NgModule({
   declarations: [

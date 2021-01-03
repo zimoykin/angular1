@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'contacts', component: ContactViewComponent },
   { path: 'user/:userid', component: userView },
   { path: 'calendar', component: CalendarComponent },
-  { path: 'location/:location', component: LocationViewComponent },
+  { path: 'location', component: LocationViewComponent },
   { path: 'tag/:tag', component: TagsViewComponent },
   { path: 'author/:userid', component: AuthorViewComponent },
   { path: '',  redirectTo: '/home', pathMatch: 'full' },
