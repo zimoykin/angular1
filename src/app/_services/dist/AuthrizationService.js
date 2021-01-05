@@ -41,14 +41,26 @@ var Authorization = /** @class */ (function () {
         console.log("1 is jwt ok?");
         var token = this.cookieService.get('jwt');
         var ref = localStorage.getItem('ref');
-        if (token == '' && ref != '') {
+        console.log("token: " + token);
+        console.log("ref: " + ref);
+        if (ref == '' || ref == null || ref == undefined) {
+            console.log("without refresh!");
+            return false;
+        }
+        if (ref != '' || ref != null || ref != undefined) {
             console.log("refresh?");
             this.refresh().subscribe(function (val) {
-                return _this.isJwtOk();
+                if (val == null) {
+                    console.log('back false');
+                    return false;
+                }
+                else {
+                    return _this.isJwtOk();
+                }
             });
         }
         else if (token == '') {
-            console.log('back');
+            console.log('back false 2');
             return false;
         }
         var decoded = jwt_decode_1["default"](token);
@@ -94,16 +106,26 @@ var Authorization = /** @class */ (function () {
         var _this = this;
         console.log("ref token start");
         var ref = localStorage.getItem('ref');
+        console.log(ref);
+        // if (ref == null) {
+        //   return null
+        // }
         var uri = Constants_1.Constants.server + "api/users/refresh";
         var body = JSON.stringify({ refreshToken: ref });
         var headers = new http_1.HttpHeaders();
         headers = headers.append('Content-Type', 'application/json');
+        console.log('send request get toekn');
         var user$ = new rxjs_1.Observable(function (obser) {
             _this.http.post(uri, body, { headers: headers })
                 .subscribe(function (user) {
                 console.log('2');
-                _this.saveUser(user);
-                obser.complete();
+                if (user != null) {
+                    _this.saveUser(user);
+                    obser.complete();
+                }
+                else {
+                    obser.closed;
+                }
             });
         });
         return user$;

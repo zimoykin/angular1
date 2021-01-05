@@ -1,0 +1,31 @@
+#cardview {
+  top: calc(30% - 15rem/2);
+  width: 20rem;
+  height: 15rem;
+  left: calc(50% - 20rem/2);
+  overflow: hidden;
+  justify-content: center;
+  position: fixed;
+  justify-content: center;
+  text-align: center;
+  background-color: rgba(139, 196, 193, 0.6);
+  padding: 1rem;
+  border-radius: 0.3rem;
+}
+
+h3 {
+  background-color: rgba(101, 161, 160, 0.5);
+  color: white;
+  font-weight: lighter;
+  border-radius: 0.3rem;
+  border-style: none;
+}
+
+input {
+  border-radius: 0.3rem;
+  border-style: none;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+  width: 100%;
+}

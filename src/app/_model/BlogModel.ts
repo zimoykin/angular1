@@ -6,7 +6,7 @@ export class BlogModel {
     description: string
     image: string
     id: string
-    user: User
+    user: Author
     tags: [string]
     place: Place
     created: string
@@ -31,4 +31,9 @@ export class BlogModel {
     description: string
     place: string
     tags: string
+  }
+
+  export class Author {
+    id: string
+    username: string
   }

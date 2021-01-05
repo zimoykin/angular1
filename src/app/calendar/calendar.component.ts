@@ -5,6 +5,7 @@ import { Day, Month, Week } from '../_model/Month';
 import { Constants as K } from '../_model/Constants'
 import { Authorization } from '../_services/AuthrizationService' 
 import { CookieService } from 'ngx-cookie-service';
+import {  } from '../_services/date.extensions';
 
 @Component({
   selector: 'app-calendar',
@@ -36,7 +37,7 @@ export class CalendarComponent implements OnInit {
 
   getBlogsOnDay (date: Date) {
 
-    this.http.get<[BlogModel]>(`${K.server}api/blogs/onday/${date.toLocaleDateString()}`, { 
+    this.http.get<[BlogModel]>(`${K.server}api/blogs/onday/${date.prepareDateConvertToString()}`, { 
       headers: {
         Authorization: this.auth.token
       }})
@@ -107,5 +108,9 @@ export class CalendarComponent implements OnInit {
 
       }
     }
+  }
+
+  isMobile () : boolean {
+    return K.isMobile()
   }
 }

@@ -1,8 +1,24 @@
 <header>
-    <nav class="navbar navbar-expand-md" id="navbar">
-        <div class='container'>
 
-            <div class='d-flex w-100'>
+    <div id='hiddenMenu' class="menunav" [ngStyle]="{'width': showMenu ? '65%' : '0' }"> 
+        <div style="padding-top: 5rem;">
+
+            <div *ngFor="let Elmenu of menu">
+                <a style="text-decoration-style: none; color: white;" routerLink={{Elmenu.route}}>
+                    <div style="padding: .5rem; background-color: rgba(101, 161, 160, .9); margin: .3rem;">
+                        <span>
+                            {{Elmenu.title}}
+                        </span>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-md" id="navbar" style="flex-wrap: nowrap;">
+        <div class='container' style="flex-wrap: nowrap;">
+            <div *ngIf="!isMobile()" class='d-flex w-100' style="flex-wrap: nowrap;">
                 <div *ngFor="let Elmenu of menu">
                     <a class='mr-1' routerLink={{Elmenu.route}}>
                         <button class="btn btn-light font-weight-light" id="homeButton">
@@ -13,7 +29,7 @@
 
             </div>
 
-            <div>
+            <div *ngIf="!isMobile()" >
                 <div class='menuitemLogin'>
                     <button class="btn btn-light font-weight-light" id="loginButton" (click)="clickLogin()">
                         {{ (loginName | async) }}
@@ -21,13 +37,18 @@
                 </div>
             </div>
 
-
-
+            <div *ngIf="isMobile()" class='d-flex w-100'>
+                <button class="btn btn-light font-weight-light" id="menuButton"
+                (click)="showHiddenMenu()">
+                    <div class="hamburger"></div>
+                    <div class="hamburger"></div>
+                    <div class="hamburger"></div>
+                </button>
+            </div>
+            
         </div>
     </nav>
 </header>
-
-
 
 <div class="LoginNav" id='loginPanel' [ngStyle]="{'width': showPanelLogin ? '35%' : '0' }">
 

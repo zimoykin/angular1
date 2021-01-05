@@ -152,4 +152,8 @@ export class LocationViewComponent implements OnInit {
     }
   }
 
+  isMobile () : boolean {
+    return K.isMobile()
+  }
+
 }

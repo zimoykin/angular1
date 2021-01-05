@@ -118,6 +118,9 @@ var LocationViewComponent = /** @class */ (function () {
             this.willCreateNew = 'place';
         }
     };
+    LocationViewComponent.prototype.isMobile = function () {
+        return Constants_1.Constants.isMobile();
+    };
     LocationViewComponent = __decorate([
         core_1.Component({
             selector: 'app-location-view',

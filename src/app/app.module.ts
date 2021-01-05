@@ -24,6 +24,7 @@ import { FooterviewComponent } from './footerview/footerview.component';
 import { TagsViewComponent } from './tags-view/tags-view.component';
 import { LocationViewComponent } from './location-view/location-view.component';
 import { AuthorViewComponent } from './author-view/author-view.component';
+import { LoginViewComponent } from './login-view/login-view.component';
 
 
 //https://www.design-seeds.com/in-nature/nature-made/nature-tones-40/
@@ -44,7 +45,8 @@ import { AuthorViewComponent } from './author-view/author-view.component';
     FooterviewComponent,
     TagsViewComponent,
     LocationViewComponent,
-    AuthorViewComponent
+    AuthorViewComponent,
+    LoginViewComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

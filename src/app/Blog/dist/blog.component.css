@@ -3,6 +3,7 @@
   border-style: none;
   display: inline-block;
   margin-bottom: 2rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .card a {
@@ -51,6 +52,7 @@ h2 {
   text-align: end;
   width: 100%;
   font-weight: lighter;
+  background-color: rgba(195, 178, 180, 0.6);
 }
 
 .description {

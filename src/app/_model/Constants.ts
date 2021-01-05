@@ -17,6 +17,12 @@ export class Constants {
         return menus
 
     }
+
+    public static isMobile () : boolean {
+        //console.log (document.getElementById('navbar').clientHeight / document.getElementById('backgroundImage').clientHeight  * 100)
+        return ( document.getElementById("backgroundImage").clientWidth < document.getElementById("backgroundImage").clientHeight) 
+    }
+    
 }
 
 export interface DecodedToken {

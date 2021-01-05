@@ -9,6 +9,7 @@ import { CalendarComponent } from '../app/calendar/calendar.component'
 import { LocationViewComponent } from '../app/location-view/location-view.component'
 import { TagsViewComponent } from '../app/tags-view/tags-view.component'
 import { AuthorViewComponent } from '../app/author-view/author-view.component'
+import { LoginViewComponent } from './login-view/login-view.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'user/:userid', component: userView },
   { path: 'calendar', component: CalendarComponent },
   { path: 'location', component: LocationViewComponent },
+  { path: 'login', component: LoginViewComponent },
   { path: 'tag/:tag', component: TagsViewComponent },
   { path: 'author/:userid', component: AuthorViewComponent },
   { path: '',  redirectTo: '/home', pathMatch: 'full' },

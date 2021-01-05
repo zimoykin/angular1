@@ -31,7 +31,7 @@ var CalendarComponent = /** @class */ (function () {
     };
     CalendarComponent.prototype.getBlogsOnDay = function (date) {
         var _this = this;
-        this.http.get(Constants_1.Constants.server + "api/blogs/onday/" + date.toLocaleDateString(), {
+        this.http.get(Constants_1.Constants.server + "api/blogs/onday/" + date.prepareDateConvertToString(), {
             headers: {
                 Authorization: this.auth.token
             }
@@ -93,6 +93,9 @@ var CalendarComponent = /** @class */ (function () {
                 this.month.week.push(week_1);
             }
         }
+    };
+    CalendarComponent.prototype.isMobile = function () {
+        return Constants_1.Constants.isMobile();
     };
     CalendarComponent = __decorate([
         core_1.Component({

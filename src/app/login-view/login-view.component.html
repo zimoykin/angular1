@@ -1,0 +1,23 @@
+
+
+
+<div id='cardview'>
+
+    <h3>
+        login here
+    </h3>
+    <form #cred 
+    (ngSubmit)="login(cred)"
+    > 
+        <div cclass='w-100'>
+            <input id="emailLogin" type='email' required>
+        </div>
+        <div class='w-100'>
+            <input type='password' id='passwordLogin' required>
+        </div>
+        <hr>
+        <button class='btn btn-success' type="submit"> login </button>
+    </form>
+
+
+</div>

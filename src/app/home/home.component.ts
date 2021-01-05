@@ -39,39 +39,18 @@ export class HomeComponent implements OnInit {
 
   getAllBlogs() : Observable <[BlogModel]> {
 
-    const blogs = new Observable<[BlogModel]>(obser => {
+    return new Observable<[BlogModel]>(obser => {
 
-      if (this.auth.isJwtOk()) {
-        console.log (`get jwt${this.auth.token}`)
-
-        if ( this.auth.token == '' || this.auth.token == null ) {
-          throw console.error('error');
-        }
-
-        this.httpClient.get(`${K.server}api/blogs`, {
-          headers: { Authorization: this.auth.token }
-        }).subscribe ( (blogs: [BlogModel]) => {
-          obser.next (blogs)
-        })
-      } else {
-        console.log (`jwt isn't yet ok`)
+      if (this.auth.token == '' || this.auth.token == null) {
+        throw console.error('error');
       }
 
+      this.httpClient.get(`${K.server}api/blogs`, {
+        headers: { Authorization: this.auth.token }
+      }).subscribe((blogs: [BlogModel]) => {
+        obser.next(blogs)
+      })
     })
-
-    return blogs
-
   }
-
-
-  @HostListener('window:scroll', ['$event'])
-  
-  onScroll($event: Event) {
-    const scrollFactor = 100;
-    console.log(window.screen.height)
-
-    this.backElement.style.backgroundImage = 'url (https://picjumbo.com/wp-content/uploads/beautiful-tuscan-landscape-around-pienza-town-italy-2210x1473.jpg)'
-  }
-
 
 }

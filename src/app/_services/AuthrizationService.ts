@@ -3,7 +3,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Constants as K, DecodedToken } from '../_model/Constants';
 import jwtDecode from 'jwt-decode';
-import { map } from 'rxjs/operators';
+import { map, timeout } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { User } from '../_model/User';
 import { HeaderComponent as hat} from '../header/header.component'
@@ -46,13 +46,26 @@ export class Authorization {
     const token = this.cookieService.get('jwt')
     const ref = localStorage.getItem ('ref')
 
-    if (token == '' && ref != '') {
+    console.log ("token: " + token)
+    console.log ("ref: " + ref)
+
+    if (ref == '' || ref == null || ref == undefined) {
+      console.log (`without refresh!`)
+      return false
+    }
+
+    if (ref != '' || ref != null || ref != undefined ) {
       console.log (`refresh?`)
       this.refresh().subscribe( val => {
-        return this.isJwtOk()
+        if (val == null) { 
+          console.log ('back false')
+          return false
+        } else {
+          return this.isJwtOk()
+        }
       })
     } else if (token == '') {
-      console.log ('back')
+      console.log ('back false 2')
       return false
     }
     
@@ -116,18 +129,27 @@ export class Authorization {
     console.log (`ref token start`)
 
     const ref = localStorage.getItem('ref')
+    console.log(ref)
+    // if (ref == null) {
+    //   return null
+    // }
     const uri = `${K.server}api/users/refresh`
     const body = JSON.stringify({ refreshToken: ref })
   
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
 
+    console.log ('send request get toekn')
     const user$ = new Observable <User> ( obser => {
-      this.http.post(uri, body, { headers })
-      .subscribe ( (user:User) => {
+      this.http.post <User> (uri, body, { headers })
+      .subscribe ( (user) => {
         console.log('2')
-        this.saveUser(user)
-        obser.complete()
+        if (user != null) {
+          this.saveUser((<User>user))
+          obser.complete()
+        } else {
+          obser.closed
+        }
       })
     }) 
 

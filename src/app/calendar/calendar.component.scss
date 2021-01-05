@@ -6,8 +6,8 @@
 
 .normalDay {
     display: inline-table;
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
     background-color: rgba($color: lemonchiffon, $alpha: 0.3);
     border-radius: 2rem;
     margin: 0.1rem;
@@ -17,8 +17,8 @@
 
 .anotherMonthDay {
     display: inline-table;
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
     background-color: rgba($color: gray, $alpha: 0.3);
     border-radius: 2rem;
     margin: 0.1rem;
@@ -32,8 +32,8 @@
 
 .dayOff {
     display: inline-table;
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
     background-color: rgba($color: red, $alpha: 0.5);
     border-radius: 2rem;
     margin: 0.1rem;

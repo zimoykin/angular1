@@ -1,25 +1,3 @@
-.nav-toggler {
-  display: block;
-  margin: 0 auto;
-  width: 1450px;
-  padding: 3px;
-  transition: 1;
-}
-
-.nav-toggler span {
-  border: 3px solid white;
-  border-radius: 1vh;
-  padding: 0.5rem;
-  margin: 0.3rem;
-  cursor: pointer;
-}
-
-.nav-toggler :hover {
-  background-color: black;
-  color: #ffd7ff;
-  border: 2px solid salmon;
-}
-
 header {
   width: 100%;
   background-color: rgba(101, 161, 160, 0.7);
@@ -31,7 +9,7 @@ header {
 
 .LoginNav {
   position: fixed;
-  width: 350px;
+  width: 0px;
   height: 100%;
   z-index: 998;
   background-color: rgba(0, 0, 0, 0.7);
@@ -71,6 +49,7 @@ header {
   border-style: none;
   background-color: rgba(185, 222, 223, 0.7);
   margin-right: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.7);
 }
 
 .menuitemLogin {
@@ -82,4 +61,22 @@ header {
 
 .menuitem:hover {
   cursor: pointer;
+}
+
+.hamburger {
+  width: 20px;
+  height: 3px;
+  background-color: black;
+  margin: 2px 0;
+}
+
+.menunav {
+  position: fixed;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 0px;
+  height: 100%;
+  overflow-x: hidden;
+  transition: 0.5s;
+  font-weight: lighter;
 }

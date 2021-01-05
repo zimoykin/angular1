@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.BlogDraft = exports.Country = exports.Place = exports.BlogModel = void 0;
+exports.Author = exports.BlogDraft = exports.Country = exports.Place = exports.BlogModel = void 0;
 var BlogModel = /** @class */ (function () {
     function BlogModel() {
     }
@@ -25,3 +25,9 @@ var BlogDraft = /** @class */ (function () {
     return BlogDraft;
 }());
 exports.BlogDraft = BlogDraft;
+var Author = /** @class */ (function () {
+    function Author() {
+    }
+    return Author;
+}());
+exports.Author = Author;

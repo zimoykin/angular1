@@ -32,32 +32,17 @@ var HomeComponent = /** @class */ (function () {
     };
     HomeComponent.prototype.getAllBlogs = function () {
         var _this = this;
-        var blogs = new rxjs_1.Observable(function (obser) {
-            if (_this.auth.isJwtOk()) {
-                console.log("get jwt" + _this.auth.token);
-                if (_this.auth.token == '' || _this.auth.token == null) {
-                    throw console.error('error');
-                }
-                _this.httpClient.get(Constants_1.Constants.server + "api/blogs", {
-                    headers: { Authorization: _this.auth.token }
-                }).subscribe(function (blogs) {
-                    obser.next(blogs);
-                });
+        return new rxjs_1.Observable(function (obser) {
+            if (_this.auth.token == '' || _this.auth.token == null) {
+                throw console.error('error');
             }
-            else {
-                console.log("jwt isn't yet ok");
-            }
+            _this.httpClient.get(Constants_1.Constants.server + "api/blogs", {
+                headers: { Authorization: _this.auth.token }
+            }).subscribe(function (blogs) {
+                obser.next(blogs);
+            });
         });
-        return blogs;
     };
-    HomeComponent.prototype.onScroll = function ($event) {
-        var scrollFactor = 100;
-        console.log(window.screen.height);
-        this.backElement.style.backgroundImage = 'url (https://picjumbo.com/wp-content/uploads/beautiful-tuscan-landscape-around-pienza-town-italy-2210x1473.jpg)';
-    };
-    __decorate([
-        core_1.HostListener('window:scroll', ['$event'])
-    ], HomeComponent.prototype, "onScroll");
     HomeComponent = __decorate([
         core_1.Component({
             selector: 'app-home',

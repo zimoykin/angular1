@@ -1,3 +1,4 @@
+
 <div *ngIf="willCreateNew != ''" style="z-index: 1000; position: fixed; top: 0;
 right: 0;
 bottom: 0;
@@ -5,7 +6,26 @@ left: 0;
 width: 100%; height: 100%; 
 background-color: rgba(49, 46, 65, .7);
 transition: 1s;">
-    <div style="position: fixed; top: 25%; left: 25%; width: 50%; height: 50%; background-color: rgba(185, 222, 223, .7);
+
+    <div *ngIf="!isMobile()" style="position: fixed; top: 25%; left: 25%; width: 50%; height: 50%; background-color: rgba(185, 222, 223, .7);
+    border-radius: 1rem; padding: 2rem;">
+
+        <h2 style="text-align: center; font-weight: lighter;"> Create new {{willCreateNew}} </h2>
+        <form #new_country action="javascript:void(0);">
+            <div class='w-100'>
+                <input class='w-100 mb-3 form-control' placeholder='title' id='title' type='text' aria-label="Text"
+                    required>
+                <input class='w-100 mb-3 form-control' placeholder='description' id='description' type='text'
+                    aria-label="Text" required>
+            </div>
+            <div class='w-100' style='display: inline; justify-items: center;'>
+                <button type="submit" class="btn btn-success mr-1"
+                    (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value)"> save </button>
+                <button type="reset" class="btn btn-danger mr-1" (click)="saveCountryPlace(false)"> cancel </button>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="isMobile()" style="position: fixed; top: 25%; left: 0%; width: 100%; height: 50%; background-color: rgba(185, 222, 223, .7);
     border-radius: 1rem; padding: 2rem;">
 
         <h2 style="text-align: center; font-weight: lighter;"> Create new {{willCreateNew}} </h2>

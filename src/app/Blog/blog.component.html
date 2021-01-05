@@ -1,4 +1,3 @@
-
 <div *ngIf="isFullVersion">
     <div class='bg-dark text-light w-100'>
         <span> author: </span>
@@ -17,35 +16,35 @@
             <h2 style="text-align: right;"><a routerLink="/edit/{{ blog.id }}">(edit)</a></h2>
         </div>
     </div>
-
     <div class='blog align-items-start'>
-
-        <!-- d-flex flex-row <div class='img'>
-            <img src="{{ blog.image }}" />
-        </div> -->
-        <!-- <div class='div_img'
-            [style.background-image]="'url(' + blog.image  + ')'"
-            [style.width.px]='450'
-            [style.height.px]='450'> 
-        </div> -->
+        <div style="z-index: 1;position: absolute; padding: .3rem; text-align: right;">
+            <div class='w-100'>
+                <span style='background-color: rgba(139, 196, 193, .6); width: 100%;'>
+                    <a routerLink="/place/{{ blog.place.title }}">
+                        {{ blog.place.title + " " + blog.place.country.title }}
+                    </a>
+                </span>
+            </div>
+        </div>
 
         <picture>
-            <img
-                src="{{ blog.image }}"
-                alt="pictures"
-                style="object-fit: cover;"
-                loading="lazy"
-                width="100%"
-                height="450px"
-            />
+            <img src="{{ blog.image }}" alt="pictures" style="object-fit: cover;" loading="lazy" width="100%"
+                height="450px" />
         </picture>
 
         <div class='description'>
             <span> {{ blog.description }} </span>
         </div>
-            <div class='tags' *ngFor="let item of blog.tags">
-                <a routerLink="/tag/{{ item }}">{{ "#" + item }}</a>
+        <div class='tags' *ngFor="let item of blog.tags">
+            <a routerLink="/tag/{{ item }}">{{ "#" + item }}</a>
+        </div>
+        <div class='d-flex'>
+            <div class='w-100'>
+                <span style='background-color: rgba(195, 178, 180, .4); width: 100%;'>
+                    <a routerLink="/user/{{ blog.user.id }}">
+                        {{ " &#183; " + blog.created + " &#183; " +  blog.user.username }}
+                    </a>
+                </span>
             </div>
-
+        </div>
     </div>
-</div>

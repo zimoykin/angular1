@@ -14,6 +14,10 @@ var Constants = /** @class */ (function () {
         menus.push(new ElemntMenu('location', '/location'));
         return menus;
     };
+    Constants.isMobile = function () {
+        //console.log (document.getElementById('navbar').clientHeight / document.getElementById('backgroundImage').clientHeight  * 100)
+        return (document.getElementById("backgroundImage").clientWidth < document.getElementById("backgroundImage").clientHeight);
+    };
     Constants.server = 'http://10.0.0.102:8000/';
     return Constants;
 }());

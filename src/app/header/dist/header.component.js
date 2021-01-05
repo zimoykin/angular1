@@ -11,16 +11,24 @@ var core_1 = require("@angular/core");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var rxjs_1 = require("rxjs");
 var Constants_1 = require("../_model/Constants");
+var router_1 = require("@angular/router");
+var operators_1 = require("rxjs/operators");
 var HeaderComponent = /** @class */ (function () {
-    function HeaderComponent(httpClient, cookieService) {
+    function HeaderComponent(router, httpClient, cookieService) {
+        this.router = router;
         this.httpClient = httpClient;
         this.cookieService = cookieService;
         this.navElement = null;
         this.showPanelLogin = false;
+        this.showMenu = false;
         this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
     }
     HeaderComponent.prototype.ngAfterViewInit = function () {
         this.navElement = document.getElementById('navbar');
+    };
+    HeaderComponent.prototype.onResize = function ($event) {
+        console.log('');
+        this.showMenu = false;
     };
     HeaderComponent.prototype.onScroll = function ($event) {
         var scrollFactor = 100;
@@ -36,8 +44,21 @@ var HeaderComponent = /** @class */ (function () {
             this.navElement.classList.remove('navbar-shadow');
         }
     };
+    HeaderComponent.prototype.onClick = function ($event) {
+        var target = document.getElementById('hiddenMenu');
+        if (target == null || target == undefined) {
+            return;
+        }
+        if (!$event.composedPath().includes(target) && target.clientWidth > 0) {
+            this.showMenu = !this.showMenu;
+        }
+    };
+    HeaderComponent.prototype.ngOnDestroy = function () {
+        this.$routerSub = null;
+    };
     HeaderComponent.prototype.ngOnInit = function () {
         var _this = this;
+        console.log('init header');
         this.menu = Constants_1.Constants.defaultMenu();
         var userName = this.cookieService.get('username');
         this.loginName = new rxjs_1.Observable(function (obser) {
@@ -49,7 +70,23 @@ var HeaderComponent = /** @class */ (function () {
             }
         });
         this.loginName.subscribe(function (observer) {
+            console.log('head check jwt');
             if (_this.auth.isJwtOk()) {
+                console.log('jwt is ok 59');
+            }
+            else {
+                console.log('jwt isnt ok 61');
+            }
+        });
+        var $routerSub = this.router.events
+            .pipe(operators_1.filter(function (event) { return event instanceof router_1.NavigationEnd; }))
+            .subscribe(function (event) {
+            _this.showMenu = false;
+            if (!_this.auth.isJwtOk()) {
+                if (event.url != '/login') {
+                    console.log(window.location.href);
+                    window.location.href = '/login';
+                }
             }
         });
     };
@@ -77,9 +114,21 @@ var HeaderComponent = /** @class */ (function () {
             _this.showPanelLogin = false;
         });
     };
+    HeaderComponent.prototype.isMobile = function () {
+        return Constants_1.Constants.isMobile();
+    };
+    HeaderComponent.prototype.showHiddenMenu = function () {
+        this.showMenu = !this.showMenu;
+    };
+    __decorate([
+        core_1.HostListener('window:resize', ['$event'])
+    ], HeaderComponent.prototype, "onResize");
     __decorate([
         core_1.HostListener('window:scroll', ['$event'])
     ], HeaderComponent.prototype, "onScroll");
+    __decorate([
+        core_1.HostListener('window:click', ['$event'])
+    ], HeaderComponent.prototype, "onClick");
     HeaderComponent = __decorate([
         core_1.Component({
             selector: 'app-header',

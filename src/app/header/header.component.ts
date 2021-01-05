@@ -5,6 +5,9 @@ import { Authorization } from '../_services/AuthrizationService'
 import { Observable } from 'rxjs'
 import { User } from '../_model/User'
 import { Constants as K, ElemntMenu} from '../_model/Constants'
+import { NavigationEnd, NavigationStart, Router as R, RouterEvent } from '@angular/router'
+import { filter } from 'rxjs/operators'
+
 
 @Component({
   selector: 'app-header',
@@ -17,13 +20,21 @@ export class HeaderComponent implements OnInit {
   navElement: HTMLElement = null
   loginName: Observable<string>
   showPanelLogin = false
+  showMenu = false
   auth = new Authorization(this.cookieService, this.httpClient)
   menu: Array<ElemntMenu>
+  $routerSub: Observable<RouterEvent>
 
-  constructor(private httpClient: HttpClient, private cookieService: CookieService) { }
+  constructor( private router: R, private httpClient: HttpClient, private cookieService: CookieService) { }
 
   ngAfterViewInit() {
     this.navElement = document.getElementById('navbar') as HTMLElement;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize($event: Event) {
+    console.log ('')
+    this.showMenu = false
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -42,10 +53,28 @@ export class HeaderComponent implements OnInit {
       this.navElement.classList.remove('navbar-shadow')
     }
   }
+  @HostListener('window:click', ['$event'])
+  onClick($event: Event) {
+
+    let target = document.getElementById('hiddenMenu')
+
+    if (target == null || target == undefined) {
+      return
+    }
+
+    if ( !$event.composedPath().includes(target) && target.clientWidth > 0 ) {
+      this.showMenu = !this.showMenu   
+    }
+  }
+
+  ngOnDestroy () {
+    this.$routerSub = null
+  }
 
   ngOnInit() {
 
-    this.menu = K.defaultMenu()
+     console.log ('init header')
+     this.menu = K.defaultMenu()
 
     const userName = this.cookieService.get('username')
     this.loginName = new Observable<string>(obser => {
@@ -55,10 +84,27 @@ export class HeaderComponent implements OnInit {
 
     this.loginName.subscribe(observer => {
 
-      if (this.auth.isJwtOk()) {
+      console.log ('head check jwt')
 
+      if (this.auth.isJwtOk()) {
+          console.log ( 'jwt is ok 59')
+      } else {
+        console.log ( 'jwt isnt ok 61') 
       }
     })
+    let $routerSub = this.router.events
+    .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
+    .subscribe( ( event ) => {
+
+      this.showMenu = false
+
+      if (!this.auth.isJwtOk()) {
+        if (event.url != '/login') {
+          console.log( window.location.href) 
+          window.location.href = '/login'
+        }
+      }
+     });
 
   }
 
@@ -94,4 +140,11 @@ export class HeaderComponent implements OnInit {
     })
   }
 
+  isMobile () : boolean {
+    return K.isMobile()
+  }
+
+  showHiddenMenu () {
+    this.showMenu= !this.showMenu;
+  }
 }
