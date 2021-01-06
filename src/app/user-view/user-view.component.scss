@@ -1,7 +1,71 @@
 
 #userView {
-    background-color: sandybrown;
-    position: absolute;
+    background-color: rgba($color: #B9DEDF, $alpha: .5);
+   
     height: 15rem;
     display: flex;
 }
+.card {
+    //padding-top: .5rem;
+    background-color: rgba($color: gray, $alpha: 0);
+    border-style: none;
+    display: inline-block;
+    padding: .5rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#about {
+    display: block;
+    width: 100%;
+    background-color: #65A1A0;
+    padding: 1rem;
+    color: wheat;
+    font-weight: 200;
+    text-align: left;
+}
+
+.picktureLine {
+    display: inline;
+}
+
+.threeColums {
+    -webkit-columns: 3;
+    -moz-columns: 3;
+    columns: 3;
+}
+.twoColums {
+    -webkit-columns: 2;
+    -moz-columns: 2;
+    columns: 2;
+}
+
+#title {
+    margin: .3rem;
+    z-index: 2;
+    position: absolute;
+    background-color: rgba(163, 159, 151, .7);
+    font-weight: 300;
+    font-size: 8px;
+}
+
+.upload {
+    margin-bottom: 1rem;
+    padding: .3rem;
+    z-index: 2;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    border-radius: 1rem;
+    left: 50%;
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    font-weight: lighter;
+    border-style: none;
+    background-color: rgba($color: #B9DEDF, $alpha: .5);
+}
+
+.upload:active {  
+    outline: none;
+    border: none;
+}
+button:focus {outline:0;}

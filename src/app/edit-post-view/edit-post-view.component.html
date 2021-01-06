@@ -17,11 +17,11 @@
                     [matAutocomplete]="auto">
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
                     (optionSelected)='selectedPlace($event.option.value)'>
-                       
-                        <mat-option *ngFor="let place of filteredPlaces | async" [value]="place.title">
-                            {{ place.title }}
-                        </mat-option>
-                   
+
+                    <mat-option *ngFor="let place of filteredPlaces | async" [value]="place.title">
+                        {{ place.title }}
+                    </mat-option>
+
                 </mat-autocomplete>
             </mat-form-field>
 

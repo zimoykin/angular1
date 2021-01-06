@@ -9,25 +9,6 @@ import { User } from '../_model/User';
 import { HeaderComponent as hat} from '../header/header.component'
 import { ObserveOnSubscriber } from 'rxjs/internal/operators/observeOn';
 
-// const stream$ = of(38,39,40,41,42);
-//
-// stream$.subscribe( val => {
-//     console.log(val)
-//   }
-// )
-//
-//
-// const observer$ = new Observable ( observer => {
-//     observer.next( 'hell yaeh')
-//     setTimeout( () => { observer.next( 'hell yaeh !')},3000)
-//     setTimeout(() => { observer.error('something went wrong')}, 5000)
-// })
-//
-// observer$.subscribe( val => {
-//   console.log (val)
-// })
-
-
 @Injectable({ providedIn: 'root' })
 export class Authorization {
 
@@ -41,7 +22,7 @@ export class Authorization {
   ///////////////////
   isJwtOk(): boolean {
 
-    console.log (`1 is jwt ok?`)
+    console.log (`func isJwtOk`)
 
     const token = this.cookieService.get('jwt')
     const ref = localStorage.getItem ('ref')
@@ -50,20 +31,27 @@ export class Authorization {
   // console.log ("ref: " + ref)
 
     if (ref == '' || ref == null || ref == undefined) {
-      console.log (`without refresh!`)
+      console.log (`without refresh!` )
       return false
     }
-    
-    const decoded: DecodedToken = jwtDecode(token);
-    if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
-      console.log (`jwt explaim`)
-      this.refresh().subscribe( (val:User) => {
-        console.log('check again')
-        this.isJwtOk()
+
+    console.log (`has ref`)
+
+    if (token!=undefined && token!='') {
+      console.log (`has token, it will decoded`) 
+      console.log (token)
+      const decoded: DecodedToken = jwtDecode(token);
+      console.log (`token was decoded`)
+      if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
+        console.log(`jwt explaim`)
+        this.refresh().subscribe((val: User) => {
+          console.log('check again')
+          this.isJwtOk()
         })
-    } else { 
-      console.log (`jwt is ok`)
-      return true
+      } else {
+        console.log(`jwt is ok`)
+        return true
+      }
     }
 
     if (ref != '' || ref != null || ref != undefined ) {

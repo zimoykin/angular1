@@ -12,23 +12,6 @@ var http_1 = require("@angular/common/http");
 var Constants_1 = require("../_model/Constants");
 var jwt_decode_1 = require("jwt-decode");
 var core_1 = require("@angular/core");
-// const stream$ = of(38,39,40,41,42);
-//
-// stream$.subscribe( val => {
-//     console.log(val)
-//   }
-// )
-//
-//
-// const observer$ = new Observable ( observer => {
-//     observer.next( 'hell yaeh')
-//     setTimeout( () => { observer.next( 'hell yaeh !')},3000)
-//     setTimeout(() => { observer.error('something went wrong')}, 5000)
-// })
-//
-// observer$.subscribe( val => {
-//   console.log (val)
-// })
 var Authorization = /** @class */ (function () {
     function Authorization(cookieService, http) {
         this.cookieService = cookieService;
@@ -38,7 +21,7 @@ var Authorization = /** @class */ (function () {
     ///////////////////
     Authorization.prototype.isJwtOk = function () {
         var _this = this;
-        console.log("1 is jwt ok?");
+        console.log("func isJwtOk");
         var token = this.cookieService.get('jwt');
         var ref = localStorage.getItem('ref');
         // console.log ("token: " + token)
@@ -47,17 +30,23 @@ var Authorization = /** @class */ (function () {
             console.log("without refresh!");
             return false;
         }
-        var decoded = jwt_decode_1["default"](token);
-        if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
-            console.log("jwt explaim");
-            this.refresh().subscribe(function (val) {
-                console.log('check again');
-                _this.isJwtOk();
-            });
-        }
-        else {
-            console.log("jwt is ok");
-            return true;
+        console.log("has ref");
+        if (token != undefined && token != '') {
+            console.log("has token, it will decoded");
+            console.log(token);
+            var decoded = jwt_decode_1["default"](token);
+            console.log("token was decoded");
+            if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
+                console.log("jwt explaim");
+                this.refresh().subscribe(function (val) {
+                    console.log('check again');
+                    _this.isJwtOk();
+                });
+            }
+            else {
+                console.log("jwt is ok");
+                return true;
+            }
         }
         if (ref != '' || ref != null || ref != undefined) {
             console.log("refresh?");

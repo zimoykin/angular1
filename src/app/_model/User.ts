@@ -10,7 +10,15 @@ import { BlogModel } from "./BlogModel"
 
   export class UserFullInfo {
     image: string
+    email: string
     username: string
     id: string
+    createdAt: string
     blogs: BlogModel[]
+  }
+
+  export class UserPublic {
+    image: string
+    username: string
+    id: string
   }

@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.UserFullInfo = exports.User = void 0;
+exports.UserPublic = exports.UserFullInfo = exports.User = void 0;
 var User = /** @class */ (function () {
     function User() {
     }
@@ -13,3 +13,9 @@ var UserFullInfo = /** @class */ (function () {
     return UserFullInfo;
 }());
 exports.UserFullInfo = UserFullInfo;
+var UserPublic = /** @class */ (function () {
+    function UserPublic() {
+    }
+    return UserPublic;
+}());
+exports.UserPublic = UserPublic;

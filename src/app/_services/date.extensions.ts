@@ -7,6 +7,7 @@ declare global {
 }
 
 Date.prototype.prepareDateConvertToString = function (): string {
+  console.log ('prepareDateConvertToString')
   return this.toLocaleDateString().replace('/', '.').replace('/', '.').replace('-', '.').replace('-', '.')
 }
   
