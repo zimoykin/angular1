@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Country, Place } from '../_model/BlogModel';
 import { Authorization } from '../_services/AuthrizationService';
 import { Constants as K } from '../_model/Constants'
-import { map, startWith } from 'rxjs/operators';
+import { map, startWith, filter} from 'rxjs/operators';
 
 @Component({
   selector: 'app-location-view',
@@ -78,7 +78,7 @@ export class LocationViewComponent implements OnInit {
       return
     }
 
-    this.httpClient.get<Place[]>(`${K.server}api/places/country_id/${this.selected}`,
+    this.httpClient.get<Place[]>(`${K.server}api/places/search?field=country_id&value=${this.selected}`,
       { headers: new HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) })
       .subscribe((values) => {
         this.places = values;
@@ -111,8 +111,9 @@ export class LocationViewComponent implements OnInit {
   saveCountryPlace(val: boolean, title?: string, description?: string) {
 
     console.log(title)
+    console.log(this.willCreateNew)
 
-    if (this.willCreateNew = 'place') {
+    if (this.willCreateNew == 'place') {
 
       if (val && this.selected != '') {
 
@@ -128,7 +129,9 @@ export class LocationViewComponent implements OnInit {
         this.willCreateNew = ""
       }
 
-    } else if (this.willCreateNew = 'country') {
+    } else if (this.willCreateNew == 'country') {
+
+      console.log ('create country!')
 
       if (val) {
         this.httpClient.post<Country>(`${K.server}api/countries/`, JSON.stringify({ title: title, description: description }),

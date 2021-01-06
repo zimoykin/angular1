@@ -62,7 +62,7 @@ var LocationViewComponent = /** @class */ (function () {
         if (this.selected == '') {
             return;
         }
-        this.httpClient.get(Constants_1.Constants.server + "api/places/country_id/" + this.selected, { headers: new http_1.HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) })
+        this.httpClient.get(Constants_1.Constants.server + "api/places/search?field=country_id&value=" + this.selected, { headers: new http_1.HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) })
             .subscribe(function (values) {
             _this.places = values;
             console.log(values);
@@ -85,7 +85,8 @@ var LocationViewComponent = /** @class */ (function () {
     LocationViewComponent.prototype.saveCountryPlace = function (val, title, description) {
         var _this = this;
         console.log(title);
-        if (this.willCreateNew = 'place') {
+        console.log(this.willCreateNew);
+        if (this.willCreateNew == 'place') {
             if (val && this.selected != '') {
                 this.httpClient.post(Constants_1.Constants.server + "api/places/", JSON.stringify({ title: title, description: description, countryId: this.selected }), { headers: new http_1.HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) }).subscribe(function (val) {
                     _this.willCreateNew = '';
@@ -98,7 +99,8 @@ var LocationViewComponent = /** @class */ (function () {
                 this.willCreateNew = "";
             }
         }
-        else if (this.willCreateNew = 'country') {
+        else if (this.willCreateNew == 'country') {
+            console.log('create country!');
             if (val) {
                 this.httpClient.post(Constants_1.Constants.server + "api/countries/", JSON.stringify({ title: title, description: description }), { headers: new http_1.HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) }).subscribe(function (val) {
                     _this.willCreateNew = '';

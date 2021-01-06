@@ -32,6 +32,8 @@ var footerview_component_1 = require("./footerview/footerview.component");
 var tags_view_component_1 = require("./tags-view/tags-view.component");
 var location_view_component_1 = require("./location-view/location-view.component");
 var author_view_component_1 = require("./author-view/author-view.component");
+var login_view_component_1 = require("./login-view/login-view.component");
+require("./_services/date.extensions");
 //https://www.design-seeds.com/in-nature/nature-made/nature-tones-40/
 var AppModule = /** @class */ (function () {
     function AppModule() {
@@ -53,7 +55,8 @@ var AppModule = /** @class */ (function () {
                 footerview_component_1.FooterviewComponent,
                 tags_view_component_1.TagsViewComponent,
                 location_view_component_1.LocationViewComponent,
-                author_view_component_1.AuthorViewComponent
+                author_view_component_1.AuthorViewComponent,
+                login_view_component_1.LoginViewComponent
             ],
             imports: [
                 angular_bootstrap_md_1.MDBBootstrapModule.forRoot(),

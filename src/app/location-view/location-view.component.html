@@ -36,11 +36,11 @@ transition: 1s;">
                 <input class='w-100 mb-3 form-control' placeholder='description' id='description' type='text'
                     aria-label="Text" required>
             </div>
-            <div class='w-100' style='display: inline; justify-items: center;'>
-                <button type="submit" class="btn btn-success mr-1"
+            
+            <button type="button" class="btn btn-success mr-1"
                     (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value)"> save </button>
-                <button type="reset" class="btn btn-danger mr-1" (click)="saveCountryPlace(false)"> cancel </button>
-            </div>
+            <button type="button" class="btn btn-danger mr-1" (click)="saveCountryPlace(false)"> cancel </button>
+            
         </form>
     </div>
 </div>
@@ -60,7 +60,7 @@ transition: 1s;">
 
             </mat-autocomplete>
         </mat-form-field>
-        <button style="outline: none; border: none; width: 3rem; height: 3rem; border-radius: .5rem; border-style: none; text-decoration-style: none; 
+        <button type='button' style="outline: none; border: none; width: 3rem; height: 3rem; border-radius: .5rem; border-style: none; text-decoration-style: none; 
         background-color: rgba(185, 222, 223, .7)" (click)="addNewCountry()">
             +
         </button>
@@ -71,7 +71,7 @@ transition: 1s;">
         <a routerLink="/places/{{ item.id }}">{{item.title}}</a>
     </div>
     <div *ngIf="selected!=''">
-        <button class='btn btn-light'
+        <button class='btn btn-light' type="button"
         (click)="addNewPlace()"> create new place </button>
     </div>
 

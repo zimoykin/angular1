@@ -12,12 +12,12 @@ var rxjs_1 = require("rxjs");
 var Constants_1 = require("../_model/Constants");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var HomeComponent = /** @class */ (function () {
+    //backElement = null
     function HomeComponent(httpClient, cookieService) {
         this.httpClient = httpClient;
         this.cookieService = cookieService;
         this.list = [];
         this.isLoaded = false;
-        this.backElement = null;
         this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
     }
     HomeComponent.prototype.ngOnInit = function () {
@@ -28,7 +28,7 @@ var HomeComponent = /** @class */ (function () {
                 _this.list.push(post);
             });
         });
-        this.backElement = document.getElementById('background');
+        //this.backElement = document.getElementById('background') as HTMLElement;
     };
     HomeComponent.prototype.getAllBlogs = function () {
         var _this = this;

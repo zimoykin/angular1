@@ -46,12 +46,24 @@ export class Authorization {
     const token = this.cookieService.get('jwt')
     const ref = localStorage.getItem ('ref')
 
-    console.log ("token: " + token)
-    console.log ("ref: " + ref)
+   // console.log ("token: " + token)
+  // console.log ("ref: " + ref)
 
     if (ref == '' || ref == null || ref == undefined) {
       console.log (`without refresh!`)
       return false
+    }
+    
+    const decoded: DecodedToken = jwtDecode(token);
+    if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
+      console.log (`jwt explaim`)
+      this.refresh().subscribe( (val:User) => {
+        console.log('check again')
+        this.isJwtOk()
+        })
+    } else { 
+      console.log (`jwt is ok`)
+      return true
     }
 
     if (ref != '' || ref != null || ref != undefined ) {
@@ -67,18 +79,6 @@ export class Authorization {
     } else if (token == '') {
       console.log ('back false 2')
       return false
-    }
-    
-    const decoded: DecodedToken = jwtDecode(token);
-    if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
-      console.log (`jwt explaim`)
-      this.refresh().subscribe( (val:User) => {
-        console.log('check again')
-        this.isJwtOk()
-        })
-    } else { 
-      console.log (`jwt is ok`)
-      return true
     }
 
   }
@@ -126,7 +126,7 @@ export class Authorization {
 
   refresh() : Observable<User> {
 
-    console.log (`ref token start`)
+    console.log (`refresh token started`)
 
     const ref = localStorage.getItem('ref')
     console.log(ref)

@@ -8,10 +8,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.UserViewComponent = void 0;
 var core_1 = require("@angular/core");
+var AuthrizationService_1 = require("../_services/AuthrizationService");
+var Constants_1 = require("../_model/Constants");
 var UserViewComponent = /** @class */ (function () {
-    function UserViewComponent() {
+    function UserViewComponent(route, http, coockie) {
+        this.route = route;
+        this.http = http;
+        this.coockie = coockie;
+        this.auth = new AuthrizationService_1.Authorization(this.coockie, this.http);
     }
     UserViewComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.route.paramMap.subscribe(function (params) {
+            var userID = params.get('userid');
+            if (userID != '') {
+                _this.getUserInfo(userID).subscribe(function (val) {
+                    _this.user = val;
+                });
+            }
+        });
+    };
+    UserViewComponent.prototype.getUserInfo = function (userID) {
+        return this.http.get(Constants_1.Constants.server + "api/users/full?user_id=" + userID, {
+            headers: { Authorization: this.auth.token }
+        });
     };
     UserViewComponent = __decorate([
         core_1.Component({

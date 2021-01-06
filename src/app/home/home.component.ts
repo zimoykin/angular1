@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
 
   list: BlogModel[] = []
   isLoaded: boolean = false
-  backElement = null
+  //backElement = null
 
   constructor( private httpClient: HttpClient, private cookieService: CookieService ) { }
   auth = new Authorization(this.cookieService, this.httpClient)
@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
       }
     )
     
-    this.backElement = document.getElementById('background') as HTMLElement;
+    //this.backElement = document.getElementById('background') as HTMLElement;
   }
 
   getAllBlogs() : Observable <[BlogModel]> {

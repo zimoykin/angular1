@@ -41,11 +41,23 @@ var Authorization = /** @class */ (function () {
         console.log("1 is jwt ok?");
         var token = this.cookieService.get('jwt');
         var ref = localStorage.getItem('ref');
-        console.log("token: " + token);
-        console.log("ref: " + ref);
+        // console.log ("token: " + token)
+        // console.log ("ref: " + ref)
         if (ref == '' || ref == null || ref == undefined) {
             console.log("without refresh!");
             return false;
+        }
+        var decoded = jwt_decode_1["default"](token);
+        if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
+            console.log("jwt explaim");
+            this.refresh().subscribe(function (val) {
+                console.log('check again');
+                _this.isJwtOk();
+            });
+        }
+        else {
+            console.log("jwt is ok");
+            return true;
         }
         if (ref != '' || ref != null || ref != undefined) {
             console.log("refresh?");
@@ -62,18 +74,6 @@ var Authorization = /** @class */ (function () {
         else if (token == '') {
             console.log('back false 2');
             return false;
-        }
-        var decoded = jwt_decode_1["default"](token);
-        if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
-            console.log("jwt explaim");
-            this.refresh().subscribe(function (val) {
-                console.log('check again');
-                _this.isJwtOk();
-            });
-        }
-        else {
-            console.log("jwt is ok");
-            return true;
         }
     };
     Authorization.prototype.saveUser = function (user) {
@@ -104,7 +104,7 @@ var Authorization = /** @class */ (function () {
     };
     Authorization.prototype.refresh = function () {
         var _this = this;
-        console.log("ref token start");
+        console.log("refresh token started");
         var ref = localStorage.getItem('ref');
         console.log(ref);
         // if (ref == null) {

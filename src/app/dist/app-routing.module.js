@@ -17,7 +17,6 @@ var user_view_component_1 = require("./user-view/user-view.component");
 var calendar_component_1 = require("../app/calendar/calendar.component");
 var location_view_component_1 = require("../app/location-view/location-view.component");
 var tags_view_component_1 = require("../app/tags-view/tags-view.component");
-var author_view_component_1 = require("../app/author-view/author-view.component");
 var login_view_component_1 = require("./login-view/login-view.component");
 var routes = [
     { path: 'home', component: home_component_1.HomeComponent },
@@ -29,7 +28,6 @@ var routes = [
     { path: 'location', component: location_view_component_1.LocationViewComponent },
     { path: 'login', component: login_view_component_1.LoginViewComponent },
     { path: 'tag/:tag', component: tags_view_component_1.TagsViewComponent },
-    { path: 'author/:userid', component: author_view_component_1.AuthorViewComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 var AppRoutingModule = /** @class */ (function () {

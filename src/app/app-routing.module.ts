@@ -21,7 +21,6 @@ const routes: Routes = [
   { path: 'location', component: LocationViewComponent },
   { path: 'login', component: LoginViewComponent },
   { path: 'tag/:tag', component: TagsViewComponent },
-  { path: 'author/:userid', component: AuthorViewComponent },
   { path: '',  redirectTo: '/home', pathMatch: 'full' },
 ];
 

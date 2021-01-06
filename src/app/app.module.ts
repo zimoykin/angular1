@@ -25,6 +25,7 @@ import { TagsViewComponent } from './tags-view/tags-view.component';
 import { LocationViewComponent } from './location-view/location-view.component';
 import { AuthorViewComponent } from './author-view/author-view.component';
 import { LoginViewComponent } from './login-view/login-view.component';
+import './_services/date.extensions';
 
 
 //https://www.design-seeds.com/in-nature/nature-made/nature-tones-40/

@@ -25,13 +25,24 @@ var BlogViewComponent = /** @class */ (function () {
                 obser.next(param.get('blogid'));
             });
         }).subscribe(function (val) {
-            console.log(val);
             if (_this.auth.isJwtOk) {
-                _this.httpClient.get(Constants_1.Constants.server + "api/blogs/" + val, { headers: { Authorization: _this.auth.token } }).subscribe(function (blogObject) {
-                    console.log(blogObject);
-                    _this.blogObj = blogObject;
+                _this.getBlog(val).subscribe(function (blog) {
+                    _this.blogObj = blog;
                 });
             }
+        });
+    };
+    BlogViewComponent.prototype.getBlog = function (blogid) {
+        var _this = this;
+        return new rxjs_1.Observable(function (obser) {
+            if (_this.auth.token == '' || _this.auth.token == null) {
+                throw console.error('error');
+            }
+            _this.httpClient.get(Constants_1.Constants.server + "api/blogs/id?blogid=" + blogid, {
+                headers: { Authorization: _this.auth.token }
+            }).subscribe(function (blogs) {
+                obser.next(blogs);
+            });
         });
     };
     BlogViewComponent = __decorate([
