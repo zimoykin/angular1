@@ -1,13 +1,14 @@
 import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SecurityContext } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { BlogDraft, BlogModel, Place } from '../_model/BlogModel'
+import { BlogDraft, BlogModel, Country, Place } from '../_model/BlogModel'
 import { Authorization } from '../_services/AuthrizationService'
 import { Constants as K } from '../_model/Constants'
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-edit-post-view',
@@ -18,29 +19,54 @@ export class EditPostViewComponent implements OnInit {
 
   blogObj?: BlogModel
   isRequestSend: boolean
-  placeid:string
-  public file: any 
 
-  myControl = new FormControl()
+  public file: any
+  imagePathPlanet = K.imagePath
+
+  myControlPlace = new FormControl();
+  myControlCountry = new FormControl();
+  placeid: string
+  countryid: string
+
   places: Place[]
+  countries: Country[]
   filteredPlaces: Observable<Place[]>
+  filteredCountry: Observable<Country[]>
   selected: string
 
-  constructor(private route: ActivatedRoute, private httpClient: HttpClient, private cookieService: CookieService) { }
+  imagePreview$: Subject<string> = new BehaviorSubject(`${K.server}images/system/imageSelect.jpg`);
+
+  constructor(private route: ActivatedRoute, private httpClient: HttpClient, private cookieService: CookieService, private sanitizer: DomSanitizer) { }
   auth = new Authorization(this.cookieService, this.httpClient)
 
   ngOnInit(): void {
 
-    this.$getPlaces('').subscribe((places) => {
-      console.log(places)
-      this.isRequestSend = false
-      this.places = places
-
-      this.filteredPlaces = this.myControl.valueChanges
+    this.httpClient.get<Country[]>(`${K.server}api/countries`, {
+      headers: { Authorization: this.auth.token }
+    }).subscribe(countries => {
+      console.log(countries)
+      this.countries = countries
+      this.filteredCountry = this.myControlCountry.valueChanges
         .pipe(
           startWith(''),
-          map(value => this._filter(value))
+          map(value => this._filterCountry(value))
         );
+
+      this.places = new Array<Place>()
+
+      this.countries.map(country => {
+        country.place.map(place => {
+          this.places.push(place)
+        })
+      })
+
+      this.filteredPlaces = this.myControlPlace.valueChanges
+        .pipe(
+          startWith(''),
+          map(value => this._filterPlace(value))
+        );
+
+      console.log(this.places)
 
     })
 
@@ -51,7 +77,7 @@ export class EditPostViewComponent implements OnInit {
     }).subscribe((val) => {
       if (val != 'new') {
         if (this.auth.isJwtOk) {
-          this.httpClient.get<BlogModel>(`${K.server}api/blogs/${val}`,
+          this.httpClient.get<BlogModel>(`${K.server}api/blogs/id?blogid=${val}`,
             {
               headers:
                 { Authorization: this.auth.token }
@@ -59,8 +85,11 @@ export class EditPostViewComponent implements OnInit {
             .subscribe((blogObject: BlogModel) => {
               console.log(blogObject)
               this.blogObj = blogObject;
-              (<HTMLInputElement>document.getElementById('place')).value = blogObject.place.title
+              (<HTMLInputElement>document.getElementById('place')).value = blogObject.place.title;
+              (<HTMLInputElement>document.getElementById('country')).value = blogObject.place.country.title;
               this.placeid = blogObject.place.id
+              this.countryid = blogObject.place.country.id
+              this.imagePreview$.next(blogObject.image)
             })
         }
       } //
@@ -83,7 +112,7 @@ export class EditPostViewComponent implements OnInit {
 
   }
 
-  public getTags(blog: BlogModel): string { return '#' + blog.tags.join(' #') }
+  getTags(blog: BlogModel): string { return '#' + blog.tags.join(' #') }
 
   clear() {
     let title = document.getElementById('title') as HTMLInputElement
@@ -108,7 +137,7 @@ export class EditPostViewComponent implements OnInit {
     if (this.blogObj != null) {
 
       console.log('update here')
-      console.log (this.file)
+      console.log(this.file)
 
       this.httpClient.put<BlogModel>(`${K.server}api/blogs/${this.blogObj.id}`,
         JSON.stringify({
@@ -116,50 +145,70 @@ export class EditPostViewComponent implements OnInit {
         }),
         { headers: headers })
         .subscribe((blog) => {
-          if (blog != undefined && this.file != undefined) {
-            console.log(blog)
-            this.clear()
-
-            //u-p-l-o-a-d-s"
-            // const formData: FormData = new FormData();
-            // formData.append('file', this.file, this.file.fileName);
-            const data = new FormData()
-            data.append('file', this.file)
-            this.httpClient.post<BlogModel>(`${K.server}api/blogs/uploads/${this.blogObj.id}`, 
-            data, 
-             {headers: new HttpHeaders({
-              'Authorization': this.auth.token
-            })}).subscribe(
-                (val) => {
-                  console.log (val)
-                }
-            )
-
-           // window.location.href = '\home'
-          }
+          this.uploadPhoto(blog).subscribe ( () => { 
+            window.location.href = '\home'
+          })
+          //window.location.href = '\home'
         })
 
     } else {
 
-      this.httpClient.request<BlogModel>(new HttpRequest('POST', `${K.server}api/blogs/`,
+      this.httpClient.post<BlogModel>(`${K.server}api/blogs/`,
         JSON.stringify({
           title: title, description: description, placeId: this.placeid, tags: tags
         })
-        , { headers: headers }))
-        .subscribe((blog) => {
+        , { headers: headers })
+        .subscribe((blog: BlogModel) => {
           if (blog != undefined) {
-            console.log(blog)
-            this.clear()
-            window.location.href = '\home'
+            this.uploadPhoto(blog).subscribe ( () => {
+              window.location.href = '\home'
+            })
+            //
           }
         })
     }
   }
 
-  private 
-  _filter(value: string): Place[] {
-    console.log(value)
+  private uploadPhoto(blog: BlogModel): Observable<void> {
+
+    let end = new Observable<void>((obser) => {
+
+      if (blog != undefined && this.file != undefined) {
+        console.log(blog);
+        this.clear();
+
+        const data = new FormData();
+        data.append('file', this.file);
+        this.httpClient.post<BlogModel>(`${K.server}api/blogs/uploads/${this.blogObj.id}`,
+          data,
+          {
+            headers: new HttpHeaders({
+              'Authorization': this.auth.token
+            })
+          }).subscribe(
+            (val) => {
+              console.log(val);
+              obser.next()
+            }
+          );
+      }
+    }
+    )
+
+    return end
+
+  }
+
+  private _filterPlace(value: string): Place[] {
+    console.log("_filterPlace" + value)
     return this.places.filter((val) => {
+      return val.title.toLowerCase().includes(value.toLowerCase())
+    }
+    )
+  }
+  private _filterCountry(value: string): Country[] {
+    console.log("_filterCountry" + value)
+    return this.countries.filter((val) => {
       return val.title.toLowerCase().includes(value.toLowerCase())
     }
     )
@@ -176,39 +225,76 @@ export class EditPostViewComponent implements OnInit {
   }
 
   selectedPlace($event: string) {
-    console.log ( $event )
+    console.log($event)
     this.placeid = ''
 
-    let filtred = this.places.filter ( val => {
+    let filtred = this.places.filter(val => {
       return val.title === $event
     })
 
+    if (filtred.length > 0) {
+      this.placeid = filtred[0].id;
+    }
+  }
 
-    if ( filtred.length > 0 ) {
-      this.placeid = filtred[0].id
+  selectedCountry($event: string) {
+    console.log($event)
+    this.countryid = ''
+
+    let filtred = this.countries.filter(val => {
+      return val.title === $event
+    })
+
+    if (filtred.length > 0) {
+      this.countryid = filtred[0].id
+      this.places = filtred[0].place
+      this.filteredPlaces = this.myControlPlace.valueChanges
+        .pipe(
+          startWith(''),
+          map(value => this._filterPlace(value))
+        );
+
+      if ((<HTMLInputElement>document.getElementById('place')).value != '')
+        console.log("check selected place")
+      {
+
+        console.log(
+          this.places.filter(val => {
+            return val.title == (<HTMLInputElement>document.getElementById('place')).value
+          }).length
+        )
+        if (this.places.filter(val => {
+          return val.title == (<HTMLInputElement>document.getElementById('place')).value
+        }).length == 0) {
+          console.log("check selected place 2");
+          (<HTMLInputElement>document.getElementById('place')).value = ''
+        }
+      }
+
     }
 
   }
 
-  $getPlaces(title: string): Observable<Place[]> {
-    console.log('request send: ' + title)
 
-    if (title != '') {
-
-      return this.httpClient.get<[Place]>(`${K.server}api/places/title/${title}`,
-        { headers: new HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) })
-
-    } else {
-
-      return this.httpClient.get<[Place]>(`${K.server}api/places/`,
-        { headers: new HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) })
-
-    }
-
+  fileBrowseHandler(files) {
+    this.prepareFilesList(files);
   }
 
-  /////
 
+  prepareFilesList(file: [any]) {
 
+    this.file = file[0]
+    console.log(this.file)
+
+    // let safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl( URL.createObjectURL(this.file));
+    // let sanitizedUrl = this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, safeUrl);
+    // console.log (sanitizedUrl)
+    this.imagePreview$.next(window.URL.createObjectURL(this.file))
+  }
+
+  getSafeURL(val: string) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(val)
+  }
 
 }
+

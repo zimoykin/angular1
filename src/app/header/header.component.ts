@@ -33,7 +33,6 @@ export class HeaderComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize($event: Event) {
-    console.log ('')
     this.showMenu = false
   }
 
@@ -53,15 +52,13 @@ export class HeaderComponent implements OnInit {
       this.navElement.classList.remove('navbar-shadow')
     }
   }
+
   @HostListener('window:click', ['$event'])
   onClick($event: Event) {
-
     let target = document.getElementById('hiddenMenu')
-
     if (target == null || target == undefined) {
       return
     }
-
     if ( !$event.composedPath().includes(target) && target.clientWidth > 0 ) {
       this.showMenu = !this.showMenu   
     }
@@ -73,10 +70,10 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
 
-     console.log ('init header')
-     this.menu = K.defaultMenu()
+    console.log('init header')
+    this.menu = K.defaultMenu()
 
-    const userName = this.cookieService.get('username')
+    const userName = localStorage.getItem('username')
     this.loginName = new Observable<string>(obser => {
       if (userName != '') { obser.next(userName) }
       else { obser.next('LOGIN') }
@@ -111,17 +108,6 @@ export class HeaderComponent implements OnInit {
   clickLogin() {
     this.showPanelLogin = !this.showPanelLogin;
   }
-
-  clickLogOut() {
-
-    this.auth.logout().subscribe((val: boolean) => {
-      if (val) {
-        this.loginName = new Observable<string>(obser => { obser.next('') })
-      }
-    }
-    )
-  }
-
 
   showPanel() {
     console.log ('show nav panel')

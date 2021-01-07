@@ -18,6 +18,7 @@ var calendar_component_1 = require("../app/calendar/calendar.component");
 var location_view_component_1 = require("../app/location-view/location-view.component");
 var tags_view_component_1 = require("../app/tags-view/tags-view.component");
 var login_view_component_1 = require("./login-view/login-view.component");
+var place_view_component_1 = require("./place-view/place-view.component");
 var routes = [
     { path: 'home', component: home_component_1.HomeComponent },
     { path: 'blog/:blogid', component: blog_view_component_1.BlogViewComponent },
@@ -26,6 +27,7 @@ var routes = [
     { path: 'user/:userid', component: user_view_component_1.UserViewComponent },
     { path: 'calendar', component: calendar_component_1.CalendarComponent },
     { path: 'location', component: location_view_component_1.LocationViewComponent },
+    { path: 'places/:placeid', component: place_view_component_1.PlaceViewComponent },
     { path: 'login', component: login_view_component_1.LoginViewComponent },
     { path: 'tag/:tag', component: tags_view_component_1.TagsViewComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },

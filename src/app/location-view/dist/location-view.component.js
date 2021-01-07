@@ -96,7 +96,7 @@ var LocationViewComponent = /** @class */ (function () {
                 });
             }
             else {
-                this.willCreateNew = "";
+                this.willCreateNew = '';
             }
         }
         else if (this.willCreateNew == 'country') {
@@ -108,6 +108,7 @@ var LocationViewComponent = /** @class */ (function () {
                 });
             }
             else {
+                this.willCreateNew = '';
                 this.willCreateNew = this.willCreateNew;
             }
         }

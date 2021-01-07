@@ -1,0 +1,48 @@
+.card {
+    //padding-top: .5rem;
+    background-color: rgba($color: gray, $alpha: 0);
+    border-style: none;
+    display: inline-block;
+    padding: .5rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+#placeView {
+    background-color: rgba(#65A1A0, .7);
+}
+.present {
+    position: absolute;
+    z-index: 2;
+    bottom: 1rem;
+    left: 1rem;
+    padding: 0;
+    
+}
+.title {
+    font-weight: lighter;
+    background-color: rgba(#AAD4DA, .7);
+    font-size: 22px;
+    left: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin: 0;
+}
+
+.subTitle {
+    font-weight: lighter;
+    background-color: rgba(#AAD4DA, .7);
+    font-size: 14px;
+    padding: 0;
+    padding-left: 1rem;
+  
+}
+
+//body
+.picktureLine {
+    display: inline;
+}
+
+#threeColums {
+    -webkit-columns: 3;
+    -moz-columns: 3;
+    columns: 3;
+}

@@ -1,11 +1,3 @@
-<div *ngIf="isFullVersion">
-    <div class='bg-dark text-light w-100'>
-        <span> author: </span>
-        <a routerLink="/user/{{blog.user.id}}">
-            {{ blog.user.username }}
-        </a>
-    </div>
-</div>
 
 <div class='card w-100'>
     <div class='title d-flex'>
@@ -19,8 +11,9 @@
     <div class='blog align-items-start'>
         <div style="z-index: 1;position: absolute; padding: .3rem; text-align: right;">
             <div class='w-100'>
+                <img src={{ imagePath }}/>
                 <span style='background-color: rgba(139, 196, 193, .6); width: 100%;'>
-                    <a routerLink="/place/{{ blog.place.title }}">
+                    <a routerLink="/places/{{ blog.place.id }}">
                         {{ blog.place.title + " " + blog.place.country.title }}
                     </a>
                 </span>

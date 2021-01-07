@@ -22,6 +22,8 @@ export class Constants {
         //console.log (document.getElementById('navbar').clientHeight / document.getElementById('backgroundImage').clientHeight  * 100)
         return ( document.getElementById("backgroundImage").clientWidth < document.getElementById("backgroundImage").clientHeight) 
     }
+
+    public static imagePath = Constants.server + 'images/system/earth-globe.png'
     
 }
 

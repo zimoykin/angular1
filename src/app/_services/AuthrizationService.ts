@@ -5,7 +5,7 @@ import { Constants as K, DecodedToken } from '../_model/Constants';
 import jwtDecode from 'jwt-decode';
 import { map, timeout } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { User } from '../_model/User';
+import { User, UserPublic } from '../_model/User';
 import { HeaderComponent as hat} from '../header/header.component'
 import { ObserveOnSubscriber } from 'rxjs/internal/operators/observeOn';
 
@@ -75,9 +75,10 @@ export class Authorization {
       console.log('4 save user')
    
       this.cookieService.set ('jwt', user.accessToken)
-      this.cookieService.set ('username', user.username)
 
       localStorage.setItem ('ref', user.refreshToken)
+      localStorage.setItem ('username', user.username)
+      localStorage.setItem ('user_id', user.id)
     
       return true
 
@@ -101,6 +102,26 @@ export class Authorization {
           Authorization: authrizationData
         }
       }).subscribe ( (val: User) => {
+        this.saveUser(val)
+        obser.next(val)
+      })
+    })
+
+    return user$
+
+  }
+
+  register (username: string, email: string, password: string) : Observable<User> {
+    console.log ("register")
+    const uri = `${K.server}api/users/signin`;
+
+    const user$ = new Observable <User> ( obser => {
+
+      this.http.post<UserPublic> (uri, JSON.stringify ({
+        username: username,
+        email: email,
+        password: password
+      })).subscribe ( (val: User) => {
         this.saveUser(val)
         obser.next(val)
       })
@@ -150,9 +171,16 @@ export class Authorization {
 
       this.cookieService.deleteAll()
       localStorage.removeItem('ref')
+      localStorage.removeItem('username')
+      localStorage.removeItem('user_id')
       obser.next(true)
       
     })
   }
+
+  jwtHeader () : HttpHeaders {
+    return new HttpHeaders({ Authorization: this.token })
+  }
+
 
 }

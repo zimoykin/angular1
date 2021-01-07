@@ -17,10 +17,20 @@ export class BlogModel {
     description: string
     country: Country
   }
+
+  export class PlaceFull {
+    id: string
+    title: string 
+    description: string
+    country: Country
+    blogs: BlogModel[]
+  }
+
   export class Country {
     id: string
     title: string 
     description: string
+    place: [Place]
   }
 
 

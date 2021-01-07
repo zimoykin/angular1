@@ -68,8 +68,9 @@ var Authorization = /** @class */ (function () {
     Authorization.prototype.saveUser = function (user) {
         console.log('4 save user');
         this.cookieService.set('jwt', user.accessToken);
-        this.cookieService.set('username', user.username);
         localStorage.setItem('ref', user.refreshToken);
+        localStorage.setItem('username', user.username);
+        localStorage.setItem('user_id', user.id);
         return true;
     };
     Authorization.prototype.authorize = function (login, password) {
@@ -85,6 +86,22 @@ var Authorization = /** @class */ (function () {
                     Authorization: authrizationData
                 }
             }).subscribe(function (val) {
+                _this.saveUser(val);
+                obser.next(val);
+            });
+        });
+        return user$;
+    };
+    Authorization.prototype.register = function (username, email, password) {
+        var _this = this;
+        console.log("register");
+        var uri = Constants_1.Constants.server + "api/users/signin";
+        var user$ = new rxjs_1.Observable(function (obser) {
+            _this.http.post(uri, JSON.stringify({
+                username: username,
+                email: email,
+                password: password
+            })).subscribe(function (val) {
                 _this.saveUser(val);
                 obser.next(val);
             });
@@ -124,8 +141,13 @@ var Authorization = /** @class */ (function () {
         return new rxjs_1.Observable(function (obser) {
             _this.cookieService.deleteAll();
             localStorage.removeItem('ref');
+            localStorage.removeItem('username');
+            localStorage.removeItem('user_id');
             obser.next(true);
         });
+    };
+    Authorization.prototype.jwtHeader = function () {
+        return new http_1.HttpHeaders({ Authorization: this.token });
     };
     Authorization = __decorate([
         core_1.Injectable({ providedIn: 'root' })

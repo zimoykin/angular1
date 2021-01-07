@@ -1,23 +1,87 @@
 
+<div *ngIf="isMobile()">
 
-
-<div id='cardview'>
-
-    <h3>
-        login here
-    </h3>
-    <form #cred 
-    (ngSubmit)="login(cred)"
-    > 
-        <div cclass='w-100'>
-            <input id="emailLogin" type='email' required>
+    <div *ngIf="logined==''" id='back'>
+        <div *ngIf="logined==''" id='cardview'  [style.width.%]="75" style='-webkit-transform: translate(-50%, -50%);'>
+            <h3>
+                login here
+            </h3>
+            <form #cred (ngSubmit)="login(cred)">
+                <div class="p-2">
+                    <div class='w-100'>
+                        <input placeholder='email' id="emailLogin" type='email' required>
+                    </div>
+                    <div class='w-100'>
+                        <input  placeholder='password' type='password' id='passwordLogin' required>
+                    </div>
+                </div>
+    
+                <hr>
+                <button class='btn btn-success' type="submit"> login </button>
+            </form>
         </div>
-        <div class='w-100'>
-            <input type='password' id='passwordLogin' required>
+    </div>
+    
+    
+    <div *ngIf="logined!=''" id='cardview'>
+    
+        <h3>
+            Hi, {{ username }}
+        </h3>
+    
+        <picture>
+            <button class='zButton' type="submit" (click)='clickLogOut()'> logout </button>
+            <img src="{{ imagePath$ |async }}" style="object-fit: cover;" loading="lazy" width="100%" height="350px" />
+        </picture>
+    
+    </div>
+
+
+</div>
+
+<div *ngIf="!isMobile()">
+
+    <div *ngIf="logined==''" id='back'>
+        <div *ngIf="logined==''" id='cardview' [style.width.%]="50">
+            <h3>
+                login here
+            </h3>
+            <form #cred (ngSubmit)="login(cred)">
+                <div class="p-2">
+                    <div  *ngIf="mode=='register'"  class='w-100'>
+                        <input id="username"  placeholder='username' type='text' required>
+                    </div>
+                    <div class='w-100'>
+                        <input id="emailLogin"  placeholder='email' type='email' required>
+                    </div>
+                    <div class='w-100'>
+                        <input id='passwordLogin' type='password'  placeholder='password' required>
+                    </div>
+                </div>
+    
+                <hr>
+                <div class='zButton'>
+                    <button *ngIf="mode=='login'" class='btn btn-light mr-1' type="submit"> login </button>
+                    <button *ngIf="mode=='login'" class='btn btn-light mr-1' type="button" (click)='changeMode()'> register new </button>
+                    <button *ngIf="mode=='register'" class='btn btn-light' type="button" (click)='registerNew(cred.username, cred.emailLogin, cred.passwordLogin)' > Register new </button>
+                </div>
+            </form>
         </div>
-        <hr>
-        <button class='btn btn-success' type="submit"> login </button>
-    </form>
+    </div>
+    
+    
+    <div *ngIf="logined!=''" id='cardview'>
+    
+        <h3>
+            Hi, {{ username }}
+        </h3>
+    
+        <picture>
+            <button class='zButton' type="submit" (click)='clickLogOut()'> logout </button>
+            <img src="{{ imagePath$ |async }}" style="object-fit: cover;" loading="lazy" width="100%" height="350px" />
+        </picture>
+    
+    </div>
 
 
 </div>

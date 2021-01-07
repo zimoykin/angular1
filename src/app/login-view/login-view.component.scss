@@ -1,15 +1,16 @@
 #cardview {
-    top: calc(30% - 15rem/2);
-    width: 20rem;
-    height: 15rem;
-    left: calc(50% - 20rem/2);
+    top: 50%;
+    width: 50%;
+    height: 22rem;
+    left: 50%;
+    transform: translate(-50%, -150%);
+    -webkit-transform: translate(-50%, -150%);
     overflow: hidden;
     justify-content: center;
     position: fixed;
     justify-content: center;
     text-align: center;
     background-color: rgba($color: #8BC4C1, $alpha: .6);
-    padding: 1rem;
     border-radius: .3rem;
 }
 
@@ -20,6 +21,7 @@ h3 {
     font-weight: lighter;
     border-radius: .3rem; 
     border-style: none;
+    margin: 0;
 }
 
 input {
@@ -30,4 +32,27 @@ input {
     padding-left: 1rem;
 
     width: 100%;
+}
+
+.zButton {
+    z-index: 2;
+    position: absolute;
+    bottom: 0;
+    border-style: none;
+    padding: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#back {
+    position: fixed;
+    z-index: 9;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(#000000, .7);
+    z-index: 1000; position: fixed; top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transition: 1s;
 }

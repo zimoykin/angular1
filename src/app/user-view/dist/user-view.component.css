@@ -23,13 +23,7 @@
 }
 
 .picktureLine {
-  display: inline;
-}
-
-.threeColums {
-  -webkit-columns: 3;
-  -moz-columns: 3;
-  columns: 3;
+  display: flex;
 }
 
 .twoColums {

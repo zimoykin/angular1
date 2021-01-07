@@ -15,21 +15,35 @@ var operators_1 = require("rxjs/operators");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var Constants_1 = require("../_model/Constants");
 var EditPostViewComponent = /** @class */ (function () {
-    function EditPostViewComponent(route, httpClient, cookieService) {
+    function EditPostViewComponent(route, httpClient, cookieService, sanitizer) {
         this.route = route;
         this.httpClient = httpClient;
         this.cookieService = cookieService;
-        this.myControl = new forms_1.FormControl();
+        this.sanitizer = sanitizer;
+        this.imagePathPlanet = Constants_1.Constants.imagePath;
+        this.myControlPlace = new forms_1.FormControl();
+        this.myControlCountry = new forms_1.FormControl();
+        this.imagePreview$ = new rxjs_1.BehaviorSubject(Constants_1.Constants.server + "images/system/imageSelect.jpg");
         this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
     }
     EditPostViewComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.$getPlaces('').subscribe(function (places) {
-            console.log(places);
-            _this.isRequestSend = false;
-            _this.places = places;
-            _this.filteredPlaces = _this.myControl.valueChanges
-                .pipe(operators_1.startWith(''), operators_1.map(function (value) { return _this._filter(value); }));
+        this.httpClient.get(Constants_1.Constants.server + "api/countries", {
+            headers: { Authorization: this.auth.token }
+        }).subscribe(function (countries) {
+            console.log(countries);
+            _this.countries = countries;
+            _this.filteredCountry = _this.myControlCountry.valueChanges
+                .pipe(operators_1.startWith(''), operators_1.map(function (value) { return _this._filterCountry(value); }));
+            _this.places = new Array();
+            _this.countries.map(function (country) {
+                country.place.map(function (place) {
+                    _this.places.push(place);
+                });
+            });
+            _this.filteredPlaces = _this.myControlPlace.valueChanges
+                .pipe(operators_1.startWith(''), operators_1.map(function (value) { return _this._filterPlace(value); }));
+            console.log(_this.places);
         });
         var blogid = new rxjs_1.Observable(function (obser) {
             _this.route.paramMap.subscribe(function (param) {
@@ -38,14 +52,17 @@ var EditPostViewComponent = /** @class */ (function () {
         }).subscribe(function (val) {
             if (val != 'new') {
                 if (_this.auth.isJwtOk) {
-                    _this.httpClient.get(Constants_1.Constants.server + "api/blogs/" + val, {
+                    _this.httpClient.get(Constants_1.Constants.server + "api/blogs/id?blogid=" + val, {
                         headers: { Authorization: _this.auth.token }
                     })
                         .subscribe(function (blogObject) {
                         console.log(blogObject);
                         _this.blogObj = blogObject;
                         document.getElementById('place').value = blogObject.place.title;
+                        document.getElementById('country').value = blogObject.place.country.title;
                         _this.placeid = blogObject.place.id;
+                        _this.countryid = blogObject.place.country.id;
+                        _this.imagePreview$.next(blogObject.image);
                     });
                 }
             } //
@@ -90,39 +107,55 @@ var EditPostViewComponent = /** @class */ (function () {
                 title: title, description: description, placeId: this.placeid, tags: tags
             }), { headers: headers })
                 .subscribe(function (blog) {
-                if (blog != undefined && _this.file != undefined) {
-                    console.log(blog);
-                    _this.clear();
-                    //u-p-l-o-a-d-s"
-                    // const formData: FormData = new FormData();
-                    // formData.append('file', this.file, this.file.fileName);
-                    var data = new FormData();
-                    data.append('file', _this.file);
-                    _this.httpClient.post(Constants_1.Constants.server + "api/blogs/uploads/" + _this.blogObj.id, data, { headers: new http_1.HttpHeaders({
-                            'Authorization': _this.auth.token
-                        }) }).subscribe(function (val) {
-                        console.log(val);
-                    });
-                    // window.location.href = '\home'
-                }
+                _this.uploadPhoto(blog).subscribe(function () {
+                    window.location.href = '\home';
+                });
+                //window.location.href = '\home'
             });
         }
         else {
-            this.httpClient.request(new http_1.HttpRequest('POST', Constants_1.Constants.server + "api/blogs/", JSON.stringify({
+            this.httpClient.post(Constants_1.Constants.server + "api/blogs/", JSON.stringify({
                 title: title, description: description, placeId: this.placeid, tags: tags
-            }), { headers: headers }))
+            }), { headers: headers })
                 .subscribe(function (blog) {
                 if (blog != undefined) {
-                    console.log(blog);
-                    _this.clear();
-                    window.location.href = '\home';
+                    _this.uploadPhoto(blog).subscribe(function () {
+                        window.location.href = '\home';
+                    });
+                    //
                 }
             });
         }
     };
-    EditPostViewComponent.prototype._filter = function (value) {
-        console.log(value);
+    EditPostViewComponent.prototype.uploadPhoto = function (blog) {
+        var _this = this;
+        var end = new rxjs_1.Observable(function (obser) {
+            if (blog != undefined && _this.file != undefined) {
+                console.log(blog);
+                _this.clear();
+                var data = new FormData();
+                data.append('file', _this.file);
+                _this.httpClient.post(Constants_1.Constants.server + "api/blogs/uploads/" + _this.blogObj.id, data, {
+                    headers: new http_1.HttpHeaders({
+                        'Authorization': _this.auth.token
+                    })
+                }).subscribe(function (val) {
+                    console.log(val);
+                    obser.next();
+                });
+            }
+        });
+        return end;
+    };
+    EditPostViewComponent.prototype._filterPlace = function (value) {
+        console.log("_filterPlace" + value);
         return this.places.filter(function (val) {
+            return val.title.toLowerCase().includes(value.toLowerCase());
+        });
+    };
+    EditPostViewComponent.prototype._filterCountry = function (value) {
+        console.log("_filterCountry" + value);
+        return this.countries.filter(function (val) {
             return val.title.toLowerCase().includes(value.toLowerCase());
         });
     };
@@ -145,14 +178,46 @@ var EditPostViewComponent = /** @class */ (function () {
             this.placeid = filtred[0].id;
         }
     };
-    EditPostViewComponent.prototype.$getPlaces = function (title) {
-        console.log('request send: ' + title);
-        if (title != '') {
-            return this.httpClient.get(Constants_1.Constants.server + "api/places/title/" + title, { headers: new http_1.HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) });
+    EditPostViewComponent.prototype.selectedCountry = function ($event) {
+        var _this = this;
+        console.log($event);
+        this.countryid = '';
+        var filtred = this.countries.filter(function (val) {
+            return val.title === $event;
+        });
+        if (filtred.length > 0) {
+            this.countryid = filtred[0].id;
+            this.places = filtred[0].place;
+            this.filteredPlaces = this.myControlPlace.valueChanges
+                .pipe(operators_1.startWith(''), operators_1.map(function (value) { return _this._filterPlace(value); }));
+            if (document.getElementById('place').value != '')
+                console.log("check selected place");
+            {
+                console.log(this.places.filter(function (val) {
+                    return val.title == document.getElementById('place').value;
+                }).length);
+                if (this.places.filter(function (val) {
+                    return val.title == document.getElementById('place').value;
+                }).length == 0) {
+                    console.log("check selected place 2");
+                    document.getElementById('place').value = '';
+                }
+            }
         }
-        else {
-            return this.httpClient.get(Constants_1.Constants.server + "api/places/", { headers: new http_1.HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) });
-        }
+    };
+    EditPostViewComponent.prototype.fileBrowseHandler = function (files) {
+        this.prepareFilesList(files);
+    };
+    EditPostViewComponent.prototype.prepareFilesList = function (file) {
+        this.file = file[0];
+        console.log(this.file);
+        // let safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl( URL.createObjectURL(this.file));
+        // let sanitizedUrl = this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, safeUrl);
+        // console.log (sanitizedUrl)
+        this.imagePreview$.next(window.URL.createObjectURL(this.file));
+    };
+    EditPostViewComponent.prototype.getSafeURL = function (val) {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(val);
     };
     EditPostViewComponent = __decorate([
         core_1.Component({

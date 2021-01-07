@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { HeaderComponent } from '../header/header.component';
-import { User } from '../_model/User';
+import { User, UserFullInfo } from '../_model/User';
 import { Authorization } from '../_services/AuthrizationService';
+import { Constants as K } from '../_model/Constants'
 
 @Component({
   selector: 'app-login-view',
@@ -15,8 +17,26 @@ export class LoginViewComponent implements OnInit {
   constructor(private httpClient: HttpClient, private cookieService: CookieService) { }
 
   auth = new Authorization(this.cookieService, this.httpClient)
+  logined: string
+  username: string
+  imagePath$: Subject<string> = new BehaviorSubject ('')
+
+  mode: string = 'login'
 
   ngOnInit(): void {
+    if ( localStorage.getItem('user_id') ) {
+      this.logined = localStorage.getItem('user_id')
+      this.username = localStorage.getItem('username')
+
+      this.httpClient.get <UserFullInfo> (`${K.server}api/users/full?user_id=${this.logined}`, {
+        headers: this.auth.jwtHeader()
+      }).subscribe ( val => {
+        this.imagePath$.next ( val.image )
+      })
+
+    } else {
+      this.logined = ''
+    }
   }
 
   login (cred) {
@@ -27,6 +47,34 @@ export class LoginViewComponent implements OnInit {
         }
       })
     }
+  }
+
+  registerNew (username, email, password) {
+    console.log ('register' + password.value)
+    if (email.value != '' && password.value != ''  && username.value != '') {
+      this.auth.register(username.value, email.value, password.value)
+      .subscribe( (user: User) => {
+        if (user != null) {
+          window.location.href = '/home'
+        }
+      })
+    }
+  }
+
+  clickLogOut() {
+
+    this.auth.logout().subscribe((val: boolean) => {
+      if (val) { this.logined = '' }
+    })
+
+  }
+
+  isMobile () : boolean {
+    return K.isMobile()
+  }
+
+  changeMode () {
+    this.mode = this.mode == 'login' ? 'register' : 'login'
   }
 
 }

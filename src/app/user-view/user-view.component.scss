@@ -25,14 +25,9 @@
 }
 
 .picktureLine {
-    display: inline;
+    display: flex;
 }
 
-.threeColums {
-    -webkit-columns: 3;
-    -moz-columns: 3;
-    columns: 3;
-}
 .twoColums {
     -webkit-columns: 2;
     -moz-columns: 2;

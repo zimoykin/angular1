@@ -3,7 +3,7 @@
 
     <div id="userView">
         <picture *ngIf="user != undefined" class='w-50'>
-                 <img id='avatar' src="{{ user.image }}" loading="lazy" width='100%' height="100%" style='object-fit: cover; '/>
+                 <img id='avatar' src="{{ avatarPath }}" loading="lazy" width='100%' height="100%" style='object-fit: cover; '/>
                 <label class='upload' for="fusk"> upload new photo </label>
                 <input id="fusk" type="file" name="photo" style="display: none;" multiple (change)="fileBrowseHandler($event.target.files)">
         </picture>

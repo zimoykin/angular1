@@ -18,7 +18,7 @@ export class UserViewComponent implements OnInit {
 
   user: UserFullInfo
   auth = new Authorization(this.coockie, this.http)
-  file: any
+  avatarPath: string
 
   ngOnInit(): void {
 
@@ -27,6 +27,7 @@ export class UserViewComponent implements OnInit {
       if (userID != '') {
         this.getUserInfo(userID).subscribe(val => {
           this.user = val
+          this.avatarPath = val.image
           console.log(val)
         })
       }
@@ -46,20 +47,20 @@ export class UserViewComponent implements OnInit {
 
 
   prepareFilesList(file: [any]) {
-    this.file = file[0]
-    console.log(this.file)
+  
+    console.log(file[0])
 
     const data = new FormData()
-    data.append('file', this.file)
+    data.append('file', file[0])
 
     this.http.post(`${K.server}api/users/avatar`, data, {
       headers: new HttpHeaders({
         'Authorization': this.auth.token
       })
     }).subscribe ( (val: UserPublic) => {
-      console.log ( val);
-      
-      (<HTMLImageElement>document.getElementById('avatar') ).src = val.image
+      console.log ( val );
+      window.location.reload();
+      //this.user.image = val.image
     })
 
   }

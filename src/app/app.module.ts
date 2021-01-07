@@ -26,6 +26,7 @@ import { LocationViewComponent } from './location-view/location-view.component';
 import { AuthorViewComponent } from './author-view/author-view.component';
 import { LoginViewComponent } from './login-view/login-view.component';
 import './_services/date.extensions';
+import { PlaceViewComponent } from './place-view/place-view.component';
 
 
 //https://www.design-seeds.com/in-nature/nature-made/nature-tones-40/
@@ -47,7 +48,8 @@ import './_services/date.extensions';
     TagsViewComponent,
     LocationViewComponent,
     AuthorViewComponent,
-    LoginViewComponent
+    LoginViewComponent,
+    PlaceViewComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

@@ -27,7 +27,6 @@ var HeaderComponent = /** @class */ (function () {
         this.navElement = document.getElementById('navbar');
     };
     HeaderComponent.prototype.onResize = function ($event) {
-        console.log('');
         this.showMenu = false;
     };
     HeaderComponent.prototype.onScroll = function ($event) {
@@ -60,7 +59,7 @@ var HeaderComponent = /** @class */ (function () {
         var _this = this;
         console.log('init header');
         this.menu = Constants_1.Constants.defaultMenu();
-        var userName = this.cookieService.get('username');
+        var userName = localStorage.getItem('username');
         this.loginName = new rxjs_1.Observable(function (obser) {
             if (userName != '') {
                 obser.next(userName);
@@ -92,14 +91,6 @@ var HeaderComponent = /** @class */ (function () {
     };
     HeaderComponent.prototype.clickLogin = function () {
         this.showPanelLogin = !this.showPanelLogin;
-    };
-    HeaderComponent.prototype.clickLogOut = function () {
-        var _this = this;
-        this.auth.logout().subscribe(function (val) {
-            if (val) {
-                _this.loginName = new rxjs_1.Observable(function (obser) { obser.next(''); });
-            }
-        });
     };
     HeaderComponent.prototype.showPanel = function () {
         console.log('show nav panel');

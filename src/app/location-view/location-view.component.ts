@@ -126,7 +126,7 @@ export class LocationViewComponent implements OnInit {
             this.updatePlaceList()
           })
       } else {
-        this.willCreateNew = ""
+        this.willCreateNew = ''
       }
 
     } else if (this.willCreateNew == 'country') {
@@ -140,6 +140,7 @@ export class LocationViewComponent implements OnInit {
             this.updateCountryList();
           })
       } else {
+        this.willCreateNew = ''
         this.willCreateNew = this.willCreateNew
       }
 

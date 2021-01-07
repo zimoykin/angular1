@@ -1,0 +1,47 @@
+.card {
+  background-color: rgba(128, 128, 128, 0);
+  border-style: none;
+  display: inline-block;
+  padding: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#placeView {
+  background-color: rgba(101, 161, 160, 0.7);
+}
+
+.present {
+  position: absolute;
+  z-index: 2;
+  bottom: 1rem;
+  left: 1rem;
+  padding: 0;
+}
+
+.title {
+  font-weight: lighter;
+  background-color: rgba(170, 212, 218, 0.7);
+  font-size: 22px;
+  left: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin: 0;
+}
+
+.subTitle {
+  font-weight: lighter;
+  background-color: rgba(170, 212, 218, 0.7);
+  font-size: 14px;
+  padding: 0;
+  padding-left: 1rem;
+}
+
+.picktureLine {
+  display: inline;
+}
+
+#threeColums {
+  -webkit-columns: 3;
+  -moz-columns: 3;
+  columns: 3;
+}

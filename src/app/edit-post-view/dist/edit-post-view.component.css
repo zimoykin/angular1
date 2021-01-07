@@ -19,3 +19,25 @@
 .example-full-width {
   width: 100%;
 }
+
+#detail {
+  display: flex;
+  width: 100%;
+}
+
+#others {
+  display: inline;
+  width: 50%;
+  font-weight: 100;
+}
+
+#formdescription {
+  width: 50%;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+}
+
+#formdescription textarea {
+  height: 100%;
+  font-weight: 100;
+}

@@ -25,6 +25,7 @@ var UserViewComponent = /** @class */ (function () {
             if (userID != '') {
                 _this.getUserInfo(userID).subscribe(function (val) {
                     _this.user = val;
+                    _this.avatarPath = val.image;
                     console.log(val);
                 });
             }
@@ -39,17 +40,17 @@ var UserViewComponent = /** @class */ (function () {
         this.prepareFilesList(files);
     };
     UserViewComponent.prototype.prepareFilesList = function (file) {
-        this.file = file[0];
-        console.log(this.file);
+        console.log(file[0]);
         var data = new FormData();
-        data.append('file', this.file);
+        data.append('file', file[0]);
         this.http.post(Constants_1.Constants.server + "api/users/avatar", data, {
             headers: new http_1.HttpHeaders({
                 'Authorization': this.auth.token
             })
         }).subscribe(function (val) {
             console.log(val);
-            document.getElementById('avatar').src = val.image;
+            window.location.reload();
+            //this.user.image = val.image
         });
     };
     UserViewComponent = __decorate([

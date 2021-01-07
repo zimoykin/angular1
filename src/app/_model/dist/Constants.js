@@ -19,6 +19,7 @@ var Constants = /** @class */ (function () {
         return (document.getElementById("backgroundImage").clientWidth < document.getElementById("backgroundImage").clientHeight);
     };
     Constants.server = 'http://10.0.0.102:8000/';
+    Constants.imagePath = Constants.server + 'images/system/earth-globe.png';
     return Constants;
 }());
 exports.Constants = Constants;
