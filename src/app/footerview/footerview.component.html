@@ -1,8 +1,10 @@
 
 
 
-<div id='footer'>
-    <span>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores, tenetur.
-    </span>
+<div *ngIf="showThis$|async" id='footer'>
+    <a (click)='loremed()' > 
+        <span>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores, tenetur.
+        </span>
+    </a>
 </div>

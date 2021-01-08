@@ -89,7 +89,10 @@ export class EditPostViewComponent implements OnInit {
               (<HTMLInputElement>document.getElementById('country')).value = blogObject.place.country.title;
               this.placeid = blogObject.place.id
               this.countryid = blogObject.place.country.id
-              this.imagePreview$.next(blogObject.image)
+              console.log (blogObject.image)
+              if (blogObject.image != '') {
+                this.imagePreview$.next(blogObject.image)
+              }
             })
         }
       } //
@@ -135,16 +138,15 @@ export class EditPostViewComponent implements OnInit {
     console.log(this.file)
 
     if (this.blogObj != null) {
-
+     
       console.log('update here')
-      console.log(this.file)
-
-      this.httpClient.put<BlogModel>(`${K.server}api/blogs/${this.blogObj.id}`,
+      this.httpClient.put<BlogModel>(`${K.server}api/blogs?blogid=${this.blogObj.id}`,
         JSON.stringify({
           title: title, description: description, placeId: this.placeid, tags: tags
         }),
         { headers: headers })
         .subscribe((blog) => {
+          console.log ('upload start')
           this.uploadPhoto(blog).subscribe ( () => { 
             window.location.href = '\home'
           })
@@ -152,7 +154,7 @@ export class EditPostViewComponent implements OnInit {
         })
 
     } else {
-
+      console.log('create new here')
       this.httpClient.post<BlogModel>(`${K.server}api/blogs/`,
         JSON.stringify({
           title: title, description: description, placeId: this.placeid, tags: tags
@@ -169,28 +171,43 @@ export class EditPostViewComponent implements OnInit {
     }
   }
 
-  private uploadPhoto(blog: BlogModel): Observable<void> {
+  delete () {
+    if(confirm("Are you sure to delete blog?")) {
+      console.log("delete confirmed here");
+      this.httpClient.delete (`${K.server}api/blogs?blogid=${this.blogObj.id}`,
+        {observe : 'response',
+        headers: this.auth.jwtHeader()}
+      )
+      .subscribe ( response => {
+       console.log (response)
+       if (response.status == 200) {
+        window.location.href = '/home'
+       } else {
+         alert (response.statusText)
+       }
+      }) 
+      
+    }
+  }
 
+  private uploadPhoto(blog: BlogModel): Observable<void> {
+    
     let end = new Observable<void>((obser) => {
 
       if (blog != undefined && this.file != undefined) {
-        console.log(blog);
-        this.clear();
-
+       
         const data = new FormData();
         data.append('file', this.file);
-        this.httpClient.post<BlogModel>(`${K.server}api/blogs/uploads/${this.blogObj.id}`,
-          data,
-          {
-            headers: new HttpHeaders({
-              'Authorization': this.auth.token
-            })
-          }).subscribe(
+        data.append('filename', this.file.name);
+        this.httpClient.post<BlogModel>(`${K.server}api/blogs/uploads?blogid=${blog.id}`, data, {headers: this.auth.jwtHeader()})
+        .subscribe(
             (val) => {
               console.log(val);
               obser.next()
             }
           );
+      } else {
+        obser.next()
       }
     }
     )

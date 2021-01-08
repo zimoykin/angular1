@@ -8,12 +8,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.blogComponent = void 0;
 var core_1 = require("@angular/core");
+var rxjs_1 = require("rxjs");
 var Constants_1 = require("../_model/Constants");
 var blogComponent = /** @class */ (function () {
-    function blogComponent() {
+    function blogComponent(cookie) {
+        this.cookie = cookie;
         this.imagePath = Constants_1.Constants.imagePath;
+        this.userID$ = new rxjs_1.BehaviorSubject('init');
     }
-    blogComponent.prototype.ngOnInit = function () { };
+    blogComponent.prototype.ngOnInit = function () {
+        this.userID$.next(localStorage.getItem('user_id'));
+    };
+    blogComponent.prototype.ngOnDestroy = function () {
+        this.userID$.unsubscribe();
+    };
+    blogComponent.prototype.getImageSize = function () {
+        return document.getElementById('mainWindow').clientWidth + "px";
+    };
     __decorate([
         core_1.Input()
     ], blogComponent.prototype, "blog");

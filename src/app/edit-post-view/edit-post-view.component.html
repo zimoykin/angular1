@@ -28,7 +28,7 @@
                     <!-- <img src={{ imagePathPlanet }}/> -->
                     <picture style = 'border-style: none;'>
                         <label style = 'border-style: none;' for="fileDropRef">
-                            <img style = 'border-style: none;' src="{{ getSafeURL (imagePreview$ | async) }}"
+                            <img id='imgPreview' style = 'border-style: none;' [attr.src]= "getSafeURL (imagePreview$ | async)"
                             style="object-fit: cover;" loading="lazy" width="100%"
                             height="350px"
                             />
@@ -82,6 +82,9 @@
             </button>
             <button type="submit" class="btn btn-light m-1" (click)="clear()">
                 clear
+            </button>
+            <button *ngIf="blogObj != undefined" type="submit" class="btn btn-danger m-1" (click)="delete()">
+                DELETE
             </button>
         </form>
     </div>

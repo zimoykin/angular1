@@ -62,7 +62,10 @@ var EditPostViewComponent = /** @class */ (function () {
                         document.getElementById('country').value = blogObject.place.country.title;
                         _this.placeid = blogObject.place.id;
                         _this.countryid = blogObject.place.country.id;
-                        _this.imagePreview$.next(blogObject.image);
+                        console.log(blogObject.image);
+                        if (blogObject.image != '') {
+                            _this.imagePreview$.next(blogObject.image);
+                        }
                     });
                 }
             } //
@@ -102,11 +105,11 @@ var EditPostViewComponent = /** @class */ (function () {
         console.log(this.file);
         if (this.blogObj != null) {
             console.log('update here');
-            console.log(this.file);
-            this.httpClient.put(Constants_1.Constants.server + "api/blogs/" + this.blogObj.id, JSON.stringify({
+            this.httpClient.put(Constants_1.Constants.server + "api/blogs?blogid=" + this.blogObj.id, JSON.stringify({
                 title: title, description: description, placeId: this.placeid, tags: tags
             }), { headers: headers })
                 .subscribe(function (blog) {
+                console.log('upload start');
                 _this.uploadPhoto(blog).subscribe(function () {
                     window.location.href = '\home';
                 });
@@ -114,6 +117,7 @@ var EditPostViewComponent = /** @class */ (function () {
             });
         }
         else {
+            console.log('create new here');
             this.httpClient.post(Constants_1.Constants.server + "api/blogs/", JSON.stringify({
                 title: title, description: description, placeId: this.placeid, tags: tags
             }), { headers: headers })
@@ -127,22 +131,37 @@ var EditPostViewComponent = /** @class */ (function () {
             });
         }
     };
+    EditPostViewComponent.prototype["delete"] = function () {
+        if (confirm("Are you sure to delete blog?")) {
+            console.log("delete confirmed here");
+            this.httpClient["delete"](Constants_1.Constants.server + "api/blogs?blogid=" + this.blogObj.id, { observe: 'response',
+                headers: this.auth.jwtHeader() })
+                .subscribe(function (response) {
+                console.log(response);
+                if (response.status == 200) {
+                    window.location.href = '/home';
+                }
+                else {
+                    alert(response.statusText);
+                }
+            });
+        }
+    };
     EditPostViewComponent.prototype.uploadPhoto = function (blog) {
         var _this = this;
         var end = new rxjs_1.Observable(function (obser) {
             if (blog != undefined && _this.file != undefined) {
-                console.log(blog);
-                _this.clear();
                 var data = new FormData();
                 data.append('file', _this.file);
-                _this.httpClient.post(Constants_1.Constants.server + "api/blogs/uploads/" + _this.blogObj.id, data, {
-                    headers: new http_1.HttpHeaders({
-                        'Authorization': _this.auth.token
-                    })
-                }).subscribe(function (val) {
+                data.append('filename', _this.file.name);
+                _this.httpClient.post(Constants_1.Constants.server + "api/blogs/uploads?blogid=" + blog.id, data, { headers: _this.auth.jwtHeader() })
+                    .subscribe(function (val) {
                     console.log(val);
                     obser.next();
                 });
+            }
+            else {
+                obser.next();
             }
         });
         return end;
