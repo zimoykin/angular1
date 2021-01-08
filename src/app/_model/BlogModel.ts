@@ -1,3 +1,5 @@
+import { UserPublic } from "./User"
+
 export class BlogModel {
 
     title: string
@@ -8,6 +10,7 @@ export class BlogModel {
     tags: [string]
     place: Place
     created: string
+    emotions: [Emotions]
 
   }
 
@@ -44,4 +47,10 @@ export class BlogModel {
   export class Author {
     id: string
     username: string
+  }
+
+  export class Emotions {
+     user: UserPublic
+     blog_id: string
+     image: string
   }

@@ -17,6 +17,6 @@
 
 <div *ngIf="isLoaded">
     <div>
-        <app-blog *ngFor="let iterPost of list" [blog]="iterPost" [isFullVersion]=false></app-blog>
+        <app-blog *ngFor="let iterPost of list" [blogid]="iterPost.id" [isFullVersion]=false></app-blog>
     </div>
 </div>

@@ -12,36 +12,31 @@ var rxjs_1 = require("rxjs");
 var Constants_1 = require("../_model/Constants");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var HomeComponent = /** @class */ (function () {
-    //backElement = null
     function HomeComponent(httpClient, cookieService) {
         this.httpClient = httpClient;
         this.cookieService = cookieService;
-        this.list = [];
-        this.isLoaded = false;
+        this.list$ = new rxjs_1.BehaviorSubject(undefined);
+        this.isLoaded$ = new rxjs_1.BehaviorSubject(false);
         this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
     }
     HomeComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this.getAllBlogs().subscribe(function (response) {
-            _this.isLoaded = true;
-            response.map(function (post) {
-                _this.list.push(post);
-            });
-        });
-        //this.backElement = document.getElementById('background') as HTMLElement;
+        this.getAllBlogs();
     };
     HomeComponent.prototype.getAllBlogs = function () {
         var _this = this;
-        return new rxjs_1.Observable(function (obser) {
-            if (_this.auth.token == '' || _this.auth.token == null) {
-                throw console.error('error');
-            }
-            _this.httpClient.get(Constants_1.Constants.server + "api/blogs", {
-                headers: { Authorization: _this.auth.token }
-            }).subscribe(function (blogs) {
-                obser.next(blogs);
-            });
+        if (this.auth.token == '' || this.auth.token == null) {
+            throw console.error('error');
+        }
+        this.httpClient.get(Constants_1.Constants.server + "api/blogs/list", {
+            headers: this.auth.jwtHeader()
+        }).subscribe(function (blogs) {
+            _this.isLoaded$.next(true);
+            _this.list$.next(blogs);
         });
+    };
+    HomeComponent.prototype.ngOnDestroy = function () {
+        this.isLoaded$.unsubscribe();
+        this.list$.unsubscribe();
     };
     HomeComponent = __decorate([
         core_1.Component({

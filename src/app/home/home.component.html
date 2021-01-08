@@ -1,4 +1,4 @@
-<div *ngIf="!isLoaded">
+<div *ngIf="!(isLoaded$|async)">
     <div id="homeview">
         <div>
             <div class="lds-roller">
@@ -15,8 +15,8 @@
     </div>
 </div>
 
-<div *ngIf="isLoaded">
+<div *ngIf="isLoaded$|async">
     <div>
-        <app-blog *ngFor="let iterPost of list" [blog]="iterPost" [isFullVersion]=false></app-blog>
+        <app-blog *ngFor="let iterPost of list$|async" [blogid]="iterPost" [isFullVersion]=false></app-blog>
     </div>
 </div>

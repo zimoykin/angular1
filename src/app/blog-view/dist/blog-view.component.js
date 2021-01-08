@@ -10,40 +10,23 @@ exports.BlogViewComponent = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
-var Constants_1 = require("../_model/Constants");
 var BlogViewComponent = /** @class */ (function () {
     function BlogViewComponent(route, httpClient, cookieService) {
         this.route = route;
         this.httpClient = httpClient;
         this.cookieService = cookieService;
         this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
+        this.blogid$ = new rxjs_1.BehaviorSubject('');
     }
     BlogViewComponent.prototype.ngOnInit = function () {
         var _this = this;
-        var blogid = new rxjs_1.Observable(function (obser) {
-            _this.route.paramMap.subscribe(function (param) {
-                obser.next(param.get('blogid'));
-            });
-        }).subscribe(function (val) {
-            if (_this.auth.isJwtOk) {
-                _this.getBlog(val).subscribe(function (blog) {
-                    _this.blogObj = blog;
-                });
-            }
+        this.route.paramMap.subscribe(function (val) {
+            var blogid = val.get('blogid');
+            _this.blogid$.next(blogid);
         });
     };
-    BlogViewComponent.prototype.getBlog = function (blogid) {
-        var _this = this;
-        return new rxjs_1.Observable(function (obser) {
-            if (_this.auth.token == '' || _this.auth.token == null) {
-                throw console.error('error');
-            }
-            _this.httpClient.get(Constants_1.Constants.server + "api/blogs/id?blogid=" + blogid, {
-                headers: { Authorization: _this.auth.token }
-            }).subscribe(function (blogs) {
-                obser.next(blogs);
-            });
-        });
+    BlogViewComponent.prototype.ngOnDestroy = function () {
+        this.blogid$.unsubscribe();
     };
     BlogViewComponent = __decorate([
         core_1.Component({

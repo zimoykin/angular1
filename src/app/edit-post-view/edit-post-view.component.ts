@@ -171,22 +171,24 @@ export class EditPostViewComponent implements OnInit {
     }
   }
 
-  delete () {
-    if(confirm("Are you sure to delete blog?")) {
+  delete() {
+    if (confirm("Are you sure to delete blog?")) {
       console.log("delete confirmed here");
-      this.httpClient.delete (`${K.server}api/blogs?blogid=${this.blogObj.id}`,
-        {observe : 'response',
-        headers: this.auth.jwtHeader()}
+      this.httpClient.delete(`${K.server}api/blogs?blogid=${this.blogObj.id}`,
+        {
+          observe: 'response',
+          headers: this.auth.jwtHeader()
+        }
       )
-      .subscribe ( response => {
-       console.log (response)
-       if (response.status == 200) {
-        window.location.href = '/home'
-       } else {
-         alert (response.statusText)
-       }
-      }) 
-      
+        .subscribe(response => {
+          console.log(response)
+          if (response.status == 200) {
+            window.location.href = '/home'
+          } else {
+            alert(response.statusText)
+          }
+        })
+
     }
   }
 

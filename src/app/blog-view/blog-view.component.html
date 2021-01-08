@@ -1,7 +1,7 @@
 
-<div *ngIf="blogObj != undefined"> 
+<div *ngIf="(blogid$|async) != undefined"> 
     <app-blog 
-     [blog]="blogObj"
+     [blogid]="blogid$|async"
      [isFullVersion]=true
     ></app-blog>
 </div>

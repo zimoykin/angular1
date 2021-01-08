@@ -1,11 +1,11 @@
 
-<div class='card w-100'>
+<div class='card w-100' *ngIf="(blog$|async)!=undefined">
     <div class='title d-flex' id='mainWindow'>
         <div class='w-100'>
-            <h2><a routerLink="/blog/{{ blog.id }}">{{ blog.title }}</a></h2>
+            <h2><a routerLink="/blog/{{ (blog$|async).id }}">{{ (blog$|async).title }}</a></h2>
         </div>
-        <div *ngIf=" (userID$|async) == blog.user.id " class=''>
-            <h2 style="text-align: right;"><a routerLink="/edit/{{ blog.id }}">(edit)</a></h2>
+        <div *ngIf=" (userID$|async) == (blog$|async).user.id " class=''>
+            <h2 style="text-align: right;"><a routerLink="/edit/{{ (blog$|async).id }}">(edit)</a></h2>
         </div>
     </div>
     <div class='blog align-items-start'>
@@ -13,34 +13,44 @@
             <div class='w-100'>
                 <img src="{{ imagePath }}"/>
                 <span style='background-color: rgba(139, 196, 193, .6); width: 100%;'>
-                    <a routerLink="/places/{{ blog.place.id }}">
-                        {{ blog.place.title + " " + blog.place.country.title }}
+                    <a routerLink="/places/{{ (blog$|async).place.id }}">
+                        {{ (blog$|async).place.title + " " + (blog$|async).place.country.title }}
                     </a>
                 </span>
             </div>
         </div>
 
         <picture>
-            <img src="{{ blog.image }}"
+            <img src="{{ (blog$|async).image }}"
              style="object-fit: cover;" 
              loading="lazy" 
              [style.width]="getImageSize()"
             height="450px" />
         </picture>
 
-        <div class='description'>
-            <span> {{ blog.description }} </span>
+        <div class='description p-1'>
+            <span> {{ (blog$|async).description }} </span>
         </div>
-        <div class='tags' *ngFor="let item of blog.tags">
-            <a routerLink="/tag/{{ item }}">{{ "#" + item }}</a>
-        </div>
-        <div class='d-flex'>
-            <div class='w-100'>
-                <span style='background-color: rgba(195, 178, 180, .4); width: 100%;'>
-                    <a routerLink="/user/{{ blog.user.id }}">
-                        {{ " &#183; " + blog.created + " &#183; " +  blog.user.username }}
-                    </a>
-                </span>
+        <div style="display: flex;">
+            <div class="w-100">
+                <div class='tags' *ngFor="let item of (blog$|async).tags">
+                    <a routerLink="/tag/{{ item }}">{{ "#" + item }}</a>
+                </div>
+                <div class='d-flex'>
+                    <div class='w-100'>
+                        <span style='background-color: rgba(195, 178, 180, .4); width: 100%;'>
+                            <a routerLink="/user/{{ (blog$|async).user.id }}">
+                                {{ " &#183; " + (blog$|async).created + " &#183; " +  (blog$|async).user.username }}
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <a (click)='clickLike("like")'> 
+                    <img src="{{ imagePathEmotions$|async }}"/>
+                </a>
             </div>
         </div>
+
     </div>

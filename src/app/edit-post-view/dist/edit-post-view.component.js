@@ -134,8 +134,10 @@ var EditPostViewComponent = /** @class */ (function () {
     EditPostViewComponent.prototype["delete"] = function () {
         if (confirm("Are you sure to delete blog?")) {
             console.log("delete confirmed here");
-            this.httpClient["delete"](Constants_1.Constants.server + "api/blogs?blogid=" + this.blogObj.id, { observe: 'response',
-                headers: this.auth.jwtHeader() })
+            this.httpClient["delete"](Constants_1.Constants.server + "api/blogs?blogid=" + this.blogObj.id, {
+                observe: 'response',
+                headers: this.auth.jwtHeader()
+            })
                 .subscribe(function (response) {
                 console.log(response);
                 if (response.status == 200) {
