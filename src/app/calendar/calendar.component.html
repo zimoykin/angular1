@@ -1,6 +1,6 @@
-<div id='calendar'>
-    <div id='calendarcard w-100'>
-        <div class='calendarMonth' id='month'>
+<div class='card w-100'>
+   
+        <div class='calendarMonth w-50 pr-1' id='month'>
 
             <h3> 
                 <a (click)='nextMonth(-1)'>
@@ -44,19 +44,16 @@
                 </div>
             </div>
 
-            <div class='blogs-links'>
+        </div>
 
-                <span> 
-                    blogs:
-                </span>
+        <div class='blogs-links w-50 pl-'>
 
-                <div class='blogsOfDay'
-                *ngFor="let blog of blogs">
-                    <a routerLink="/blog/{{ blog.id }}"> {{ blog.title }} </a>
-                </div>
+            <h3> blogs of day: </h3>
 
+            <div class='blogsOfDay'
+            *ngFor="let blog of blogs">
+                <a routerLink="/blog/{{ blog.id }}"> {{ blog.title }} </a>
             </div>
 
         </div>
     </div>
-</div>
