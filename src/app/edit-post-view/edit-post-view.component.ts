@@ -21,6 +21,7 @@ export class EditPostViewComponent implements OnInit {
   isRequestSend: boolean
 
   public file: any
+  files: [File]
   imagePathPlanet = K.imagePath
 
   myControlPlace = new FormControl();
@@ -145,12 +146,15 @@ export class EditPostViewComponent implements OnInit {
           title: title, description: description, placeId: this.placeid, tags: tags
         }),
         { headers: headers })
-        .subscribe((blog) => {
+        .subscribe(async (blog) => {
           console.log ('upload start')
-          this.uploadPhoto(blog).subscribe ( () => { 
-            window.location.href = '\home'
-          })
-          //window.location.href = '\home'
+
+          for ( let item of this.files) {
+            console.log(item.name) 
+            console.log (this.file.name)
+            this.uploadPhoto(blog, item, item.name == this.file.name).subscribe ( () =>{console.log ('loading' + item.name)})
+            console.log ('loaded')
+          }
         })
 
     } else {
@@ -162,10 +166,13 @@ export class EditPostViewComponent implements OnInit {
         , { headers: headers })
         .subscribe((blog: BlogModel) => {
           if (blog != undefined) {
-            this.uploadPhoto(blog).subscribe ( () => {
-              window.location.href = '\home'
-            })
-            //
+        
+            for ( let item of this.files) {
+              console.log(item.name) 
+              console.log (this.file.name)
+              this.uploadPhoto(blog, item, item.name == this.file.name).subscribe ( () =>{console.log ('loading' + item.name)})
+              console.log ('loaded')
+            }
           }
         })
     }
@@ -192,16 +199,17 @@ export class EditPostViewComponent implements OnInit {
     }
   }
 
-  private uploadPhoto(blog: BlogModel): Observable<void> {
+  private uploadPhoto( blog: BlogModel, file: File, asMain: boolean): Observable<void> {
     
     let end = new Observable<void>((obser) => {
 
-      if (blog != undefined && this.file != undefined) {
-       
+      if (blog != undefined && file != undefined) {
+       console.log(file.name)
+       console.log(asMain)
         const data = new FormData();
-        data.append('file', this.file);
-        data.append('filename', this.file.name);
-        this.httpClient.post<BlogModel>(`${K.server}api/blogs/uploads?blogid=${blog.id}`, data, {headers: this.auth.jwtHeader()})
+        data.append('file', file);
+        data.append('filename', file.name);
+        this.httpClient.post<BlogModel>(`${K.server}api/blogs/uploads?blogid=${blog.id}&asMain=${asMain}`, data, {headers: this.auth.jwtHeader()})
         .subscribe(
             (val) => {
               console.log(val);
@@ -305,9 +313,9 @@ export class EditPostViewComponent implements OnInit {
     this.file = file[0]
     console.log(this.file)
 
-    // let safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl( URL.createObjectURL(this.file));
-    // let sanitizedUrl = this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, safeUrl);
-    // console.log (sanitizedUrl)
+    this.files = file
+    console.log(this.files)
+
     this.imagePreview$.next(window.URL.createObjectURL(this.file))
   }
 

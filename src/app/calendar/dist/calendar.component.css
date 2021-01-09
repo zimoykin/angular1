@@ -89,6 +89,7 @@
 }
 
 #calendar {
+  position: absolute;
   overflow: hidden;
   display: flex;
   justify-content: center;

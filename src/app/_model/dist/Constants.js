@@ -20,6 +20,10 @@ var Constants = /** @class */ (function () {
     };
     Constants.server = 'http://10.0.0.102:8000/';
     Constants.imagePath = Constants.server + 'images/system/earth-globe.png';
+    Constants.imageLike = Constants.server + 'images/system/like.png';
+    Constants.imageDislike = Constants.server + 'images/system/dislike.png';
+    Constants.imageReport = Constants.server + 'images/system/report.png';
+    Constants.imageNoEmotion = Constants.server + 'images/system/noemotions.png';
     return Constants;
 }());
 exports.Constants = Constants;

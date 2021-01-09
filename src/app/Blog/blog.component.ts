@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, Input } from '@angular/core'
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Subject, observable, Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { BlogModel } from '../_model/BlogModel';
 import  { Constants as K } from '../_model/Constants'
 import { Authorization } from '../_services/AuthrizationService';
@@ -21,10 +20,20 @@ export class blogComponent implements OnInit {
 
     imagePath = K.imagePath
 
-    imagePathEmotions$: Subject<string> = new BehaviorSubject(this.imagePath)
+    imagePathEmotions$: Subject<string> = new BehaviorSubject(K.imageNoEmotion)
     userID$: Subject<string> = new BehaviorSubject('init')
     blog$: Subject<BlogModel> = new BehaviorSubject(undefined)
 
+    //
+    imageLike = K.imageLike
+    imageDislike = K.imageDislike
+    imageReport = K.imageReport
+    imageNoEmotion = K.imageNoEmotion
+    //
+
+    currentPictures = 0
+    currentImage$: Subject<string> = new BehaviorSubject('')
+    imageList: [string]
 
     constructor( private cookie: CookieService, private http: HttpClient) {}
 
@@ -46,6 +55,8 @@ export class blogComponent implements OnInit {
                 });
                 if (filtred.length > 0) {
                     this.imagePathEmotions$.next(filtred[0].image);
+                } else {
+                    this.imagePathEmotions$.next(K.imageNoEmotion);
                 }
             }
         });
@@ -81,9 +92,37 @@ export class blogComponent implements OnInit {
     
           this.http.get(`${K.server}api/blogs/id?blogid=${blogid}`, {
             headers: { Authorization: this.auth.token }
-          }).subscribe((blogs: BlogModel) => {
-            this.blog$.next(blogs)
+          }).subscribe((blog: BlogModel) => {
+            this.blog$.next(blog)
+            this.currentImage$.next ( blog.image )
           })
+      }
+
+      clickPictures () {
+       
+          console.log ('change pictures started')
+          //this.currentImage$.next( val[this.currentPictures+1] )
+
+          if (this.imageList == undefined ) {
+            console.log ('getting image list')
+            this.http.get <[string]> (`${K.server}api/blogs/images/list?blogid=${this.blogid}`,
+            { headers: this.auth.jwtHeader() }).subscribe ( (val) => {
+             this.imageList = val
+             console.log ('changing image of new list')
+             this.changePictures ()
+            })
+
+          } else {
+            console.log ('change image old list')
+            this.changePictures ()
+          }
+
+      }
+
+      async changePictures () {
+        this.currentPictures = this.currentPictures+1 > this.imageList.length-1 ? 0 : this.currentPictures+1 
+        console.log ('set' +  this.currentPictures)
+        this.currentImage$.next( this.imageList[ this.currentPictures] )
       }
 
 }

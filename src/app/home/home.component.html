@@ -16,7 +16,26 @@
 </div>
 
 <div *ngIf="isLoaded$|async">
+
     <div>
-        <app-blog *ngFor="let iterPost of list$|async" [blogid]="iterPost" [isFullVersion]=false></app-blog>
-    </div>
+        <app-blog 
+        *ngFor="let iterPost of list$|async" 
+        [blogid]="iterPost" 
+        [isFullVersion]=false>
+        </app-blog>
+
+        <div class="card w-50">
+            <mat-paginator 
+            style="background-color: transparent;"
+            [length]="length"
+            [pageSize]="pageSize"
+            [pageIndex]='pageIndex'
+            (page)="pageChanged($event)"
+            >
+            </mat-paginator>
+        </div>
+        
+        </div>
+
+    
 </div>

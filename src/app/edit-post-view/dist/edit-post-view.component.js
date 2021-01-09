@@ -5,6 +5,42 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 exports.__esModule = true;
 exports.EditPostViewComponent = void 0;
 var http_1 = require("@angular/common/http");
@@ -108,13 +144,24 @@ var EditPostViewComponent = /** @class */ (function () {
             this.httpClient.put(Constants_1.Constants.server + "api/blogs?blogid=" + this.blogObj.id, JSON.stringify({
                 title: title, description: description, placeId: this.placeid, tags: tags
             }), { headers: headers })
-                .subscribe(function (blog) {
-                console.log('upload start');
-                _this.uploadPhoto(blog).subscribe(function () {
-                    window.location.href = '\home';
+                .subscribe(function (blog) { return __awaiter(_this, void 0, void 0, function () {
+                var _loop_1, this_1, _i, _a, item;
+                return __generator(this, function (_b) {
+                    console.log('upload start');
+                    _loop_1 = function (item) {
+                        console.log(item.name);
+                        console.log(this_1.file.name);
+                        this_1.uploadPhoto(blog, item, item.name == this_1.file.name).subscribe(function () { console.log('loading' + item.name); });
+                        console.log('loaded');
+                    };
+                    this_1 = this;
+                    for (_i = 0, _a = this.files; _i < _a.length; _i++) {
+                        item = _a[_i];
+                        _loop_1(item);
+                    }
+                    return [2 /*return*/];
                 });
-                //window.location.href = '\home'
-            });
+            }); });
         }
         else {
             console.log('create new here');
@@ -123,10 +170,16 @@ var EditPostViewComponent = /** @class */ (function () {
             }), { headers: headers })
                 .subscribe(function (blog) {
                 if (blog != undefined) {
-                    _this.uploadPhoto(blog).subscribe(function () {
-                        window.location.href = '\home';
-                    });
-                    //
+                    var _loop_2 = function (item) {
+                        console.log(item.name);
+                        console.log(_this.file.name);
+                        _this.uploadPhoto(blog, item, item.name == _this.file.name).subscribe(function () { console.log('loading' + item.name); });
+                        console.log('loaded');
+                    };
+                    for (var _i = 0, _a = _this.files; _i < _a.length; _i++) {
+                        var item = _a[_i];
+                        _loop_2(item);
+                    }
                 }
             });
         }
@@ -149,14 +202,16 @@ var EditPostViewComponent = /** @class */ (function () {
             });
         }
     };
-    EditPostViewComponent.prototype.uploadPhoto = function (blog) {
+    EditPostViewComponent.prototype.uploadPhoto = function (blog, file, asMain) {
         var _this = this;
         var end = new rxjs_1.Observable(function (obser) {
-            if (blog != undefined && _this.file != undefined) {
+            if (blog != undefined && file != undefined) {
+                console.log(file.name);
+                console.log(asMain);
                 var data = new FormData();
-                data.append('file', _this.file);
-                data.append('filename', _this.file.name);
-                _this.httpClient.post(Constants_1.Constants.server + "api/blogs/uploads?blogid=" + blog.id, data, { headers: _this.auth.jwtHeader() })
+                data.append('file', file);
+                data.append('filename', file.name);
+                _this.httpClient.post(Constants_1.Constants.server + "api/blogs/uploads?blogid=" + blog.id + "&asMain=" + asMain, data, { headers: _this.auth.jwtHeader() })
                     .subscribe(function (val) {
                     console.log(val);
                     obser.next();
@@ -232,9 +287,8 @@ var EditPostViewComponent = /** @class */ (function () {
     EditPostViewComponent.prototype.prepareFilesList = function (file) {
         this.file = file[0];
         console.log(this.file);
-        // let safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl( URL.createObjectURL(this.file));
-        // let sanitizedUrl = this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, safeUrl);
-        // console.log (sanitizedUrl)
+        this.files = file;
+        console.log(this.files);
         this.imagePreview$.next(window.URL.createObjectURL(this.file));
     };
     EditPostViewComponent.prototype.getSafeURL = function (val) {

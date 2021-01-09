@@ -24,6 +24,11 @@ export class Constants {
     }
 
     public static imagePath = Constants.server + 'images/system/earth-globe.png'
+
+    public static imageLike = Constants.server + 'images/system/like.png'
+    public static imageDislike = Constants.server + 'images/system/dislike.png'
+    public static imageReport = Constants.server + 'images/system/report.png'
+    public static imageNoEmotion = Constants.server + 'images/system/noemotions.png'
     
 }
 

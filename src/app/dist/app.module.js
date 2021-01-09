@@ -9,6 +9,8 @@ exports.__esModule = true;
 exports.AppModule = void 0;
 var platform_browser_1 = require("@angular/platform-browser");
 var core_1 = require("@angular/core");
+var menu_1 = require("@angular/material/menu");
+var icon_1 = require("@angular/material/icon");
 var app_routing_module_1 = require("./app-routing.module");
 var app_component_1 = require("./app.component");
 var blog_component_1 = require("./blog/blog.component");
@@ -34,6 +36,8 @@ var location_view_component_1 = require("./location-view/location-view.component
 var author_view_component_1 = require("./author-view/author-view.component");
 var login_view_component_1 = require("./login-view/login-view.component");
 require("./_services/date.extensions");
+var place_view_component_1 = require("./place-view/place-view.component");
+var paginator_1 = require("@angular/material/paginator");
 //https://www.design-seeds.com/in-nature/nature-made/nature-tones-40/
 var AppModule = /** @class */ (function () {
     function AppModule() {
@@ -56,7 +60,8 @@ var AppModule = /** @class */ (function () {
                 tags_view_component_1.TagsViewComponent,
                 location_view_component_1.LocationViewComponent,
                 author_view_component_1.AuthorViewComponent,
-                login_view_component_1.LoginViewComponent
+                login_view_component_1.LoginViewComponent,
+                place_view_component_1.PlaceViewComponent
             ],
             imports: [
                 angular_bootstrap_md_1.MDBBootstrapModule.forRoot(),
@@ -68,7 +73,10 @@ var AppModule = /** @class */ (function () {
                 forms_1.FormsModule,
                 forms_1.ReactiveFormsModule,
                 animations_1.BrowserAnimationsModule,
-                select_1.MatSelectModule
+                select_1.MatSelectModule,
+                menu_1.MatMenuModule,
+                icon_1.MatIconModule,
+                paginator_1.MatPaginatorModule
             ],
             providers: [],
             bootstrap: [app_component_1.AppComponent]

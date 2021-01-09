@@ -17,26 +17,47 @@ var HomeComponent = /** @class */ (function () {
         this.cookieService = cookieService;
         this.list$ = new rxjs_1.BehaviorSubject(undefined);
         this.isLoaded$ = new rxjs_1.BehaviorSubject(false);
+        this.nextPage$ = new rxjs_1.BehaviorSubject(undefined);
         this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
+        // MatPaginator Output
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageIndex = 0;
     }
     HomeComponent.prototype.ngOnInit = function () {
-        this.getAllBlogs();
+        var _this = this;
+        this.nextPage$.next();
+        this.nextPage$.subscribe(function () {
+            console.log('currentPage: ' + _this.pageIndex);
+            _this.isLoaded$.next(false);
+            _this.getAllBlogs();
+        });
+    };
+    HomeComponent.prototype.pageChanged = function (event) {
+        this.pageIndex = event.pageIndex;
+        this.nextPage$.next();
+        return event;
     };
     HomeComponent.prototype.getAllBlogs = function () {
         var _this = this;
+        console.log('getAllBlogs');
         if (this.auth.token == '' || this.auth.token == null) {
             throw console.error('error');
         }
-        this.httpClient.get(Constants_1.Constants.server + "api/blogs/list", {
+        this.httpClient.get(Constants_1.Constants.server + "api/blogs/list?page=" + (this.pageIndex + 1) + "&per=" + this.pageSize, {
+            observe: 'response',
             headers: this.auth.jwtHeader()
-        }).subscribe(function (blogs) {
+        }).subscribe(function (response) {
+            console.log(response);
             _this.isLoaded$.next(true);
-            _this.list$.next(blogs);
+            _this.list$.next(response.body.items);
+            _this.length = response.body.metadata.total;
         });
     };
     HomeComponent.prototype.ngOnDestroy = function () {
         this.isLoaded$.unsubscribe();
         this.list$.unsubscribe();
+        this.nextPage$.unsubscribe();
     };
     HomeComponent = __decorate([
         core_1.Component({

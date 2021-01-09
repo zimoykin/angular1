@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { blogComponent } from './blog/blog.component';
@@ -27,6 +28,7 @@ import { AuthorViewComponent } from './author-view/author-view.component';
 import { LoginViewComponent } from './login-view/login-view.component';
 import './_services/date.extensions';
 import { PlaceViewComponent } from './place-view/place-view.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 //https://www.design-seeds.com/in-nature/nature-made/nature-tones-40/
@@ -61,7 +63,10 @@ import { PlaceViewComponent } from './place-view/place-view.component';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatMenuModule,
+    MatIconModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]
