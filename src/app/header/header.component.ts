@@ -133,4 +133,12 @@ export class HeaderComponent implements OnInit {
   showHiddenMenu () {
     this.showMenu= !this.showMenu;
   }
+
+  searchSubmit (searchInput: Event) {
+    console.log ('search start ' + searchInput) 
+
+    if ( (<HTMLInputElement>document.getElementById('searchInput')).value != '') {
+      window.location.href = `/search/${(<HTMLInputElement>document.getElementById('searchInput')).value}`
+    }
+  }
 }

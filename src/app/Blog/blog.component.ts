@@ -18,6 +18,8 @@ export class blogComponent implements OnInit {
     @Input() index: number;
     @Input() isFullVersion: boolean
 
+    isLoaded$: Subject<boolean> = new BehaviorSubject ( false )
+
     imagePath = K.imagePath
 
     imagePathEmotions$: Subject<string> = new BehaviorSubject(K.imageNoEmotion)
@@ -89,18 +91,22 @@ export class blogComponent implements OnInit {
           if (this.auth.token == '' || this.auth.token == null) {
             throw console.error('error');
           }
-    
+          this.isLoaded$.next(false)
           this.http.get(`${K.server}api/blogs/id?blogid=${blogid}`, {
             headers: { Authorization: this.auth.token }
           }).subscribe((blog: BlogModel) => {
-            this.blog$.next(blog)
-            this.currentImage$.next ( blog.image )
+              setTimeout( () => {
+                this.blog$.next(blog)
+                this.currentImage$.next ( blog.image )
+                this.isLoaded$.next(true)
+              }, 0)
           })
       }
 
       clickPictures () {
        
           console.log ('change pictures started')
+          this.isLoaded$.next(true)
           //this.currentImage$.next( val[this.currentPictures+1] )
 
           if (this.imageList == undefined ) {
@@ -109,11 +115,13 @@ export class blogComponent implements OnInit {
             { headers: this.auth.jwtHeader() }).subscribe ( (val) => {
              this.imageList = val
              console.log ('changing image of new list')
+             this.isLoaded$.next(true)
              this.changePictures ()
             })
 
           } else {
             console.log ('change image old list')
+            this.isLoaded$.next(true)
             this.changePictures ()
           }
 

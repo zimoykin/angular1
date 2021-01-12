@@ -50,6 +50,7 @@ var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var Constants_1 = require("../_model/Constants");
+var resizeImage_1 = require("../_services/resizeImage");
 var EditPostViewComponent = /** @class */ (function () {
     function EditPostViewComponent(route, httpClient, cookieService, sanitizer) {
         this.route = route;
@@ -133,56 +134,77 @@ var EditPostViewComponent = /** @class */ (function () {
         tags.value = '';
     };
     EditPostViewComponent.prototype.save = function (title, description, tags) {
-        var _this = this;
-        var headers = new http_1.HttpHeaders({
-            'Authorization': this.auth.token,
-            'Content-Type': 'application/json'
-        });
-        console.log(this.file);
-        if (this.blogObj != null) {
-            console.log('update here');
-            this.httpClient.put(Constants_1.Constants.server + "api/blogs?blogid=" + this.blogObj.id, JSON.stringify({
-                title: title, description: description, placeId: this.placeid, tags: tags
-            }), { headers: headers })
-                .subscribe(function (blog) { return __awaiter(_this, void 0, void 0, function () {
-                var _loop_1, this_1, _i, _a, item;
-                return __generator(this, function (_b) {
-                    console.log('upload start');
-                    _loop_1 = function (item) {
-                        console.log(item.name);
-                        console.log(this_1.file.name);
-                        this_1.uploadPhoto(blog, item, item.name == this_1.file.name).subscribe(function () { console.log('loading' + item.name); });
-                        console.log('loaded');
-                    };
-                    this_1 = this;
-                    for (_i = 0, _a = this.files; _i < _a.length; _i++) {
-                        item = _a[_i];
-                        _loop_1(item);
-                    }
-                    return [2 /*return*/];
+        return __awaiter(this, void 0, void 0, function () {
+            var headers;
+            var _this = this;
+            return __generator(this, function (_a) {
+                headers = new http_1.HttpHeaders({
+                    'Authorization': this.auth.token,
+                    'Content-Type': 'application/json'
                 });
-            }); });
-        }
-        else {
-            console.log('create new here');
-            this.httpClient.post(Constants_1.Constants.server + "api/blogs/", JSON.stringify({
-                title: title, description: description, placeId: this.placeid, tags: tags
-            }), { headers: headers })
-                .subscribe(function (blog) {
-                if (blog != undefined) {
-                    var _loop_2 = function (item) {
-                        console.log(item.name);
-                        console.log(_this.file.name);
-                        _this.uploadPhoto(blog, item, item.name == _this.file.name).subscribe(function () { console.log('loading' + item.name); });
-                        console.log('loaded');
-                    };
-                    for (var _i = 0, _a = _this.files; _i < _a.length; _i++) {
-                        var item = _a[_i];
-                        _loop_2(item);
-                    }
+                console.log(this.file);
+                if (this.blogObj != null) {
+                    console.log('update here');
+                    this.httpClient.put(Constants_1.Constants.server + "api/blogs?blogid=" + this.blogObj.id, JSON.stringify({
+                        title: title, description: description, placeId: this.placeid, tags: tags
+                    }), { headers: headers })
+                        .subscribe(function (blog) { return __awaiter(_this, void 0, void 0, function () {
+                        var _i, _a, item;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
+                                case 0:
+                                    _i = 0, _a = this.files;
+                                    _b.label = 1;
+                                case 1:
+                                    if (!(_i < _a.length)) return [3 /*break*/, 4];
+                                    item = _a[_i];
+                                    console.log(item.name);
+                                    console.log(this.file.name);
+                                    return [4 /*yield*/, this.uploadPhoto(blog.id, item, item.name == this.file.name).then(function () { })
+                                        //window.location.href = '/home'
+                                    ];
+                                case 2:
+                                    _b.sent();
+                                    _b.label = 3;
+                                case 3:
+                                    _i++;
+                                    return [3 /*break*/, 1];
+                                case 4: return [2 /*return*/];
+                            }
+                        });
+                    }); });
                 }
+                else {
+                    this.httpClient.post(Constants_1.Constants.server + "api/blogs/", JSON.stringify({
+                        title: title, description: description, placeId: this.placeid, tags: tags
+                    }), { headers: headers })
+                        .subscribe(function (blog) { return __awaiter(_this, void 0, void 0, function () {
+                        var _i, _a, item;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
+                                case 0:
+                                    if (!(blog != undefined)) return [3 /*break*/, 4];
+                                    _i = 0, _a = this.files;
+                                    _b.label = 1;
+                                case 1:
+                                    if (!(_i < _a.length)) return [3 /*break*/, 4];
+                                    item = _a[_i];
+                                    return [4 /*yield*/, this.uploadPhoto(blog.id, item, item.name == this.file.name).then(function () { })];
+                                case 2:
+                                    _b.sent();
+                                    window.location.href = '/home';
+                                    _b.label = 3;
+                                case 3:
+                                    _i++;
+                                    return [3 /*break*/, 1];
+                                case 4: return [2 /*return*/];
+                            }
+                        });
+                    }); });
+                }
+                return [2 /*return*/];
             });
-        }
+        });
     };
     EditPostViewComponent.prototype["delete"] = function () {
         if (confirm("Are you sure to delete blog?")) {
@@ -202,26 +224,30 @@ var EditPostViewComponent = /** @class */ (function () {
             });
         }
     };
-    EditPostViewComponent.prototype.uploadPhoto = function (blog, file, asMain) {
-        var _this = this;
-        var end = new rxjs_1.Observable(function (obser) {
-            if (blog != undefined && file != undefined) {
-                console.log(file.name);
-                console.log(asMain);
-                var data = new FormData();
-                data.append('file', file);
-                data.append('filename', file.name);
-                _this.httpClient.post(Constants_1.Constants.server + "api/blogs/uploads?blogid=" + blog.id + "&asMain=" + asMain, data, { headers: _this.auth.jwtHeader() })
-                    .subscribe(function (val) {
-                    console.log(val);
-                    obser.next();
-                });
-            }
-            else {
-                obser.next();
-            }
+    EditPostViewComponent.prototype.uploadPhoto = function (blogid, file, asMain) {
+        return __awaiter(this, void 0, void 0, function () {
+            var imgService;
+            var _this = this;
+            return __generator(this, function (_a) {
+                if (blogid != undefined && file != undefined) {
+                    console.log(file.name);
+                    console.log(asMain);
+                    imgService = new resizeImage_1.ImageService();
+                    imgService.resizeImage(file)
+                        .then(function (resizedFile) {
+                        var data = new FormData();
+                        data.append('file', resizedFile);
+                        data.append('filename', file.name);
+                        _this.httpClient.post(Constants_1.Constants.server + "api/blogs/uploads?blogid=" + blogid + "&asMain=" + asMain, data, { headers: _this.auth.jwtHeader() }).subscribe(function (val) {
+                            console.log(val);
+                        });
+                    })["catch"](function (error) {
+                        alert(error);
+                    });
+                }
+                return [2 /*return*/];
+            });
         });
-        return end;
     };
     EditPostViewComponent.prototype._filterPlace = function (value) {
         console.log("_filterPlace" + value);

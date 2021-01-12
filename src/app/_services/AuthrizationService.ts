@@ -3,11 +3,9 @@ import { CookieService } from 'ngx-cookie-service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Constants as K, DecodedToken } from '../_model/Constants';
 import jwtDecode from 'jwt-decode';
-import { map, timeout } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { User, UserPublic } from '../_model/User';
-import { HeaderComponent as hat} from '../header/header.component'
-import { ObserveOnSubscriber } from 'rxjs/internal/operators/observeOn';
+
 
 @Injectable({ providedIn: 'root' })
 export class Authorization {

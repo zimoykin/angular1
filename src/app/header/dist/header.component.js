@@ -111,6 +111,12 @@ var HeaderComponent = /** @class */ (function () {
     HeaderComponent.prototype.showHiddenMenu = function () {
         this.showMenu = !this.showMenu;
     };
+    HeaderComponent.prototype.searchSubmit = function (searchInput) {
+        console.log('search start ' + searchInput);
+        if (document.getElementById('searchInput').value != '') {
+            window.location.href = "/search/" + document.getElementById('searchInput').value;
+        }
+    };
     __decorate([
         core_1.HostListener('window:resize', ['$event'])
     ], HeaderComponent.prototype, "onResize");

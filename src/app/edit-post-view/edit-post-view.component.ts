@@ -9,6 +9,9 @@ import { BlogDraft, BlogModel, Country, Place } from '../_model/BlogModel'
 import { Authorization } from '../_services/AuthrizationService'
 import { Constants as K } from '../_model/Constants'
 import { DomSanitizer } from '@angular/platform-browser';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { ImageSearch } from '@material-ui/icons';
+import { ImageService } from '../_services/resizeImage';
 
 @Component({
   selector: 'app-edit-post-view',
@@ -90,7 +93,7 @@ export class EditPostViewComponent implements OnInit {
               (<HTMLInputElement>document.getElementById('country')).value = blogObject.place.country.title;
               this.placeid = blogObject.place.id
               this.countryid = blogObject.place.country.id
-              console.log (blogObject.image)
+              console.log(blogObject.image)
               if (blogObject.image != '') {
                 this.imagePreview$.next(blogObject.image)
               }
@@ -129,7 +132,7 @@ export class EditPostViewComponent implements OnInit {
     tags.value = ''
   }
 
-  save(title: string, description: string, tags: string) {
+  async save(title: string, description: string, tags: string) {
 
     const headers = new HttpHeaders({
       'Authorization': this.auth.token,
@@ -139,39 +142,34 @@ export class EditPostViewComponent implements OnInit {
     console.log(this.file)
 
     if (this.blogObj != null) {
-     
+
       console.log('update here')
       this.httpClient.put<BlogModel>(`${K.server}api/blogs?blogid=${this.blogObj.id}`,
         JSON.stringify({
           title: title, description: description, placeId: this.placeid, tags: tags
         }),
         { headers: headers })
-        .subscribe(async (blog) => {
-          console.log ('upload start')
-
-          for ( let item of this.files) {
-            console.log(item.name) 
-            console.log (this.file.name)
-            this.uploadPhoto(blog, item, item.name == this.file.name).subscribe ( () =>{console.log ('loading' + item.name)})
-            console.log ('loaded')
+        .subscribe( async (blog) => {
+          
+          for (let item of this.files) {
+            console.log(item.name)
+            console.log(this.file.name)
+            await this.uploadPhoto(blog.id, item, item.name == this.file.name).then( () => {} )
+            //window.location.href = '/home'
           }
+
         })
 
     } else {
-      console.log('create new here')
-      this.httpClient.post<BlogModel>(`${K.server}api/blogs/`,
-        JSON.stringify({
+      
+      this.httpClient.post<BlogModel>(`${K.server}api/blogs/`, JSON.stringify({
           title: title, description: description, placeId: this.placeid, tags: tags
-        })
-        , { headers: headers })
-        .subscribe((blog: BlogModel) => {
+        }), { headers: headers })
+      .subscribe( async (blog) => {
           if (blog != undefined) {
-        
-            for ( let item of this.files) {
-              console.log(item.name) 
-              console.log (this.file.name)
-              this.uploadPhoto(blog, item, item.name == this.file.name).subscribe ( () =>{console.log ('loading' + item.name)})
-              console.log ('loaded')
+            for (let item of this.files) {
+              await this.uploadPhoto(blog.id, item, item.name == this.file.name).then(() => {} )
+              window.location.href = '/home'
             }
           }
         })
@@ -199,31 +197,31 @@ export class EditPostViewComponent implements OnInit {
     }
   }
 
-  private uploadPhoto( blog: BlogModel, file: File, asMain: boolean): Observable<void> {
-    
-    let end = new Observable<void>((obser) => {
+  async uploadPhoto(blogid: string, file: File, asMain: boolean) {
 
-      if (blog != undefined && file != undefined) {
-       console.log(file.name)
-       console.log(asMain)
-        const data = new FormData();
-        data.append('file', file);
-        data.append('filename', file.name);
-        this.httpClient.post<BlogModel>(`${K.server}api/blogs/uploads?blogid=${blog.id}&asMain=${asMain}`, data, {headers: this.auth.jwtHeader()})
-        .subscribe(
-            (val) => {
-              console.log(val);
-              obser.next()
-            }
-          );
-      } else {
-        obser.next()
-      }
+    if (blogid != undefined && file != undefined) {
+
+      console.log(file.name)
+      console.log(asMain)
+
+      let imgService = new ImageService()
+      imgService.resizeImage(file)
+        .then(resizedFile => {
+          const data = new FormData();
+          data.append('file', resizedFile);
+          data.append('filename', file.name);
+          this.httpClient.post<BlogModel>(`${K.server}api/blogs/uploads?blogid=${blogid}&asMain=${asMain}`,
+            data, 
+            { headers: this.auth.jwtHeader() }
+            ).subscribe( (val) => {
+                console.log(val);
+              }
+            );
+        })
+        .catch(error => {
+          alert(error)
+        })
     }
-    )
-
-    return end
-
   }
 
   private _filterPlace(value: string): Place[] {

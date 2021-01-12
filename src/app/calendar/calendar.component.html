@@ -1,6 +1,6 @@
-<div class='card w-100'>
+<div class='card w-100 {{ !isMobile() ? "ryadom" : "" }} '>
    
-        <div class='calendarMonth w-50 pr-1' id='month'>
+        <div class='calendarMonth {{ !isMobile() ? "w-50" : "w-100"}} pr-1' id='month'>
 
             <h3> 
                 <a (click)='nextMonth(-1)'>
@@ -46,14 +46,26 @@
 
         </div>
 
-        <div class='blogs-links w-50 pl-'>
+        <div class='blogs-links {{ !isMobile() ? "w-50" : "w-100"}} pl-'>
 
             <h3> blogs of day: </h3>
 
             <div class='blogsOfDay'
             *ngFor="let blog of blogs">
-                <a routerLink="/blog/{{ blog.id }}"> {{ blog.title }} </a>
+                <a routerLink="/blog/{{ blog.id }}" style="text-decoration: none;"> 
+                    <div style="display: flex;">
+                        <img src="{{ blog.image }}" height="65px" width="65px" style="object-fit: cover;" loading='lazy' >
+                        <div style="display: block;">
+                            <p style="color: wheat; text-decoration: none; padding: .5rem;">
+                                {{ blog.title }}
+                            </p>
+                            <span style="color: wheat;">
+                                 {{ blog.user.username }} 
+                            </span>
+                        </div>
+                    </div>
+                </a>
             </div>
 
         </div>
-    </div>
+</div>

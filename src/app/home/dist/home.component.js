@@ -21,7 +21,7 @@ var HomeComponent = /** @class */ (function () {
         this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
         // MatPaginator Output
         this.length = 0;
-        this.pageSize = 5;
+        this.pageSize = 10;
         this.pageIndex = 0;
     }
     HomeComponent.prototype.ngOnInit = function () {

@@ -19,6 +19,7 @@ var location_view_component_1 = require("../app/location-view/location-view.comp
 var tags_view_component_1 = require("../app/tags-view/tags-view.component");
 var login_view_component_1 = require("./login-view/login-view.component");
 var place_view_component_1 = require("./place-view/place-view.component");
+var search_view_component_1 = require("./search-view/search-view.component");
 var routes = [
     { path: 'home', component: home_component_1.HomeComponent },
     { path: 'blog/:blogid', component: blog_view_component_1.BlogViewComponent },
@@ -30,6 +31,7 @@ var routes = [
     { path: 'places/:placeid', component: place_view_component_1.PlaceViewComponent },
     { path: 'login', component: login_view_component_1.LoginViewComponent },
     { path: 'tag/:tag', component: tags_view_component_1.TagsViewComponent },
+    { path: 'search/:value', component: search_view_component_1.SearchViewComponent },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 var AppRoutingModule = /** @class */ (function () {

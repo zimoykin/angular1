@@ -1,0 +1,22 @@
+<div *ngIf="!isLoaded">
+    <div id="homeview">
+        <div>
+            <div class="lds-roller">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isLoaded">
+    <div>
+        <app-blog *ngFor="let iterPost of list" [blogid]="iterPost" [isFullVersion]=false></app-blog>
+    </div>
+</div>

@@ -43,11 +43,11 @@
 
 .calendarweek {
    
-    
     border-radius: 5px;
     margin: .1rem;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     
 }
 
@@ -116,7 +116,7 @@
 .blogs-links {
     
     border-radius: 0.5rem;
-    height: 5rem;
+    //height: 5rem;
 }
 
 .blogs-links h3 {
@@ -144,7 +144,10 @@
     //padding-top: .5rem;
     background-color: rgba($color: gray, $alpha: 0);
     border-style: none;
-    padding: .5rem;
+  
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.ryadom {
     display: -webkit-inline-box;
 }

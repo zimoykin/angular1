@@ -51,6 +51,7 @@ var blogComponent = /** @class */ (function () {
     function blogComponent(cookie, http) {
         this.cookie = cookie;
         this.http = http;
+        this.isLoaded$ = new rxjs_1.BehaviorSubject(false);
         this.imagePath = Constants_1.Constants.imagePath;
         this.imagePathEmotions$ = new rxjs_1.BehaviorSubject(Constants_1.Constants.imageNoEmotion);
         this.userID$ = new rxjs_1.BehaviorSubject('init');
@@ -111,27 +112,34 @@ var blogComponent = /** @class */ (function () {
         if (this.auth.token == '' || this.auth.token == null) {
             throw console.error('error');
         }
+        this.isLoaded$.next(false);
         this.http.get(Constants_1.Constants.server + "api/blogs/id?blogid=" + blogid, {
             headers: { Authorization: this.auth.token }
         }).subscribe(function (blog) {
-            _this.blog$.next(blog);
-            _this.currentImage$.next(blog.image);
+            setTimeout(function () {
+                _this.blog$.next(blog);
+                _this.currentImage$.next(blog.image);
+                _this.isLoaded$.next(true);
+            }, 0);
         });
     };
     blogComponent.prototype.clickPictures = function () {
         var _this = this;
         console.log('change pictures started');
+        this.isLoaded$.next(true);
         //this.currentImage$.next( val[this.currentPictures+1] )
         if (this.imageList == undefined) {
             console.log('getting image list');
             this.http.get(Constants_1.Constants.server + "api/blogs/images/list?blogid=" + this.blogid, { headers: this.auth.jwtHeader() }).subscribe(function (val) {
                 _this.imageList = val;
                 console.log('changing image of new list');
+                _this.isLoaded$.next(true);
                 _this.changePictures();
             });
         }
         else {
             console.log('change image old list');
+            this.isLoaded$.next(true);
             this.changePictures();
         }
     };

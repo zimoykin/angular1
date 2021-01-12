@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
 
   // MatPaginator Output
   length = 0;
-  pageSize = 5;
+  pageSize = 10;
   pageIndex = 0;
   pageEvent: PageEvent;
 

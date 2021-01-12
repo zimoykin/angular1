@@ -46,6 +46,7 @@
   margin: 0.1rem;
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .calendarMonth {
@@ -105,7 +106,6 @@
 
 .blogs-links {
   border-radius: 0.5rem;
-  height: 5rem;
 }
 
 .blogs-links h3 {
@@ -131,7 +131,9 @@
 .card {
   background-color: rgba(128, 128, 128, 0);
   border-style: none;
-  padding: 0.5rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.ryadom {
   display: -webkit-inline-box;
 }

@@ -11,6 +11,7 @@ import { TagsViewComponent } from '../app/tags-view/tags-view.component'
 import { AuthorViewComponent } from '../app/author-view/author-view.component'
 import { LoginViewComponent } from './login-view/login-view.component';
 import { PlaceViewComponent } from './place-view/place-view.component';
+import { SearchViewComponent } from './search-view/search-view.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'places/:placeid', component: PlaceViewComponent },
   { path: 'login', component: LoginViewComponent },
   { path: 'tag/:tag', component: TagsViewComponent },
+  { path: 'search/:value', component: SearchViewComponent },
   { path: '',  redirectTo: '/home', pathMatch: 'full' },
 ];
 
