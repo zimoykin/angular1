@@ -87,8 +87,8 @@ var ImageService = /** @class */ (function () {
                         canvas.height = height;
                         ctx = canvas.getContext("2d");
                         ctx.drawImage(img, 0, 0, width, height);
-                        return [4 /*yield*/, new Promise(function (resolve) {
-                                canvas.toBlob(resolve, 'image/jpeg', 0.95);
+                        return [4 /*yield*/, new Promise(function (image) {
+                                canvas.toBlob(image, 'image/jpeg', 0.95);
                             })];
                     case 3:
                         result = _b.sent();

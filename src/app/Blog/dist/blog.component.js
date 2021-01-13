@@ -56,6 +56,7 @@ var blogComponent = /** @class */ (function () {
         this.imagePathEmotions$ = new rxjs_1.BehaviorSubject(Constants_1.Constants.imageNoEmotion);
         this.userID$ = new rxjs_1.BehaviorSubject('init');
         this.blog$ = new rxjs_1.BehaviorSubject(undefined);
+        this.emotions$ = new rxjs_1.BehaviorSubject(undefined);
         //
         this.imageLike = Constants_1.Constants.imageLike;
         this.imageDislike = Constants_1.Constants.imageDislike;
@@ -67,37 +68,52 @@ var blogComponent = /** @class */ (function () {
         this.auth = new AuthrizationService_1.Authorization(this.cookie, this.http);
     }
     blogComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.userID$.next(localStorage.getItem('user_id'));
-        this.getBlog(this.blogid);
-        this.updateUserEmotion();
+        this.getBlog(this.blogid).then(function () {
+            _this.updateUserEmotion();
+        });
     };
     blogComponent.prototype.updateUserEmotion = function () {
-        var _this = this;
-        var user_id = localStorage.getItem('user_id');
-        this.blog$.subscribe(function (blog) {
-            if (blog != undefined && blog.emotions.length > 0) {
-                var filtred = blog.emotions.filter(function (val) {
-                    return val.user.id == user_id;
+        return __awaiter(this, void 0, void 0, function () {
+            var user_id;
+            var _this = this;
+            return __generator(this, function (_a) {
+                user_id = localStorage.getItem('user_id');
+                this.emotions$.subscribe(function (emotion) {
+                    if (emotion != undefined && emotion.length > 0) {
+                        var filtred = emotion.filter(function (val) {
+                            return val.user.id == user_id;
+                        });
+                        if (filtred.length > 0) {
+                            _this.imagePathEmotions$.next(filtred[0].image);
+                        }
+                        else {
+                            _this.imagePathEmotions$.next(Constants_1.Constants.imageNoEmotion);
+                        }
+                    }
+                    else {
+                        _this.imagePathEmotions$.next(Constants_1.Constants.imageNoEmotion);
+                    }
                 });
-                if (filtred.length > 0) {
-                    _this.imagePathEmotions$.next(filtred[0].image);
-                }
-                else {
-                    _this.imagePathEmotions$.next(Constants_1.Constants.imageNoEmotion);
-                }
-            }
+                return [2 /*return*/];
+            });
         });
     };
     blogComponent.prototype.clickLike = function (emotion) {
         var _this = this;
         console.log(emotion);
-        this.http.post(Constants_1.Constants.server + "api/emotions?blogid=" + this.blogid + "&emotion=" + emotion, null, {
+        this.http.post(Constants_1.Constants.server + "api/emotions/set?blogid=" + this.blogid + "&emotion=" + emotion, null, {
             observe: 'response',
             headers: this.auth.jwtHeader()
         })
             .subscribe(function (response) {
             if (response.status == 200) {
-                _this.getBlog(_this.blogid);
+                console.log("got it!");
+                _this.emotions$.next(response.body);
+                _this.updateUserEmotion().then(function () {
+                    console.log("updated it!");
+                });
             }
         });
     };
@@ -108,26 +124,34 @@ var blogComponent = /** @class */ (function () {
         return document.getElementById('mainWindow').clientWidth + "px";
     };
     blogComponent.prototype.getBlog = function (blogid) {
-        var _this = this;
-        if (this.auth.token == '' || this.auth.token == null) {
-            throw console.error('error');
-        }
-        this.isLoaded$.next(false);
-        this.http.get(Constants_1.Constants.server + "api/blogs/id?blogid=" + blogid, {
-            headers: { Authorization: this.auth.token }
-        }).subscribe(function (blog) {
-            setTimeout(function () {
-                _this.blog$.next(blog);
-                _this.currentImage$.next(blog.image);
-                _this.isLoaded$.next(true);
-            }, 0);
+        return __awaiter(this, void 0, Promise, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (response) {
+                        if (_this.auth.token == '' || _this.auth.token == null) {
+                            response();
+                            console.error('error');
+                        }
+                        _this.isLoaded$.next(false);
+                        _this.http.get(Constants_1.Constants.server + "api/blogs/id?blogid=" + blogid, {
+                            headers: { Authorization: _this.auth.token }
+                        }).subscribe(function (blog) {
+                            setTimeout(function () {
+                                _this.blog$.next(blog);
+                                _this.emotions$.next(blog.emotions);
+                                _this.currentImage$.next(blog.image);
+                                _this.isLoaded$.next(true);
+                                response();
+                            }, 0);
+                        });
+                    })];
+            });
         });
     };
     blogComponent.prototype.clickPictures = function () {
         var _this = this;
         console.log('change pictures started');
         this.isLoaded$.next(true);
-        //this.currentImage$.next( val[this.currentPictures+1] )
         if (this.imageList == undefined) {
             console.log('getting image list');
             this.http.get(Constants_1.Constants.server + "api/blogs/images/list?blogid=" + this.blogid, { headers: this.auth.jwtHeader() }).subscribe(function (val) {

@@ -13,6 +13,7 @@ var forms_1 = require("@angular/forms");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var Constants_1 = require("../_model/Constants");
 var operators_1 = require("rxjs/operators");
+var httpClient_1 = require("../_services/httpClient");
 var LocationViewComponent = /** @class */ (function () {
     function LocationViewComponent(httpClient, cookie) {
         this.httpClient = httpClient;
@@ -21,6 +22,7 @@ var LocationViewComponent = /** @class */ (function () {
         this.selected = '';
         this.willCreateNew = '';
         this.auth = new AuthrizationService_1.Authorization(this.cookie, this.httpClient);
+        this.http = new httpClient_1.Http(this.cookie, this.httpClient);
     }
     LocationViewComponent.prototype.ngOnInit = function () {
         //api/countries/list
@@ -62,10 +64,11 @@ var LocationViewComponent = /** @class */ (function () {
         if (this.selected == '') {
             return;
         }
-        this.httpClient.get(Constants_1.Constants.server + "api/places/search?field=country_id&value=" + this.selected, { headers: new http_1.HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) })
-            .subscribe(function (values) {
-            _this.places = values;
-            console.log(values);
+        this.http
+            .get(Constants_1.Constants.server + "api/places/search", [new httpClient_1.Param("field", "country_id"), new httpClient_1.Param("value", this.selected)])
+            .then(function (val) {
+            console.log(val);
+            _this.places = val.body;
         });
     };
     LocationViewComponent.prototype.$getCountriesList = function () {

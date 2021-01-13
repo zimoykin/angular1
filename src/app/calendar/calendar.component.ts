@@ -16,9 +16,9 @@ export class CalendarComponent implements OnInit {
   month: Month
   blogs: [BlogModel]
   $dt = new Date()
-  auth: Authorization = new Authorization(this.coockie, this.http)
+  auth: Authorization = new Authorization(this.cookie, this.http)
 
-  constructor( private http: HttpClient, private coockie: CookieService ) { }
+  constructor( private http: HttpClient, private cookie: CookieService ) { }
 
   ngOnInit(): void {
     this.GetBuildThisMonth()

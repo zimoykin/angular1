@@ -12,11 +12,11 @@ var Month_1 = require("../_model/Month");
 var Constants_1 = require("../_model/Constants");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var CalendarComponent = /** @class */ (function () {
-    function CalendarComponent(http, coockie) {
+    function CalendarComponent(http, cookie) {
         this.http = http;
-        this.coockie = coockie;
+        this.cookie = cookie;
         this.$dt = new Date();
-        this.auth = new AuthrizationService_1.Authorization(this.coockie, this.http);
+        this.auth = new AuthrizationService_1.Authorization(this.cookie, this.http);
     }
     CalendarComponent.prototype.ngOnInit = function () {
         this.GetBuildThisMonth();

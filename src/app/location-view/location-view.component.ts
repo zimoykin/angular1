@@ -7,6 +7,7 @@ import { Country, Place } from '../_model/BlogModel';
 import { Authorization } from '../_services/AuthrizationService';
 import { Constants as K } from '../_model/Constants'
 import { map, startWith, filter} from 'rxjs/operators';
+import { Http, Param } from '../_services/httpClient';
 
 @Component({
   selector: 'app-location-view',
@@ -26,6 +27,7 @@ export class LocationViewComponent implements OnInit {
 
   constructor(private httpClient: HttpClient, private cookie: CookieService) { }
   auth = new Authorization(this.cookie, this.httpClient)
+  http = new Http(this.cookie, this.httpClient)
 
   ngOnInit(): void {
     //api/countries/list
@@ -78,13 +80,17 @@ export class LocationViewComponent implements OnInit {
       return
     }
 
-    this.httpClient.get<Place[]>(`${K.server}api/places/search?field=country_id&value=${this.selected}`,
-      { headers: new HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) })
-      .subscribe((values) => {
-        this.places = values;
-        console.log(values);
-      });
+    this.http
+      .get<[Place]>(
+        `${K.server}api/places/search`,
+        [new Param("field", "country_id"), new Param("value", this.selected)]
+      )
+      .then(val => {
+        console.log(val)
+        this.places = val.body;
+      })
   }
+
 
   $getCountriesList(): Observable<Country[]> {
 

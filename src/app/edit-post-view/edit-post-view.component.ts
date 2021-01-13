@@ -27,6 +27,8 @@ export class EditPostViewComponent implements OnInit {
   files: [File]
   imagePathPlanet = K.imagePath
 
+  uploadProgress$: Subject<number> = new BehaviorSubject(0);
+
   myControlPlace = new FormControl();
   myControlCountry = new FormControl();
   placeid: string
@@ -140,40 +142,55 @@ export class EditPostViewComponent implements OnInit {
     })
 
     console.log(this.file)
+    this.uploadProgress$.next ( this.files != undefined ? this.files.length : 1 )
 
     if (this.blogObj != null) {
 
-      console.log('update here')
       this.httpClient.put<BlogModel>(`${K.server}api/blogs?blogid=${this.blogObj.id}`,
         JSON.stringify({
           title: title, description: description, placeId: this.placeid, tags: tags
         }),
         { headers: headers })
         .subscribe( async (blog) => {
-          
-          for (let item of this.files) {
-            console.log(item.name)
-            console.log(this.file.name)
-            await this.uploadPhoto(blog.id, item, item.name == this.file.name).then( () => {} )
-            //window.location.href = '/home'
-          }
-
+          await this.uploadFiles(blog).then ( () => {
+            this.uploadProgress$.next(0)
+            window.location.href = '/home'
+          })
         })
 
     } else {
       
       this.httpClient.post<BlogModel>(`${K.server}api/blogs/`, JSON.stringify({
-          title: title, description: description, placeId: this.placeid, tags: tags
-        }), { headers: headers })
-      .subscribe( async (blog) => {
-          if (blog != undefined) {
-            for (let item of this.files) {
-              await this.uploadPhoto(blog.id, item, item.name == this.file.name).then(() => {} )
-              window.location.href = '/home'
-            }
-          }
+        title: title, description: description, placeId: this.placeid, tags: tags
+      }), { headers: headers })
+        .subscribe( async (blog) => {
+          await this.uploadFiles(blog).then ( () => {
+            this.uploadProgress$.next(0)
+            window.location.href = '/home'
+          })
         })
     }
+  }
+
+  private async uploadFiles(blog: BlogModel): Promise<void> {
+
+    console.log("start load " + blog.title);
+
+    console.log('update here')
+    return await new Promise<void>( async response => {
+      if( this.files == undefined) {
+        response()
+        return
+      }
+      for (let item of this.files) {
+        await this.uploadPhoto(blog.id, item, item.name == this.file.name)
+        .then(() => {
+          //alert("file loaded: " + item.name);
+        })
+      }
+      response()
+    }
+    )
   }
 
   delete() {
@@ -197,31 +214,42 @@ export class EditPostViewComponent implements OnInit {
     }
   }
 
-  async uploadPhoto(blogid: string, file: File, asMain: boolean) {
+  private async uploadPhoto(blogid: string, file: File, asMain: boolean) : Promise <void> {
 
-    if (blogid != undefined && file != undefined) {
+    let end = new Promise<void>( (response) => {
 
-      console.log(file.name)
-      console.log(asMain)
+      if (blogid != undefined && file != undefined) {
 
-      let imgService = new ImageService()
-      imgService.resizeImage(file)
-        .then(resizedFile => {
-          const data = new FormData();
-          data.append('file', resizedFile);
-          data.append('filename', file.name);
-          this.httpClient.post<BlogModel>(`${K.server}api/blogs/uploads?blogid=${blogid}&asMain=${asMain}`,
-            data, 
-            { headers: this.auth.jwtHeader() }
-            ).subscribe( (val) => {
-                console.log(val);
-              }
-            );
-        })
-        .catch(error => {
-          alert(error)
-        })
-    }
+        console.log(file.name)
+        console.log(asMain)
+  
+        let imgService = new ImageService()
+        imgService.resizeImage(file)
+          .then(resizedFile => {
+            const data = new FormData();
+            data.append('file', resizedFile);
+            data.append('filename', file.name);
+            this.httpClient.post<BlogModel>(`${K.server}api/blogs/uploads?blogid=${blogid}&asMain=${asMain}`,
+              data, 
+              { headers: this.auth.jwtHeader() }
+              ).subscribe( (val) => {
+                  console.log(val);
+                  response()
+                }
+              );
+          })
+          .catch(error => {
+            alert(error)
+            response()
+          })
+      } else { 
+        response()
+      }
+
+    })
+
+    return end
+
   }
 
   private _filterPlace(value: string): Place[] {

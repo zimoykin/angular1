@@ -25,15 +25,17 @@
             <h2 style="text-align: right;"><a routerLink="/edit/{{ (blog$|async).id }}">(edit)</a></h2>
         </div>
     </div>
-    <div class='blog align-items-start'>
+    <div class='blog align-items-start' *ngIf="(isLoaded$|async) && (blog$|async)!=undefined">
         <div style="z-index: 1;position: absolute; padding: .3rem; text-align: right;">
             <div class='w-100'>
-                <img src="{{ imagePath }}" />
-                <span style='background-color: rgba(139, 196, 193, .6); width: 100%;'>
-                    <a routerLink="/places/{{ (blog$|async).place.id }}">
+                <a routerLink="/places/{{ (blog$|async).place.id }}">
+                    <img src="{{ imagePath }}" />
+                    <span style='background-color: rgba(139, 196, 193, .6); width: 100%;'>
                         {{ (blog$|async).place.title + " " + (blog$|async).place.country.title }}
-                    </a>
-                </span>
+    
+                    </span>
+                </a>
+    
             </div>
         </div>
 
@@ -42,10 +44,10 @@
                 [style.width]="getImageSize()" height="450px" (click)="clickPictures()" />
         </picture>
 
-        <div class='description p-1'>
+        <div class='description p-1' *ngIf="(isLoaded$|async) && (blog$|async)!=undefined">
             <span> {{ (blog$|async).description }} </span>
         </div>
-        <div style="display: flex;">
+        <div style="display: flex;" *ngIf="(isLoaded$|async) && (blog$|async)!=undefined">
             <div class="w-100">
                 <div class='tags' *ngFor="let item of (blog$|async).tags">
                     <a routerLink="/tag/{{ item }}">{{ "#" + item }}</a>

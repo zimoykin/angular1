@@ -58,6 +58,7 @@ var EditPostViewComponent = /** @class */ (function () {
         this.cookieService = cookieService;
         this.sanitizer = sanitizer;
         this.imagePathPlanet = Constants_1.Constants.imagePath;
+        this.uploadProgress$ = new rxjs_1.BehaviorSubject(0);
         this.myControlPlace = new forms_1.FormControl();
         this.myControlCountry = new forms_1.FormControl();
         this.imagePreview$ = new rxjs_1.BehaviorSubject(Constants_1.Constants.server + "images/system/imageSelect.jpg");
@@ -143,33 +144,22 @@ var EditPostViewComponent = /** @class */ (function () {
                     'Content-Type': 'application/json'
                 });
                 console.log(this.file);
+                this.uploadProgress$.next(this.files != undefined ? this.files.length : 1);
                 if (this.blogObj != null) {
-                    console.log('update here');
                     this.httpClient.put(Constants_1.Constants.server + "api/blogs?blogid=" + this.blogObj.id, JSON.stringify({
                         title: title, description: description, placeId: this.placeid, tags: tags
                     }), { headers: headers })
                         .subscribe(function (blog) { return __awaiter(_this, void 0, void 0, function () {
-                        var _i, _a, item;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
-                                case 0:
-                                    _i = 0, _a = this.files;
-                                    _b.label = 1;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, this.uploadFiles(blog).then(function () {
+                                        _this.uploadProgress$.next(0);
+                                        window.location.href = '/home';
+                                    })];
                                 case 1:
-                                    if (!(_i < _a.length)) return [3 /*break*/, 4];
-                                    item = _a[_i];
-                                    console.log(item.name);
-                                    console.log(this.file.name);
-                                    return [4 /*yield*/, this.uploadPhoto(blog.id, item, item.name == this.file.name).then(function () { })
-                                        //window.location.href = '/home'
-                                    ];
-                                case 2:
-                                    _b.sent();
-                                    _b.label = 3;
-                                case 3:
-                                    _i++;
-                                    return [3 /*break*/, 1];
-                                case 4: return [2 /*return*/];
+                                    _a.sent();
+                                    return [2 /*return*/];
                             }
                         });
                     }); });
@@ -179,30 +169,64 @@ var EditPostViewComponent = /** @class */ (function () {
                         title: title, description: description, placeId: this.placeid, tags: tags
                     }), { headers: headers })
                         .subscribe(function (blog) { return __awaiter(_this, void 0, void 0, function () {
-                        var _i, _a, item;
-                        return __generator(this, function (_b) {
-                            switch (_b.label) {
-                                case 0:
-                                    if (!(blog != undefined)) return [3 /*break*/, 4];
-                                    _i = 0, _a = this.files;
-                                    _b.label = 1;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, this.uploadFiles(blog).then(function () {
+                                        _this.uploadProgress$.next(0);
+                                        window.location.href = '/home';
+                                    })];
                                 case 1:
-                                    if (!(_i < _a.length)) return [3 /*break*/, 4];
-                                    item = _a[_i];
-                                    return [4 /*yield*/, this.uploadPhoto(blog.id, item, item.name == this.file.name).then(function () { })];
-                                case 2:
-                                    _b.sent();
-                                    window.location.href = '/home';
-                                    _b.label = 3;
-                                case 3:
-                                    _i++;
-                                    return [3 /*break*/, 1];
-                                case 4: return [2 /*return*/];
+                                    _a.sent();
+                                    return [2 /*return*/];
                             }
                         });
                     }); });
                 }
                 return [2 /*return*/];
+            });
+        });
+    };
+    EditPostViewComponent.prototype.uploadFiles = function (blog) {
+        return __awaiter(this, void 0, Promise, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log("start load " + blog.title);
+                        console.log('update here');
+                        return [4 /*yield*/, new Promise(function (response) { return __awaiter(_this, void 0, void 0, function () {
+                                var _i, _a, item;
+                                return __generator(this, function (_b) {
+                                    switch (_b.label) {
+                                        case 0:
+                                            if (this.files == undefined) {
+                                                response();
+                                                return [2 /*return*/];
+                                            }
+                                            _i = 0, _a = this.files;
+                                            _b.label = 1;
+                                        case 1:
+                                            if (!(_i < _a.length)) return [3 /*break*/, 4];
+                                            item = _a[_i];
+                                            return [4 /*yield*/, this.uploadPhoto(blog.id, item, item.name == this.file.name)
+                                                    .then(function () {
+                                                    //alert("file loaded: " + item.name);
+                                                })];
+                                        case 2:
+                                            _b.sent();
+                                            _b.label = 3;
+                                        case 3:
+                                            _i++;
+                                            return [3 /*break*/, 1];
+                                        case 4:
+                                            response();
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
             });
         });
     };
@@ -225,27 +249,34 @@ var EditPostViewComponent = /** @class */ (function () {
         }
     };
     EditPostViewComponent.prototype.uploadPhoto = function (blogid, file, asMain) {
-        return __awaiter(this, void 0, void 0, function () {
-            var imgService;
+        return __awaiter(this, void 0, Promise, function () {
+            var end;
             var _this = this;
             return __generator(this, function (_a) {
-                if (blogid != undefined && file != undefined) {
-                    console.log(file.name);
-                    console.log(asMain);
-                    imgService = new resizeImage_1.ImageService();
-                    imgService.resizeImage(file)
-                        .then(function (resizedFile) {
-                        var data = new FormData();
-                        data.append('file', resizedFile);
-                        data.append('filename', file.name);
-                        _this.httpClient.post(Constants_1.Constants.server + "api/blogs/uploads?blogid=" + blogid + "&asMain=" + asMain, data, { headers: _this.auth.jwtHeader() }).subscribe(function (val) {
-                            console.log(val);
+                end = new Promise(function (response) {
+                    if (blogid != undefined && file != undefined) {
+                        console.log(file.name);
+                        console.log(asMain);
+                        var imgService = new resizeImage_1.ImageService();
+                        imgService.resizeImage(file)
+                            .then(function (resizedFile) {
+                            var data = new FormData();
+                            data.append('file', resizedFile);
+                            data.append('filename', file.name);
+                            _this.httpClient.post(Constants_1.Constants.server + "api/blogs/uploads?blogid=" + blogid + "&asMain=" + asMain, data, { headers: _this.auth.jwtHeader() }).subscribe(function (val) {
+                                console.log(val);
+                                response();
+                            });
+                        })["catch"](function (error) {
+                            alert(error);
+                            response();
                         });
-                    })["catch"](function (error) {
-                        alert(error);
-                    });
-                }
-                return [2 /*return*/];
+                    }
+                    else {
+                        response();
+                    }
+                });
+                return [2 /*return*/, end];
             });
         });
     };
