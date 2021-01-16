@@ -4,7 +4,6 @@ exports.ElemntMenu = exports.Constants = void 0;
 var Constants = /** @class */ (function () {
     function Constants() {
     }
-    // public static server: string = 'http://10.0.1.7:8000/'
     Constants.defaultMenu = function () {
         var menus = new Array();
         menus.push(new ElemntMenu('home', '/home'));
@@ -16,9 +15,15 @@ var Constants = /** @class */ (function () {
     };
     Constants.isMobile = function () {
         //console.log (document.getElementById('navbar').clientHeight / document.getElementById('backgroundImage').clientHeight  * 100)
-        return (document.getElementById("backgroundImage").clientWidth < document.getElementById("backgroundImage").clientHeight);
+        if (navigator.appVersion.toLocaleLowerCase().includes('android') || navigator.appVersion.toLocaleLowerCase().includes('ios')) {
+            return true;
+        }
+        else {
+            return (document.getElementById("backgroundImage").clientWidth < document.getElementById("backgroundImage").clientHeight);
+        }
     };
-    Constants.server = 'http://10.0.0.102:8000/';
+    //public static server: string = 'http://10.0.0.102:8000/'
+    Constants.server = 'http://10.0.1.7:8000/';
     Constants.imagePath = Constants.server + 'images/system/earth-globe.png';
     Constants.imageLike = Constants.server + 'images/system/like.png';
     Constants.imageDislike = Constants.server + 'images/system/dislike.png';

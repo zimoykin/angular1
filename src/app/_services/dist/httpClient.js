@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.Resp = exports.Param = exports.Http = void 0;
 var AuthrizationService_1 = require("./AuthrizationService");
+var operators_1 = require("rxjs/operators");
 var Http = /** @class */ (function () {
     function Http(cookie, http) {
         this.cookie = cookie;
@@ -19,14 +20,18 @@ var Http = /** @class */ (function () {
                 url += "=" + val.value + "&";
             });
         }
-        var result = new Promise(function (result) {
+        var result = new Promise(function (result, reject) {
             //token
             if (_this.auth.isJwtOk()) {
+                var timeout_1 = setTimeout(function () {
+                    reject(new Error("timeout"));
+                }, 10000);
                 //request
-                _this.http.get(url, { headers: _this.auth.jwtHeader(), observe: 'response' })
-                    .subscribe(function (response) {
+                var request = _this.http.get(url, { headers: _this.auth.jwtHeader(), observe: 'response' })
+                    .pipe(operators_1.map(function (response) {
+                    clearTimeout(timeout_1);
                     result(new Resp(response.status, response.body));
-                });
+                })).subscribe();
             }
         });
         return result;

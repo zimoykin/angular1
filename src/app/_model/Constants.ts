@@ -1,8 +1,8 @@
 import { } from '@angular/core'
 
 export class Constants {
-    public static server: string = 'http://10.0.0.102:8000/'
-   // public static server: string = 'http://10.0.1.7:8000/'
+    //public static server: string = 'http://10.0.0.102:8000/'
+    public static server: string = 'http://10.0.1.7:8000/'
 
     public static defaultMenu () : Array<ElemntMenu> {
 
@@ -20,7 +20,11 @@ export class Constants {
 
     public static isMobile () : boolean {
         //console.log (document.getElementById('navbar').clientHeight / document.getElementById('backgroundImage').clientHeight  * 100)
-        return ( document.getElementById("backgroundImage").clientWidth < document.getElementById("backgroundImage").clientHeight) 
+        if ( navigator.appVersion.toLocaleLowerCase().includes('android') || navigator.appVersion.toLocaleLowerCase().includes('ios')) {
+            return true
+        } else {
+            return ( document.getElementById("backgroundImage").clientWidth < document.getElementById("backgroundImage").clientHeight) 
+        }
     }
 
     public static imagePath = Constants.server + 'images/system/earth-globe.png'

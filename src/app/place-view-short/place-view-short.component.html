@@ -1,0 +1,14 @@
+
+<app-loader-view [load]="isload"> </app-loader-view>
+
+<div class='card w-100'>
+    <a routerLink="/places/{{place.id}}">
+    <div *ngIf="place!=undefined" id='placeView'>
+        <picture> <img src="{{ imagePreview$ |async }}" loading="lazy" width="150px" height="100px" style='object-fit: cover;'/></picture>
+        <div class="w-100">
+            <h3 class='title'> {{ place.title }} </h3>
+        </div>
+    </div>
+    </a>
+
+</div>

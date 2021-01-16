@@ -83,6 +83,7 @@ export class EditPostViewComponent implements OnInit {
     }).subscribe((val) => {
       if (val != 'new') {
         if (this.auth.isJwtOk) {
+          this.uploadProgress$.next (1)
           this.httpClient.get<BlogModel>(`${K.server}api/blogs/id?blogid=${val}`,
             {
               headers:
@@ -95,15 +96,16 @@ export class EditPostViewComponent implements OnInit {
               (<HTMLInputElement>document.getElementById('country')).value = blogObject.place.country.title;
               this.placeid = blogObject.place.id
               this.countryid = blogObject.place.country.id
+              this.uploadProgress$.next (0)
               console.log(blogObject.image)
               if (blogObject.image != '') {
                 this.imagePreview$.next(blogObject.image)
               }
             })
         }
-      } //
-      else {
-        console.log('111')
+      } else {
+        console.log('unlock view')
+        this.uploadProgress$.next (0)
         if (localStorage.getItem('blog')) {
           let draft = JSON.parse(localStorage.getItem('blog')) as BlogDraft
           let title = document.getElementById('title') as HTMLInputElement
@@ -349,5 +351,8 @@ export class EditPostViewComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(val)
   }
 
+  isMobile() : boolean {
+    return K.isMobile()
+  }
 }
 

@@ -10,6 +10,7 @@ exports.LocationViewComponent = void 0;
 var http_1 = require("@angular/common/http");
 var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
+var rxjs_1 = require("rxjs");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var Constants_1 = require("../_model/Constants");
 var operators_1 = require("rxjs/operators");
@@ -21,10 +22,12 @@ var LocationViewComponent = /** @class */ (function () {
         this.myControl = new forms_1.FormControl();
         this.selected = '';
         this.willCreateNew = '';
+        this.load = false;
         this.auth = new AuthrizationService_1.Authorization(this.cookie, this.httpClient);
         this.http = new httpClient_1.Http(this.cookie, this.httpClient);
     }
     LocationViewComponent.prototype.ngOnInit = function () {
+        this.load = true;
         //api/countries/list
         this.updateCountryList();
     };
@@ -32,6 +35,7 @@ var LocationViewComponent = /** @class */ (function () {
         var _this = this;
         this.$getCountriesList().subscribe(function (val) {
             _this.countries = val;
+            _this.load = false;
             _this.filtred = _this.myControl.valueChanges
                 .pipe(operators_1.startWith(''), operators_1.map(function (value) { return _this._filter(value); }));
         });
@@ -40,6 +44,9 @@ var LocationViewComponent = /** @class */ (function () {
         if (title == undefined) {
             this.selected = '';
             this.places = undefined;
+            return;
+        }
+        if (this.selected == title) {
             return;
         }
         console.log("selectedCountry: " + title);
@@ -64,15 +71,32 @@ var LocationViewComponent = /** @class */ (function () {
         if (this.selected == '') {
             return;
         }
-        this.http
-            .get(Constants_1.Constants.server + "api/places/search", [new httpClient_1.Param("field", "country_id"), new httpClient_1.Param("value", this.selected)])
-            .then(function (val) {
+        this.http.get(Constants_1.Constants.server + "api/places/search", [new httpClient_1.Param("field", "country_id"), new httpClient_1.Param("value", this.selected)]).then(function (val) {
             console.log(val);
             _this.places = val.body;
         });
     };
     LocationViewComponent.prototype.$getCountriesList = function () {
-        return this.httpClient.get(Constants_1.Constants.server + "api/countries/list", { headers: new http_1.HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) });
+        var _this = this;
+        return new rxjs_1.Observable(function (obser) {
+            _this.http.get(Constants_1.Constants.server + "api/countries/list", [])
+                .then(function (response) {
+                obser.next(response.body);
+            })["catch"](function () {
+                _this.load = false;
+                console.log('catch');
+            })["finally"](function () {
+                _this.load = false;
+                console.log('finally');
+            });
+        });
+    };
+    LocationViewComponent.prototype.clear = function () {
+        this.selected = '';
+        this.places = undefined;
+        document.getElementById('country').value = '';
+        this.updateCountryList();
+        return;
     };
     LocationViewComponent.prototype._filter = function (value) {
         return this.countries.filter(function (val) {

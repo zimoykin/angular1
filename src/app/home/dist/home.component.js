@@ -11,6 +11,7 @@ var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
 var Constants_1 = require("../_model/Constants");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
+var httpClient_1 = require("../_services/httpClient");
 var HomeComponent = /** @class */ (function () {
     function HomeComponent(httpClient, cookieService) {
         this.httpClient = httpClient;
@@ -19,6 +20,7 @@ var HomeComponent = /** @class */ (function () {
         this.isLoaded$ = new rxjs_1.BehaviorSubject(false);
         this.nextPage$ = new rxjs_1.BehaviorSubject(undefined);
         this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
+        this.http = new httpClient_1.Http(this.cookieService, this.httpClient);
         // MatPaginator Output
         this.length = 0;
         this.pageSize = 10;
@@ -40,14 +42,10 @@ var HomeComponent = /** @class */ (function () {
     };
     HomeComponent.prototype.getAllBlogs = function () {
         var _this = this;
-        console.log('getAllBlogs');
-        if (this.auth.token == '' || this.auth.token == null) {
-            throw console.error('error');
-        }
-        this.httpClient.get(Constants_1.Constants.server + "api/blogs/list?page=" + (this.pageIndex + 1) + "&per=" + this.pageSize, {
-            observe: 'response',
-            headers: this.auth.jwtHeader()
-        }).subscribe(function (response) {
+        this.http.get(Constants_1.Constants.server + "api/blogs/list", [
+            new httpClient_1.Param("page", (this.pageIndex + 1).toString()),
+            new httpClient_1.Param('per', "" + this.pageSize)
+        ]).then(function (response) {
             console.log(response);
             _this.isLoaded$.next(true);
             _this.list$.next(response.body.items);
@@ -58,6 +56,9 @@ var HomeComponent = /** @class */ (function () {
         this.isLoaded$.unsubscribe();
         this.list$.unsubscribe();
         this.nextPage$.unsubscribe();
+    };
+    HomeComponent.prototype.isMobile = function () {
+        return Constants_1.Constants.isMobile();
     };
     HomeComponent = __decorate([
         core_1.Component({

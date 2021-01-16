@@ -92,7 +92,11 @@ export class blogComponent implements OnInit {
     }
 
     getImageSize(): string {
-        return document.getElementById('mainWindow').clientWidth + "px"
+        if ( this.isMobile() ) {
+            return document.getElementById('mainWindow').clientWidth + "px"
+        } else {
+            return document.getElementById('mainWindow').clientWidth/2 + "px"
+        }
     }
 
     async getBlog(blogid: string): Promise<void> {
@@ -110,7 +114,7 @@ export class blogComponent implements OnInit {
             }).subscribe((blog: BlogModel) => {
                 setTimeout(() => {
                     this.blog$.next(blog)
-                    this.emotions$.next (blog.emotions)
+                    this.emotions$.next(blog.emotions)
                     this.currentImage$.next(blog.image)
                     this.isLoaded$.next(true)
                     response()
@@ -149,4 +153,7 @@ export class blogComponent implements OnInit {
         this.currentImage$.next(this.imageList[this.currentPictures])
     }
 
+    isMobile () : boolean {
+        return K.isMobile ()
+    }
 }

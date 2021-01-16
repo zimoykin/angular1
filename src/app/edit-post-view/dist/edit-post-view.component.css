@@ -37,6 +37,12 @@
   padding-bottom: 1rem;
 }
 
+#formdescriptionMobile {
+  width: 100%;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+}
+
 #formdescription textarea {
   height: 100%;
   font-weight: 100;

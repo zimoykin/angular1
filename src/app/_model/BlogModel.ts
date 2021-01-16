@@ -19,6 +19,7 @@ export class BlogModel {
     title: string 
     description: string
     country: Country
+    image?: [string]
   }
 
   export class PlaceFull {

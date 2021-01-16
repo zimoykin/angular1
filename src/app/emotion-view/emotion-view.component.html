@@ -1,0 +1,24 @@
+<div *ngIf="loaded"
+style='display: flex; justify-content: flex-end; z-index: 2; position: absolute;
+position: absolute;
+top: 0;
+right: 0;'>
+    <button mat-icon-button [matMenuTriggerFor]="menu"
+        style="background-color: transparent; border-style: none;">
+        <img src="{{ imagePathEmotions$|async }}" />
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="clickLike('like')">
+            <img src="{{ imageLike }}" />
+            <span class="p-1">Like</span>
+        </button>
+        <button mat-menu-item (click)="clickLike('dislike')">
+            <img src="{{ imageDislike }}" />
+            <span class="p-1">Dislike</span>
+        </button>
+        <button mat-menu-item (click)="clickLike('report')">
+            <img src="{{ imageReport }}" />
+            <span class="p-1">Report</span>
+        </button>
+    </mat-menu>
+</div>

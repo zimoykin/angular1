@@ -24,7 +24,7 @@
         [isFullVersion]=false>
         </app-blog>
 
-        <div class="card w-50">
+        <div class='{{ isMobile() ? "card w-100" : "card w-50"}}'>
             <mat-paginator 
             style="background-color: transparent;"
             [length]="length"

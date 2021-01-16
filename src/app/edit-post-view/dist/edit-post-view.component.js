@@ -90,6 +90,7 @@ var EditPostViewComponent = /** @class */ (function () {
         }).subscribe(function (val) {
             if (val != 'new') {
                 if (_this.auth.isJwtOk) {
+                    _this.uploadProgress$.next(1);
                     _this.httpClient.get(Constants_1.Constants.server + "api/blogs/id?blogid=" + val, {
                         headers: { Authorization: _this.auth.token }
                     })
@@ -100,15 +101,17 @@ var EditPostViewComponent = /** @class */ (function () {
                         document.getElementById('country').value = blogObject.place.country.title;
                         _this.placeid = blogObject.place.id;
                         _this.countryid = blogObject.place.country.id;
+                        _this.uploadProgress$.next(0);
                         console.log(blogObject.image);
                         if (blogObject.image != '') {
                             _this.imagePreview$.next(blogObject.image);
                         }
                     });
                 }
-            } //
+            }
             else {
-                console.log('111');
+                console.log('unlock view');
+                _this.uploadProgress$.next(0);
                 if (localStorage.getItem('blog')) {
                     var draft = JSON.parse(localStorage.getItem('blog'));
                     var title = document.getElementById('title');
@@ -350,6 +353,9 @@ var EditPostViewComponent = /** @class */ (function () {
     };
     EditPostViewComponent.prototype.getSafeURL = function (val) {
         return this.sanitizer.bypassSecurityTrustResourceUrl(val);
+    };
+    EditPostViewComponent.prototype.isMobile = function () {
+        return Constants_1.Constants.isMobile();
     };
     EditPostViewComponent = __decorate([
         core_1.Component({

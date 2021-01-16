@@ -12,6 +12,7 @@ var http_1 = require("@angular/common/http");
 var Constants_1 = require("../_model/Constants");
 var jwt_decode_1 = require("jwt-decode");
 var core_1 = require("@angular/core");
+var operators_1 = require("rxjs/operators");
 var Authorization = /** @class */ (function () {
     function Authorization(cookieService, http) {
         this.cookieService = cookieService;
@@ -24,8 +25,6 @@ var Authorization = /** @class */ (function () {
         console.log("func isJwtOk");
         var token = this.cookieService.get('jwt');
         var ref = localStorage.getItem('ref');
-        // console.log ("token: " + token)
-        // console.log ("ref: " + ref)
         if (ref == '' || ref == null || ref == undefined) {
             console.log("without refresh!");
             return false;
@@ -112,27 +111,23 @@ var Authorization = /** @class */ (function () {
         var _this = this;
         console.log("refresh token started");
         var ref = localStorage.getItem('ref');
-        console.log(ref);
-        // if (ref == null) {
-        //   return null
-        // }
         var uri = Constants_1.Constants.server + "api/users/refresh";
         var body = JSON.stringify({ refreshToken: ref });
         var headers = new http_1.HttpHeaders();
         headers = headers.append('Content-Type', 'application/json');
-        console.log('send request get toekn');
         var user$ = new rxjs_1.Observable(function (obser) {
-            _this.http.post(uri, body, { headers: headers })
-                .subscribe(function (user) {
-                console.log('2');
-                if (user != null) {
-                    _this.saveUser(user);
+            _this.http.post(uri, body, { headers: headers, observe: 'response' })
+                .pipe(operators_1.catchError(function (err) {
+                return rxjs_1.throwError(err);
+            }), operators_1.map(function (response) {
+                if (response.ok) {
+                    _this.saveUser(response.body);
                     obser.complete();
                 }
                 else {
                     obser.closed;
                 }
-            });
+            })).subscribe();
         });
         return user$;
     };

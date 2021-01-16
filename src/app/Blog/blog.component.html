@@ -1,9 +1,7 @@
-
 <div class='card w-100'>
 
     <div *ngIf="!(isLoaded$|async)">
         <div style="z-index: 999; display: flex; justify-content: center;">
-            <p style="display: flex;">loading</p>
             <div class="lds-roller">
                 <div></div>
                 <div></div>
@@ -17,7 +15,7 @@
         </div>
     </div>
 
-    <div class='title d-flex' id='mainWindow' *ngIf="(isLoaded$|async) && (blog$|async)!=undefined"  >
+    <div class='title d-flex' id='mainWindow' *ngIf="(isLoaded$|async) && (blog$|async)!=undefined">
         <div class='w-100'>
             <h2><a routerLink="/blog/{{ (blog$|async).id }}">{{ (blog$|async).title }}</a></h2>
         </div>
@@ -25,64 +23,52 @@
             <h2 style="text-align: right;"><a routerLink="/edit/{{ (blog$|async).id }}">(edit)</a></h2>
         </div>
     </div>
-    <div class='blog align-items-start' *ngIf="(isLoaded$|async) && (blog$|async)!=undefined">
-        <div style="z-index: 1;position: absolute; padding: .3rem; text-align: right;">
-            <div class='w-100'>
-                <a routerLink="/places/{{ (blog$|async).place.id }}">
-                    <img src="{{ imagePath }}" />
-                    <span style='background-color: rgba(139, 196, 193, .6); width: 100%;'>
-                        {{ (blog$|async).place.title + " " + (blog$|async).place.country.title }}
+    <div *ngIf="(isLoaded$|async) && (blog$|async)!=undefined">
     
-                    </span>
-                </a>
+        <div class='blog' [ngStyle]="{'display': isMobile() ? 'block': 'flex'}">
+            <div style="z-index: 1;position: absolute; padding: .3rem; text-align: right;">
+                <div class='w-100'>
+                    <a routerLink="/places/{{ (blog$|async).place.id }}">
+                        <img src="{{ imagePath }}" />
+                        <span style='background-color: rgba(139, 196, 193, .6); width: 100%;'>
+                            {{ (blog$|async).place.title + " " + (blog$|async).place.country.title }}
+                        </span>
+                    </a>
     
+                </div>
             </div>
+    
+            <picture>
+                <img src="{{ (currentImage$|async) }}" style="object-fit: cover;" loading="lazy"
+                    [style.width]="getImageSize()" height="450px" (click)="clickPictures()" />
+            </picture>
+    
+            <div class='description p-1' [ngStyle]="{'width': isMobile() ? '100%': '50%' }"
+            >
+                <span> {{ (blog$|async).description }} </span>
+            </div>
+    
         </div>
 
-        <picture>
-            <img src="{{ (currentImage$|async) }}" style="object-fit: cover;" loading="lazy"
-                [style.width]="getImageSize()" height="450px" (click)="clickPictures()" />
-        </picture>
+    </div>
 
-        <div class='description p-1' *ngIf="(isLoaded$|async) && (blog$|async)!=undefined">
-            <span> {{ (blog$|async).description }} </span>
-        </div>
-        <div style="display: flex;" *ngIf="(isLoaded$|async) && (blog$|async)!=undefined">
-            <div class="w-100">
-                <div class='tags' *ngFor="let item of (blog$|async).tags">
+    <!-- basement -->
+
+    <div class='card w-100' style="background-color: rgba(12, 12, 12, .5);" *ngIf="(isLoaded$|async)">
+
+        <div style='display: inline-block;'>
+            
+                <span style='background-color: rgba(195, 178, 180, .4); width: 100%;'>
+                    <a routerLink="/user/{{ (blog$|async).user.id }}">
+                        {{ " &#183; " + (blog$|async).created + " &#183; " + (blog$|async).user.username }}
+                    </a>
+                </span>
+            <div style="display: flex;">
+                <div class='tags w-100' *ngFor="let item of (blog$|async).tags">
                     <a routerLink="/tag/{{ item }}">{{ "#" + item }}</a>
                 </div>
-                <div class='d-flex'>
-                    <div class='w-100'>
-                        <span style='background-color: rgba(195, 178, 180, .4); width: 100%;'>
-                            <a routerLink="/user/{{ (blog$|async).user.id }}">
-                                {{ " &#183; " + (blog$|async).created + " &#183; " + (blog$|async).user.username }}
-                            </a>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div>
-
-                <button mat-icon-button [matMenuTriggerFor]="menu"
-                    style="background-color: transparent; border-style: none;">
-                    <img src="{{ imagePathEmotions$|async }}" />
-                </button>
-                <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="clickLike('like')">
-                        <img src="{{ imageLike }}" />
-                        <span class="p-1">Like</span>
-                    </button>
-                    <button mat-menu-item (click)="clickLike('dislike')">
-                        <img src="{{ imageDislike }}" />
-                        <span class="p-1">Dislike</span>
-                    </button>
-                    <button mat-menu-item (click)="clickLike('report')">
-                        <img src="{{ imageReport }}" />
-                        <span class="p-1">Report</span>
-                    </button>
-                </mat-menu>
             </div>
         </div>
-
+        <app-emotion-view [blogid]='blogid'></app-emotion-view>
+    
     </div>

@@ -42,39 +42,38 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.blogComponent = void 0;
+exports.EmotionViewComponent = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
 var Constants_1 = require("../_model/Constants");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
-var blogComponent = /** @class */ (function () {
-    function blogComponent(cookie, http) {
-        this.cookie = cookie;
-        this.http = http;
-        this.isLoaded$ = new rxjs_1.BehaviorSubject(false);
-        this.imagePath = Constants_1.Constants.imagePath;
+var httpClient_1 = require("../_services/httpClient");
+var EmotionViewComponent = /** @class */ (function () {
+    //
+    function EmotionViewComponent(httpClient, cookieService) {
+        this.httpClient = httpClient;
+        this.cookieService = cookieService;
+        this.loaded = false;
         this.imagePathEmotions$ = new rxjs_1.BehaviorSubject(Constants_1.Constants.imageNoEmotion);
-        this.userID$ = new rxjs_1.BehaviorSubject('init');
-        this.blog$ = new rxjs_1.BehaviorSubject(undefined);
         this.emotions$ = new rxjs_1.BehaviorSubject(undefined);
         //
         this.imageLike = Constants_1.Constants.imageLike;
         this.imageDislike = Constants_1.Constants.imageDislike;
         this.imageReport = Constants_1.Constants.imageReport;
         this.imageNoEmotion = Constants_1.Constants.imageNoEmotion;
-        //
-        this.currentPictures = 0;
-        this.currentImage$ = new rxjs_1.BehaviorSubject('');
-        this.auth = new AuthrizationService_1.Authorization(this.cookie, this.http);
+        this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
+        this.http = new httpClient_1.Http(this.cookieService, this.httpClient);
     }
-    blogComponent.prototype.ngOnInit = function () {
+    EmotionViewComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.userID$.next(localStorage.getItem('user_id'));
-        this.getBlog(this.blogid).then(function () {
-            _this.updateUserEmotion();
+        this.http.get(Constants_1.Constants.server + "api/emotions", [new httpClient_1.Param('blogid', this.blogid)])
+            .then(function (response) {
+            _this.loaded = true;
+            _this.emotions$.next(response.body);
         });
+        this.updateUserEmotion();
     };
-    blogComponent.prototype.updateUserEmotion = function () {
+    EmotionViewComponent.prototype.updateUserEmotion = function () {
         return __awaiter(this, void 0, void 0, function () {
             var user_id;
             var _this = this;
@@ -100,10 +99,10 @@ var blogComponent = /** @class */ (function () {
             });
         });
     };
-    blogComponent.prototype.clickLike = function (emotion) {
+    EmotionViewComponent.prototype.clickLike = function (emotion) {
         var _this = this;
         console.log(emotion);
-        this.http.post(Constants_1.Constants.server + "api/emotions/set?blogid=" + this.blogid + "&emotion=" + emotion, null, {
+        this.httpClient.post(Constants_1.Constants.server + "api/emotions/set?blogid=" + this.blogid + "&emotion=" + emotion, null, {
             observe: 'response',
             headers: this.auth.jwtHeader()
         })
@@ -117,90 +116,16 @@ var blogComponent = /** @class */ (function () {
             }
         });
     };
-    blogComponent.prototype.ngOnDestroy = function () {
-        this.userID$.unsubscribe();
-    };
-    blogComponent.prototype.getImageSize = function () {
-        if (this.isMobile()) {
-            return document.getElementById('mainWindow').clientWidth + "px";
-        }
-        else {
-            return document.getElementById('mainWindow').clientWidth / 2 + "px";
-        }
-    };
-    blogComponent.prototype.getBlog = function (blogid) {
-        return __awaiter(this, void 0, Promise, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                return [2 /*return*/, new Promise(function (response) {
-                        if (_this.auth.token == '' || _this.auth.token == null) {
-                            response();
-                            console.error('error');
-                        }
-                        _this.isLoaded$.next(false);
-                        _this.http.get(Constants_1.Constants.server + "api/blogs/id?blogid=" + blogid, {
-                            headers: { Authorization: _this.auth.token }
-                        }).subscribe(function (blog) {
-                            setTimeout(function () {
-                                _this.blog$.next(blog);
-                                _this.emotions$.next(blog.emotions);
-                                _this.currentImage$.next(blog.image);
-                                _this.isLoaded$.next(true);
-                                response();
-                            }, 0);
-                        });
-                    })];
-            });
-        });
-    };
-    blogComponent.prototype.clickPictures = function () {
-        var _this = this;
-        console.log('change pictures started');
-        this.isLoaded$.next(true);
-        if (this.imageList == undefined) {
-            console.log('getting image list');
-            this.http.get(Constants_1.Constants.server + "api/blogs/images/list?blogid=" + this.blogid, { headers: this.auth.jwtHeader() }).subscribe(function (val) {
-                _this.imageList = val;
-                console.log('changing image of new list');
-                _this.isLoaded$.next(true);
-                _this.changePictures();
-            });
-        }
-        else {
-            console.log('change image old list');
-            this.isLoaded$.next(true);
-            this.changePictures();
-        }
-    };
-    blogComponent.prototype.changePictures = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.currentPictures = this.currentPictures + 1 > this.imageList.length - 1 ? 0 : this.currentPictures + 1;
-                console.log('set' + this.currentPictures);
-                this.currentImage$.next(this.imageList[this.currentPictures]);
-                return [2 /*return*/];
-            });
-        });
-    };
-    blogComponent.prototype.isMobile = function () {
-        return Constants_1.Constants.isMobile();
-    };
     __decorate([
         core_1.Input()
-    ], blogComponent.prototype, "blogid");
-    __decorate([
-        core_1.Input()
-    ], blogComponent.prototype, "index");
-    __decorate([
-        core_1.Input()
-    ], blogComponent.prototype, "isFullVersion");
-    blogComponent = __decorate([
+    ], EmotionViewComponent.prototype, "blogid");
+    EmotionViewComponent = __decorate([
         core_1.Component({
-            selector: 'app-blog',
-            templateUrl: './blog.component.html',
-            styleUrls: ['./blog.component.scss']
+            selector: 'app-emotion-view',
+            templateUrl: './emotion-view.component.html',
+            styleUrls: ['./emotion-view.component.scss']
         })
-    ], blogComponent);
-    return blogComponent;
+    ], EmotionViewComponent);
+    return EmotionViewComponent;
 }());
-exports.blogComponent = blogComponent;
+exports.EmotionViewComponent = EmotionViewComponent;

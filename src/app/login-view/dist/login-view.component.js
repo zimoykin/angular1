@@ -11,11 +11,13 @@ var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var Constants_1 = require("../_model/Constants");
+var httpClient_1 = require("../_services/httpClient");
 var LoginViewComponent = /** @class */ (function () {
     function LoginViewComponent(httpClient, cookieService) {
         this.httpClient = httpClient;
         this.cookieService = cookieService;
         this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
+        this.http = new httpClient_1.Http(this.cookieService, this.httpClient);
         this.imagePath$ = new rxjs_1.BehaviorSubject('');
         this.mode = 'login';
     }
@@ -24,10 +26,9 @@ var LoginViewComponent = /** @class */ (function () {
         if (localStorage.getItem('user_id')) {
             this.logined = localStorage.getItem('user_id');
             this.username = localStorage.getItem('username');
-            this.httpClient.get(Constants_1.Constants.server + "api/users/full?user_id=" + this.logined, {
-                headers: this.auth.jwtHeader()
-            }).subscribe(function (val) {
-                _this.imagePath$.next(val.image);
+            this.http.get(Constants_1.Constants.server + "api/users/full", [new httpClient_1.Param('user_id', this.logined)])
+                .then(function (val) {
+                _this.imagePath$.next(val.body.image);
             });
         }
         else {
@@ -35,6 +36,10 @@ var LoginViewComponent = /** @class */ (function () {
         }
     };
     LoginViewComponent.prototype.login = function (cred) {
+        if (this.mode != 'login') {
+            this.mode = 'login';
+            return;
+        }
         if (cred.emailLogin.value != '' && cred.passwordLogin.value != '') {
             this.auth.authorize(cred.emailLogin.value, cred.passwordLogin.value).subscribe(function (user) {
                 if (user != null) {

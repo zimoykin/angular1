@@ -6,6 +6,7 @@ import { HeaderComponent } from '../header/header.component';
 import { User, UserFullInfo } from '../_model/User';
 import { Authorization } from '../_services/AuthrizationService';
 import { Constants as K } from '../_model/Constants'
+import { Http, Param } from '../_services/httpClient';
 
 @Component({
   selector: 'app-login-view',
@@ -17,6 +18,7 @@ export class LoginViewComponent implements OnInit {
   constructor(private httpClient: HttpClient, private cookieService: CookieService) { }
 
   auth = new Authorization(this.cookieService, this.httpClient)
+  http = new Http (this.cookieService, this.httpClient)
   logined: string
   username: string
   imagePath$: Subject<string> = new BehaviorSubject ('')
@@ -24,14 +26,14 @@ export class LoginViewComponent implements OnInit {
   mode: string = 'login'
 
   ngOnInit(): void {
+    
     if ( localStorage.getItem('user_id') ) {
       this.logined = localStorage.getItem('user_id')
       this.username = localStorage.getItem('username')
 
-      this.httpClient.get <UserFullInfo> (`${K.server}api/users/full?user_id=${this.logined}`, {
-        headers: this.auth.jwtHeader()
-      }).subscribe ( val => {
-        this.imagePath$.next ( val.image )
+      this.http.get<UserFullInfo> (`${K.server}api/users/full`, [new Param('user_id', this.logined)])
+      .then ( val => {
+        this.imagePath$.next ( val.body.image )
       })
 
     } else {
@@ -40,6 +42,10 @@ export class LoginViewComponent implements OnInit {
   }
 
   login (cred) {
+    if (this.mode!='login') {
+      this.mode = 'login'
+      return
+    } 
     if (cred.emailLogin.value != '' && cred.passwordLogin.value != '') {
       this.auth.authorize(cred.emailLogin.value, cred.passwordLogin.value).subscribe( (user: User) => {
         if (user != null) {

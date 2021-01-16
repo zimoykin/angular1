@@ -1,3 +1,4 @@
+<app-loader-view [load]="load"></app-loader-view>
 
 <div *ngIf="willCreateNew != ''" style="z-index: 1000; position: fixed; top: 0;
 right: 0;
@@ -20,7 +21,8 @@ transition: 1s;">
             </div>
             <div class='w-100' style='display: inline; justify-items: center;'>
                 <button type="submit" class="btn btn-success mr-1"
-                    (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value)"> save </button>
+                    (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value)"> save
+                </button>
                 <button type="reset" class="btn btn-danger mr-1" (click)="saveCountryPlace(false)"> cancel </button>
             </div>
         </form>
@@ -36,11 +38,11 @@ transition: 1s;">
                 <input class='w-100 mb-3 form-control' placeholder='description' id='description' type='text'
                     aria-label="Text" required>
             </div>
-            
+
             <button type="button" class="btn btn-success mr-1"
-                    (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value)"> save </button>
+                (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value)"> save </button>
             <button type="button" class="btn btn-danger mr-1" (click)="saveCountryPlace(false)"> cancel </button>
-            
+
         </form>
     </div>
 </div>
@@ -51,7 +53,7 @@ transition: 1s;">
 
         <mat-form-field class="example-full-width w-100 bg-light p-2">
             <input #country id='country' type="text" placeholder="country" aria-label="Text" matInput
-                [formControl]='myControl' [matAutocomplete]="auto" (focusout)='selectedCountry(country.value)'>
+                [formControl]='myControl' [matAutocomplete]="auto" >
             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
                 (optionSelected)='selectedCountry($event.option.value)'>
                 <mat-option *ngFor="let place of filtred | async" [value]="place.title">
@@ -60,19 +62,33 @@ transition: 1s;">
 
             </mat-autocomplete>
         </mat-form-field>
+
+        <button type='button' style="outline: none; border: none; width: 3rem; height: 3rem; border-radius: .5rem; border-style: none; text-decoration-style: none; 
+        background-color: rgba(185, 222, 223, .7)" (click)="clear()">
+            <mat-icon>clear</mat-icon>
+        </button>
         <button type='button' style="outline: none; border: none; width: 3rem; height: 3rem; border-radius: .5rem; border-style: none; text-decoration-style: none; 
         background-color: rgba(185, 222, 223, .7)" (click)="addNewCountry()">
-            +
+             <mat-icon>add</mat-icon>
         </button>
 
     </div>
 
+</div>
+
+<div class='card w-100 mt-2' *ngIf="places != undefined">
+
     <div *ngFor="let item of places">
-        <a routerLink="/places/{{ item.id }}">{{item.title}}</a>
-    </div>
-    <div *ngIf="selected!=''">
-        <button class='btn btn-light' type="button"
-        (click)="addNewPlace()"> create new place </button>
+        <app-place-view-short [place]="item"> </app-place-view-short>
     </div>
 
+</div>
+
+<div class='card w-100 mt-2' *ngIf="places != undefined">
+    <div *ngIf="selected!=''">
+        <button class='btn btn-light w-100'
+        type="button" (click)="addNewPlace()"> 
+            <mat-icon>add</mat-icon> Create New Place
+        </button>
+    </div>
 </div>

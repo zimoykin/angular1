@@ -1,11 +1,10 @@
 
 .card {
     //padding-top: .5rem;
-    background-color: rgba($color: gray, $alpha: 0.4);
+    background-color: transparent;
     border-style: none;
     display: inline-block;
-    margin-bottom: 2rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    padding-bottom: 1rem;
 }
 
 .card a {
@@ -61,6 +60,8 @@ h2{
     width: 100%;
     background-color: rgba($color: white, $alpha: 0.7); 
     margin: 0;  
+    overflow: hidden;
+    max-height: 450px;
 }
 
 .tags {

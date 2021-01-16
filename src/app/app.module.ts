@@ -30,6 +30,10 @@ import './_services/date.extensions';
 import { PlaceViewComponent } from './place-view/place-view.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { SearchViewComponent } from './search-view/search-view.component';
+import { LoaderViewComponent } from './loader-view/loader-view.component';
+import { PlaceViewShortComponent } from './place-view-short/place-view-short.component';
+import { EmotionViewComponent } from './emotion-view/emotion-view.component';
+
 
 
 //https://www.design-seeds.com/in-nature/nature-made/nature-tones-40/
@@ -53,7 +57,10 @@ import { SearchViewComponent } from './search-view/search-view.component';
     AuthorViewComponent,
     LoginViewComponent,
     PlaceViewComponent,
-    SearchViewComponent
+    SearchViewComponent,
+    LoaderViewComponent,
+    PlaceViewShortComponent,
+    EmotionViewComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

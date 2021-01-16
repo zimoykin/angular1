@@ -1,0 +1,88 @@
+.title {
+    text-align: end;
+    width: 100%;
+    font-weight: lighter;
+    background-color: rgba(195, 178, 180, .6);
+}
+.description{
+    width: 100%;
+    background-color: rgba($color: white, $alpha: 0.7); 
+    margin: 0;  
+    overflow: hidden;
+}
+
+.card {
+    //padding-top: .5rem;
+    background-color: rgba($color: gray, $alpha: 0.4);
+    border-style: none;
+    display: inline-block;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.card a {
+    padding: .2rem;
+    margin-right: 0.2rem;
+    color: White;
+    //background-color: rgba($color: black, $alpha: 0.3);
+    border-radius: .3rem;
+    font-weight: lighter;
+    text-decoration: none;
+}
+.div_img {
+   // padding: 1rem;
+    border-radius: 2rem;
+    background-color: rgba($color: white, $alpha: 0.5);
+    max-height: 450px;
+    max-width: 450px;
+    min-width: 450px;
+    min-height: 450px;
+}
+
+.blog{
+    display: inline-block;
+    font-weight: lighter;
+}
+
+p{
+    margin-bottom: 5rem;
+    padding: 1rem;
+    font-weight: lighter;
+}
+
+h2{
+    text-align: left;
+    font-weight: lighter;
+    background-color: rgba($color: #C3B2B4, $alpha: .4);
+    padding: .1rem;
+    margin: 0;
+    font-size: medium;
+}
+
+.flex {
+    display: flex;
+}
+
+
+.previewImageMobile {
+    background-color: rgba(12, 12, 12, .5); 
+    left: 50%; 
+    overflow: hidden;
+    display: inline;
+}
+
+.previewImage {
+    background-color: rgba(12, 12, 12, .5); 
+    left: 50%; 
+    overflow: scroll;
+    display: flex;
+}
+
+.scrollViewMobile {
+    display: flex;
+    overflow: scroll; 
+}
+.scrollView {
+    display: block;
+    overflow: scroll; 
+}

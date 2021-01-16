@@ -1,7 +1,67 @@
 
-<div *ngIf="(blogid$|async) != undefined"> 
-    <app-blog 
-     [blogid]="blogid$|async"
-     [isFullVersion]=true
-    ></app-blog>
+<app-loader-view [load]='!(isLoaded$|async)'></app-loader-view>
+
+<div class='card w-100' id='mainWindow' *ngIf="(isLoaded$|async)">
+
+    <div class='title d-flex'>
+        <div class='w-100'>
+            <h2><a routerLink="/blog/{{ (blog$|async).id }}">{{ (blog$|async).title }}</a></h2>
+        </div>
+        <div *ngIf="(userID|async) == (blog$|async).user.id ">
+            <h2 style="text-align: right;"><a routerLink="/edit/{{ (blog$|async).id }}">(edit)</a></h2>
+        </div>
+    </div>
+
+</div>
+
+<div class='card w-100' style="background-color: rgba(12, 12, 12, .5);" *ngIf="(isLoaded$|async)">
+
+    <div class='{{isMobile() ? "previewImageMobile" : "previewImage"}}'>
+        <!-- mainPictures -->
+        <picture>
+            <img id='mainPictures' src="{{ (blog$|async).image }}" style="object-fit: cover; overflow: hidden;" loading="lazy"
+                [style.width]="getImageSize()" height="550px" (click)="clickPictures()" />
+        </picture>
+
+        <!-- image preview -->
+        <div class='{{isMobile() ? "scrollViewMobile" : "scrollView"}}'
+        [style.height]="getHeightMainPictures()">
+            <div *ngFor="let item of (imageList$|async)">
+                <picture>
+                    <img src="{{ item }}" style="object-fit: cover; overflow: hidden; padding: 1px;" loading="lazy"
+                    [style.width]="getImageSizePreview()" [style.height]="getImageSizePreview()" (click)="clickPictures()" />
+                </picture>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class='card w-100' style="background-color: rgba(12, 12, 12, .5);" *ngIf="(isLoaded$|async)">
+
+    <div 
+    class='description p-1' [ngStyle]="{'width': '100%'}"
+    >
+        <span> {{ (blog$|async).description }} </span>
+    </div>
+   
+</div>
+
+<div class='card w-100' style="background-color: rgba(12, 12, 12, .5);" *ngIf="(isLoaded$|async)">
+
+    <div style='display: inline-block;'>
+        
+            <span style='background-color: rgba(195, 178, 180, .4); width: 100%;'>
+                <a routerLink="/user/{{ (blog$|async).user.id }}">
+                    {{ " &#183; " + (blog$|async).created + " &#183; " + (blog$|async).user.username }}
+                </a>
+            </span>
+        <div style="display: flex;">
+            <div class='tags w-100' *ngFor="let item of (blog$|async).tags">
+                <a routerLink="/tag/{{ item }}">{{ "#" + item }}</a>
+            </div>
+        </div>
+    </div>
+    <app-emotion-view [blogid]='blogid'></app-emotion-view>
+
 </div>

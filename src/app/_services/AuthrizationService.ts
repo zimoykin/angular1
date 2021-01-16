@@ -1,10 +1,11 @@
-import { Observable, observable, of } from 'rxjs';
+import { Observable, observable, of, throwError } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Constants as K, DecodedToken } from '../_model/Constants';
 import jwtDecode from 'jwt-decode';
 import { Injectable } from '@angular/core';
 import { User, UserPublic } from '../_model/User';
+import { catchError, map } from 'rxjs/operators';
 
 
 @Injectable({ providedIn: 'root' })
@@ -14,32 +15,29 @@ export class Authorization {
     private cookieService: CookieService,
     private http: HttpClient) { }
 
-  public token:string = `Bearer ${this.cookieService.get('jwt')}`
+  public token: string = `Bearer ${this.cookieService.get('jwt')}`
 
 
   ///////////////////
   isJwtOk(): boolean {
 
-    console.log (`func isJwtOk`)
+    console.log(`func isJwtOk`)
 
     const token = this.cookieService.get('jwt')
-    const ref = localStorage.getItem ('ref')
-
-   // console.log ("token: " + token)
-  // console.log ("ref: " + ref)
+    const ref = localStorage.getItem('ref')
 
     if (ref == '' || ref == null || ref == undefined) {
-      console.log (`without refresh!` )
+      console.log(`without refresh!`)
       return false
     }
 
-    console.log (`has ref`)
+    console.log(`has ref`)
 
-    if (token!=undefined && token!='') {
-      console.log (`has token, it will decoded`) 
-      console.log (token)
+    if (token != undefined && token != '') {
+      console.log(`has token, it will decoded`)
+      console.log(token)
       const decoded: DecodedToken = jwtDecode(token);
-      console.log (`token was decoded`)
+      console.log(`token was decoded`)
       if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
         console.log(`jwt explaim`)
         this.refresh().subscribe((val: User) => {
@@ -52,40 +50,40 @@ export class Authorization {
       }
     }
 
-    if (ref != '' || ref != null || ref != undefined ) {
-      console.log (`refresh?`)
-      this.refresh().subscribe( val => {
-        if (val == null) { 
-          console.log ('back false')
+    if (ref != '' || ref != null || ref != undefined) {
+      console.log(`refresh?`)
+      this.refresh().subscribe(val => {
+        if (val == null) {
+          console.log('back false')
           return false
         } else {
           return this.isJwtOk()
         }
       })
     } else if (token == '') {
-      console.log ('back false 2')
+      console.log('back false 2')
       return false
     }
 
   }
 
-  saveUser (user: User) : boolean {
-      console.log('4 save user')
-   
-      this.cookieService.set ('jwt', user.accessToken)
+  saveUser(user: User): boolean {
+    console.log('4 save user')
 
-      localStorage.setItem ('ref', user.refreshToken)
-      localStorage.setItem ('username', user.username)
-      localStorage.setItem ('user_id', user.id)
-    
-      return true
+    this.cookieService.set('jwt', user.accessToken)
+
+    localStorage.setItem('ref', user.refreshToken)
+    localStorage.setItem('username', user.username)
+    localStorage.setItem('user_id', user.id)
+
+    return true
 
   }
 
 
-  authorize ( login: string, password: string ) : Observable<User> {
+  authorize(login: string, password: string): Observable<User> {
 
-    console.log (login)
+    console.log(login)
 
     const uri = `${K.server}api/users/login`;
     let loginpass = (login + ':' + password);
@@ -93,13 +91,13 @@ export class Authorization {
 
     const authrizationData = (`Basic ` + loginpass);
 
-    const user$ = new Observable <User> ( obser => {
+    const user$ = new Observable<User>(obser => {
 
       this.http.post<any>(uri, null, {
         headers: {
           Authorization: authrizationData
         }
-      }).subscribe ( (val: User) => {
+      }).subscribe((val: User) => {
         this.saveUser(val)
         obser.next(val)
       })
@@ -109,17 +107,17 @@ export class Authorization {
 
   }
 
-  register (username: string, email: string, password: string) : Observable<User> {
-    console.log ("register")
+  register(username: string, email: string, password: string): Observable<User> {
+    console.log("register")
     const uri = `${K.server}api/users/signin`;
 
-    const user$ = new Observable <User> ( obser => {
+    const user$ = new Observable<User>(obser => {
 
-      this.http.post<UserPublic> (uri, JSON.stringify ({
+      this.http.post<UserPublic>(uri, JSON.stringify({
         username: username,
         email: email,
         password: password
-      })).subscribe ( (val: User) => {
+      })).subscribe((val: User) => {
         this.saveUser(val)
         obser.next(val)
       })
@@ -131,54 +129,52 @@ export class Authorization {
 
   }
 
-  refresh() : Observable<User> {
+  refresh(): Observable<User> {
 
-    console.log (`refresh token started`)
-
+    console.log(`refresh token started`)
     const ref = localStorage.getItem('ref')
-    console.log(ref)
-    // if (ref == null) {
-    //   return null
-    // }
     const uri = `${K.server}api/users/refresh`
     const body = JSON.stringify({ refreshToken: ref })
-  
+
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
 
-    console.log ('send request get toekn')
-    const user$ = new Observable <User> ( obser => {
-      this.http.post <User> (uri, body, { headers })
-      .subscribe ( (user) => {
-        console.log('2')
-        if (user != null) {
-          this.saveUser((<User>user))
-          obser.complete()
-        } else {
-          obser.closed
-        }
-      })
-    }) 
+    const user$ = new Observable<User>(obser => {
 
-    return user$
-
-  }
-
-  logout () : Observable<boolean>{
-    return new Observable<boolean>( obser => { 
-
-      this.cookieService.deleteAll()
-      localStorage.removeItem('ref')
-      localStorage.removeItem('username')
-      localStorage.removeItem('user_id')
-      obser.next(true)
+      this.http.post<User>(uri, body, { headers, observe: 'response' })
+      .pipe(
+        catchError((err) => {
+          return throwError(err);
+        }),
+         map(response => {
+            if (response.ok) {
+              this.saveUser((<User>response.body))
+              obser.complete()
+            } else {
+              obser.closed
+            }
+          }
+        )).subscribe()
       
     })
+    return user$
   }
 
-  jwtHeader () : HttpHeaders {
-    return new HttpHeaders({ Authorization: this.token })
-  }
+  logout() : Observable < boolean > {
+      return new Observable<boolean>(obser => {
+
+        this.cookieService.deleteAll()
+        localStorage.removeItem('ref')
+        localStorage.removeItem('username')
+        localStorage.removeItem('user_id')
+        obser.next(true)
+
+      })
+    }
+
+  jwtHeader() : HttpHeaders {
+      return new HttpHeaders({ Authorization: this.token })
+    }
 
 
 }

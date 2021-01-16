@@ -25,24 +25,28 @@ export class LocationViewComponent implements OnInit {
 
   places: Place[]
 
+  load = false
+
   constructor(private httpClient: HttpClient, private cookie: CookieService) { }
   auth = new Authorization(this.cookie, this.httpClient)
   http = new Http(this.cookie, this.httpClient)
 
   ngOnInit(): void {
+    this.load = true
     //api/countries/list
-    this.updateCountryList();
+    this.updateCountryList()
+
   }
 
   private updateCountryList() {
-    this.$getCountriesList().subscribe((val) => {
-
+    this.$getCountriesList().subscribe( (val) => {
       this.countries = val;
+      this.load = false;
 
       this.filtred = this.myControl.valueChanges
         .pipe(
           startWith(''),
-          map(value => this._filter(value))
+          map(value =>  this._filter(value))
         );
 
     });
@@ -53,6 +57,10 @@ export class LocationViewComponent implements OnInit {
     if (title == undefined) {
       this.selected = ''
       this.places = undefined
+      return;
+    }
+
+    if (this.selected == title) {
       return;
     }
 
@@ -80,12 +88,10 @@ export class LocationViewComponent implements OnInit {
       return
     }
 
-    this.http
-      .get<[Place]>(
+    this.http.get<[Place]>(
         `${K.server}api/places/search`,
         [new Param("field", "country_id"), new Param("value", this.selected)]
-      )
-      .then(val => {
+      ).then(val => {
         console.log(val)
         this.places = val.body;
       })
@@ -94,9 +100,27 @@ export class LocationViewComponent implements OnInit {
 
   $getCountriesList(): Observable<Country[]> {
 
-    return this.httpClient.get<Country[]>(`${K.server}api/countries/list`,
-      { headers: new HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) })
+    return new Observable<Country[]> ( (obser) =>  {
+      this.http.get <Country[]> (`${K.server}api/countries/list`, [] )
+      .then ( (response) => { 
+        obser.next(response.body) })
+      .catch ( () =>  { 
+        this.load = false 
+        console.log ('catch')
+      })
+      .finally ( () => { 
+        this.load = false 
+        console.log ('finally')
+      })
+    } ) 
+  }
 
+  clear() {
+      this.selected = ''
+      this.places = undefined;
+      (<HTMLInputElement>document.getElementById('country')).value = '';
+      this.updateCountryList()
+      return;
   }
 
   private

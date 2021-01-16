@@ -38,6 +38,9 @@ var login_view_component_1 = require("./login-view/login-view.component");
 require("./_services/date.extensions");
 var place_view_component_1 = require("./place-view/place-view.component");
 var paginator_1 = require("@angular/material/paginator");
+var search_view_component_1 = require("./search-view/search-view.component");
+var loader_view_component_1 = require("./loader-view/loader-view.component");
+var place_view_short_component_1 = require("./place-view-short/place-view-short.component");
 //https://www.design-seeds.com/in-nature/nature-made/nature-tones-40/
 var AppModule = /** @class */ (function () {
     function AppModule() {
@@ -61,7 +64,10 @@ var AppModule = /** @class */ (function () {
                 location_view_component_1.LocationViewComponent,
                 author_view_component_1.AuthorViewComponent,
                 login_view_component_1.LoginViewComponent,
-                place_view_component_1.PlaceViewComponent
+                place_view_component_1.PlaceViewComponent,
+                search_view_component_1.SearchViewComponent,
+                loader_view_component_1.LoaderViewComponent,
+                place_view_short_component_1.PlaceViewShortComponent
             ],
             imports: [
                 angular_bootstrap_md_1.MDBBootstrapModule.forRoot(),

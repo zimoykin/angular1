@@ -1,0 +1,87 @@
+.title {
+  text-align: end;
+  width: 100%;
+  font-weight: lighter;
+  background-color: rgba(195, 178, 180, 0.6);
+}
+
+.description {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  overflow: hidden;
+}
+
+.card {
+  background-color: rgba(128, 128, 128, 0.4);
+  border-style: none;
+  display: inline-block;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.card a {
+  padding: 0.2rem;
+  margin-right: 0.2rem;
+  color: White;
+  border-radius: 0.3rem;
+  font-weight: lighter;
+  text-decoration: none;
+}
+
+.div_img {
+  border-radius: 2rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  max-height: 450px;
+  max-width: 450px;
+  min-width: 450px;
+  min-height: 450px;
+}
+
+.blog {
+  display: inline-block;
+  font-weight: lighter;
+}
+
+p {
+  margin-bottom: 5rem;
+  padding: 1rem;
+  font-weight: lighter;
+}
+
+h2 {
+  text-align: left;
+  font-weight: lighter;
+  background-color: rgba(195, 178, 180, 0.4);
+  padding: 0.1rem;
+  margin: 0;
+  font-size: medium;
+}
+
+.flex {
+  display: flex;
+}
+
+.previewImageMobile {
+  background-color: rgba(12, 12, 12, 0.5);
+  left: 50%;
+  overflow: hidden;
+  display: inline;
+}
+
+.previewImage {
+  background-color: rgba(12, 12, 12, 0.5);
+  left: 50%;
+  overflow: scroll;
+  display: flex;
+}
+
+.scrollViewMobile {
+  display: flex;
+  overflow: scroll;
+}
+
+.scrollView {
+  display: block;
+  overflow: scroll;
+}

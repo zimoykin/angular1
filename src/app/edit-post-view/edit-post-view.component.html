@@ -26,10 +26,9 @@
                     placeholder="title">{{ blogObj !=null ?  blogObj.title : "" }}</textarea>
             </div>
 
-            <div id='detail'>
-                
-
-                <div id='formdescription' class="form-group">
+            <div id='{{ !isMobile() ? "detail" : ""}}'>
+                <!-- <div id='{{ !isMobile() ? "detail" : ""}}'></div> -->
+                <div id='{{ !isMobile() ? "formdescription" : ""}}' class="form-group">
                     <label for="description"> Description </label>
                     <textarea class="form-control" id="description"
                         placeholder="description">{{ blogObj !=null ? blogObj.description : ""}}</textarea>

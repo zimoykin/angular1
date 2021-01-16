@@ -8,6 +8,9 @@
                 </h3>
                 <form #cred (ngSubmit)="login(cred)">
                     <div class="p-2">
+                        <div *ngIf="mode=='register'" class='w-100'>
+                            <input id="username" placeholder='username' type='text' required>
+                        </div>
                         <div class='w-100'>
                             <input placeholder='email' id="emailLogin" type='email' required>
                         </div>
@@ -18,6 +21,11 @@
 
                     <hr>
                     <button class='btn btn-success' type="submit"> login </button>
+                    <button *ngIf="mode=='login'" class='btn btn-light mr-1' type="button" (click)='changeMode()'>
+                        register new </button>
+                    <button *ngIf="mode=='register'" class='btn btn-light' type="button"
+                        (click)='registerNew(cred.username, cred.emailLogin, cred.passwordLogin)'> Register new
+                    </button>
                 </form>
             </div>
         </div>
