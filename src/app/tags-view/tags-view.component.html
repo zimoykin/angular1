@@ -17,6 +17,16 @@
 
 <div *ngIf="isLoaded">
     <div>
-        <app-blog *ngFor="let iterPost of list" [blogid]="iterPost.id" [isFullVersion]=false></app-blog>
+        <app-blog *ngFor="let item of (list|async)" [blogid]="item" [isFullVersion]=false></app-blog>
+    </div>
+    <div class='{{ isMobile() ? "card w-100" : "card w-50"}}'>
+        <mat-paginator 
+        style="background-color: transparent;"
+        [length]="length"
+        [pageSize]="pageSize"
+        [pageIndex]='pageIndex'
+        (page)="pageChanged($event)"
+        >
+        </mat-paginator>
     </div>
 </div>

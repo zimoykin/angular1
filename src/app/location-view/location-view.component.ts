@@ -89,7 +89,7 @@ export class LocationViewComponent implements OnInit {
     }
 
     this.http.get<[Place]>(
-        `${K.server}api/places/search`,
+        `api/places/search`,
         [new Param("field", "country_id"), new Param("value", this.selected)]
       ).then(val => {
         console.log(val)
@@ -101,7 +101,7 @@ export class LocationViewComponent implements OnInit {
   $getCountriesList(): Observable<Country[]> {
 
     return new Observable<Country[]> ( (obser) =>  {
-      this.http.get <Country[]> (`${K.server}api/countries/list`, [] )
+      this.http.get <Country[]> (`api/countries/list`, [] )
       .then ( (response) => { 
         obser.next(response.body) })
       .catch ( () =>  { 

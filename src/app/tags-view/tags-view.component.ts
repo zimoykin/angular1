@@ -1,12 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BlogModel } from '../_model/BlogModel';
 import { Constants as K } from '../_model/Constants'
+import { Page } from '../_model/Pagination';
 import { Authorization } from '../_services/AuthrizationService';
+import { Http, Param } from '../_services/httpClient';
 
 
 @Component({
@@ -18,20 +21,44 @@ export class TagsViewComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private httpClient: HttpClient, private cookieService: CookieService) { }
   auth = new Authorization(this.cookieService, this.httpClient)
-
-  list: BlogModel[] = []
+  http = new Http(this.cookieService, this.httpClient)
+  list: Subject<[string]> = new BehaviorSubject<[string]>(['']);
   isLoaded: boolean = false
   tag: string
+  nextPage$: Subject<void> = new BehaviorSubject(undefined)
+  // MatPaginator Output
+  length = 0;
+  pageSize = 10;
+  pageIndex = 0;
+  pageEvent: PageEvent;
 
+  public pageChanged(event?: PageEvent) {
+    this.pageIndex = event.pageIndex
+    this.nextPage$.next()
+    return event
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((param) => {
-      this.httpClient.get<BlogModel[]>(`${K.server}api/search/tag/${param.get('tag')}`, { headers: { Authorization: this.auth.token } })
-        .subscribe(val => { 
-          this.list = val
-          this.isLoaded = true
-        })
+
+      this.nextPage$.next()
+
+      this.nextPage$.subscribe(() => {
+        this.http.get<Page<string>>("api/search/tag", [new Param('tag', param.get('tag'))])
+          .then(response => {
+            this.list.next(response.body.items)
+            this.isLoaded = true
+          })
+          .finally(() => {
+            this.isLoaded = true
+          })
+
+      })
     })
+  }
+
+  isMobile() {
+    return K.isMobile()
   }
 
 }

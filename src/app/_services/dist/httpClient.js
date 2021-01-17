@@ -3,15 +3,17 @@ exports.__esModule = true;
 exports.Resp = exports.Param = exports.Http = void 0;
 var AuthrizationService_1 = require("./AuthrizationService");
 var operators_1 = require("rxjs/operators");
+var environment_1 = require("src/environments/environment");
 var Http = /** @class */ (function () {
     function Http(cookie, http) {
         this.cookie = cookie;
         this.http = http;
         this.auth = new AuthrizationService_1.Authorization(this.cookie, this.http);
+        this.server = environment_1.environment.server;
     }
     Http.prototype.get = function (path, params) {
         var _this = this;
-        var url = path;
+        var url = this.server + path;
         //params
         if (params != undefined && params.length > 0) {
             url += "?";

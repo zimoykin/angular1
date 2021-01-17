@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Emotions } from '../_model/BlogModel';
 import { Constants as K } from '../_model/Constants'
 import { Emotion } from '../_model/Emotion';
@@ -35,7 +36,7 @@ export class EmotionViewComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.http.get<[Emotions]> ( `${K.server}api/emotions`, [ new Param ('blogid', this.blogid)])
+    this.http.get<[Emotions]> ( `api/emotions`, [ new Param ('blogid', this.blogid)])
     .then ( response => {
       this.loaded = true
       this.emotions$.next ( response.body )
@@ -66,7 +67,7 @@ export class EmotionViewComponent implements OnInit {
 
   clickLike(emotion: string) {
     console.log(emotion)
-    this.httpClient.post<[Emotion]>(`${K.server}api/emotions/set?blogid=${this.blogid}&emotion=${emotion}`, null, {
+    this.httpClient.post<[Emotion]>(`${environment.server}api/emotions/set?blogid=${this.blogid}&emotion=${emotion}`, null, {
         observe: 'response',
         headers: this.auth.jwtHeader()
     })

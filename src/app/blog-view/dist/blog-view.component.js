@@ -31,7 +31,7 @@ var BlogViewComponent = /** @class */ (function () {
         });
         this.route.paramMap.subscribe(function (val) {
             _this.blogid = val.get('blogid');
-            _this.http.get(Constants_1.Constants.server + "api/blogs/id", [
+            _this.http.get("api/blogs/id", [
                 new httpClient_1.Param('blogid', _this.blogid)
             ]).then(function (response) {
                 _this.blog$.next(response.body);
@@ -68,10 +68,12 @@ var BlogViewComponent = /** @class */ (function () {
             return document.getElementById('mainPictures').clientHeight + "px";
         }
     };
-    BlogViewComponent.prototype.clickPictures = function () { };
+    BlogViewComponent.prototype.clickPictures = function (item) {
+        document.getElementById('mainPictures').src = item;
+    };
     BlogViewComponent.prototype.getImages = function () {
         var _this = this;
-        this.http.get(Constants_1.Constants.server + "api/blogs/images/list", [
+        this.http.get("api/blogs/images/list", [
             new httpClient_1.Param('blogid', this.blogid)
         ])
             .then(function (response) {

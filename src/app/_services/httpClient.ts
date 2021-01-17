@@ -6,11 +6,13 @@ import { Authorization } from "./AuthrizationService";
 import { Observable } from 'rxjs';
 import { throwError } from 'rxjs';
 import { map, timeoutWith } from 'rxjs/operators';
+import { environment } from "src/environments/environment";
 
 export class Http {
 
     body: Data
     auth = new Authorization(this.cookie, this.http)
+    server = environment.server
 
     constructor(private cookie: CookieService, private http: HttpClient) {
     
@@ -18,7 +20,7 @@ export class Http {
 
     get<t>(path: string, params: Param[]): Promise<Resp<t>> {
 
-        let url = path
+        let url = this.server + path
 
         //params
         if (params != undefined && params.length > 0) {

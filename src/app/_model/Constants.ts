@@ -3,6 +3,7 @@ import { } from '@angular/core'
 export class Constants {
     //public static server: string = 'http://10.0.0.102:8000/'
     public static server: string = 'http://10.0.1.7:8000/'
+    //public static server: string = 'http://10.0.0.85:8000/'
 
     public static defaultMenu () : Array<ElemntMenu> {
 

@@ -69,24 +69,11 @@ var HeaderComponent = /** @class */ (function () {
             }
         });
         this.loginName.subscribe(function (observer) {
-            console.log('head check jwt');
-            if (_this.auth.isJwtOk()) {
-                console.log('jwt is ok 59');
-            }
-            else {
-                console.log('jwt isnt ok 61');
-            }
         });
         var $routerSub = this.router.events
             .pipe(operators_1.filter(function (event) { return event instanceof router_1.NavigationEnd; }))
             .subscribe(function (event) {
             _this.showMenu = false;
-            if (!_this.auth.isJwtOk()) {
-                if (event.url != '/login') {
-                    console.log(window.location.href);
-                    window.location.href = '/login';
-                }
-            }
         });
     };
     HeaderComponent.prototype.clickLogin = function () {

@@ -81,26 +81,12 @@ export class HeaderComponent implements OnInit {
 
     this.loginName.subscribe(observer => {
 
-      console.log ('head check jwt')
-
-      if (this.auth.isJwtOk()) {
-          console.log ( 'jwt is ok 59')
-      } else {
-        console.log ( 'jwt isnt ok 61') 
-      }
     })
+
     let $routerSub = this.router.events
     .pipe(filter((event: RouterEvent) => event instanceof NavigationEnd))
     .subscribe( ( event ) => {
-
       this.showMenu = false
-
-      if (!this.auth.isJwtOk()) {
-        if (event.url != '/login') {
-          console.log( window.location.href) 
-          window.location.href = '/login'
-        }
-      }
      });
 
   }

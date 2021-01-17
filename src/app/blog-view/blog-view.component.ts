@@ -37,7 +37,7 @@ export class BlogViewComponent implements OnInit {
     this.route.paramMap.subscribe((val) => {
       this.blogid = val.get('blogid')
 
-      this.http.get<BlogModel>(`${K.server}api/blogs/id`,
+      this.http.get<BlogModel>(`api/blogs/id`,
         [
           new Param('blogid', this.blogid)
         ]
@@ -79,11 +79,13 @@ export class BlogViewComponent implements OnInit {
     }
   }
 
-  clickPictures() { }
+  clickPictures (item: string) { 
+    (<HTMLImageElement>document.getElementById('mainPictures')).src = item
+  }
 
   getImages () {
 
-    this.http.get<[string]>(`${K.server}api/blogs/images/list`, 
+    this.http.get<[string]>(`api/blogs/images/list`, 
     [
       new Param('blogid',  this.blogid )
     ])

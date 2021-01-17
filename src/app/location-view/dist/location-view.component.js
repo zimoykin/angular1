@@ -71,7 +71,7 @@ var LocationViewComponent = /** @class */ (function () {
         if (this.selected == '') {
             return;
         }
-        this.http.get(Constants_1.Constants.server + "api/places/search", [new httpClient_1.Param("field", "country_id"), new httpClient_1.Param("value", this.selected)]).then(function (val) {
+        this.http.get("api/places/search", [new httpClient_1.Param("field", "country_id"), new httpClient_1.Param("value", this.selected)]).then(function (val) {
             console.log(val);
             _this.places = val.body;
         });
@@ -79,7 +79,7 @@ var LocationViewComponent = /** @class */ (function () {
     LocationViewComponent.prototype.$getCountriesList = function () {
         var _this = this;
         return new rxjs_1.Observable(function (obser) {
-            _this.http.get(Constants_1.Constants.server + "api/countries/list", [])
+            _this.http.get("api/countries/list", [])
                 .then(function (response) {
                 obser.next(response.body);
             })["catch"](function () {

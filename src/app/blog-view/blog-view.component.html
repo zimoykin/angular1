@@ -20,16 +20,16 @@
         <!-- mainPictures -->
         <picture>
             <img id='mainPictures' src="{{ (blog$|async).image }}" style="object-fit: cover; overflow: hidden;" loading="lazy"
-                [style.width]="getImageSize()" height="550px" (click)="clickPictures()" />
+                [style.width]="getImageSize()" height="550px" />
         </picture>
 
         <!-- image preview -->
         <div class='{{isMobile() ? "scrollViewMobile" : "scrollView"}}'
-        [style.height]="getHeightMainPictures()">
+        [style.height]="!isMobile() ? getHeightMainPictures() : '' ">
             <div *ngFor="let item of (imageList$|async)">
                 <picture>
                     <img src="{{ item }}" style="object-fit: cover; overflow: hidden; padding: 1px;" loading="lazy"
-                    [style.width]="getImageSizePreview()" [style.height]="getImageSizePreview()" (click)="clickPictures()" />
+                    [style.width]="getImageSizePreview()" [style.height]="getImageSizePreview()" (click)="clickPictures(item)" />
                 </picture>
             </div>
         </div>

@@ -42,7 +42,7 @@ var HomeComponent = /** @class */ (function () {
     };
     HomeComponent.prototype.getAllBlogs = function () {
         var _this = this;
-        this.http.get(Constants_1.Constants.server + "api/blogs/list", [
+        this.http.get("api/blogs/list", [
             new httpClient_1.Param("page", (this.pageIndex + 1).toString()),
             new httpClient_1.Param('per', "" + this.pageSize)
         ]).then(function (response) {

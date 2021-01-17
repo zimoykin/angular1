@@ -4,6 +4,7 @@ exports.ElemntMenu = exports.Constants = void 0;
 var Constants = /** @class */ (function () {
     function Constants() {
     }
+    //public static server: string = 'http://10.0.0.85:8000/'
     Constants.defaultMenu = function () {
         var menus = new Array();
         menus.push(new ElemntMenu('home', '/home'));

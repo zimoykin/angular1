@@ -45,6 +45,7 @@ exports.__esModule = true;
 exports.EmotionViewComponent = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
+var environment_1 = require("src/environments/environment");
 var Constants_1 = require("../_model/Constants");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var httpClient_1 = require("../_services/httpClient");
@@ -66,7 +67,7 @@ var EmotionViewComponent = /** @class */ (function () {
     }
     EmotionViewComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.http.get(Constants_1.Constants.server + "api/emotions", [new httpClient_1.Param('blogid', this.blogid)])
+        this.http.get("api/emotions", [new httpClient_1.Param('blogid', this.blogid)])
             .then(function (response) {
             _this.loaded = true;
             _this.emotions$.next(response.body);
@@ -102,7 +103,7 @@ var EmotionViewComponent = /** @class */ (function () {
     EmotionViewComponent.prototype.clickLike = function (emotion) {
         var _this = this;
         console.log(emotion);
-        this.httpClient.post(Constants_1.Constants.server + "api/emotions/set?blogid=" + this.blogid + "&emotion=" + emotion, null, {
+        this.httpClient.post(environment_1.environment.server + "api/emotions/set?blogid=" + this.blogid + "&emotion=" + emotion, null, {
             observe: 'response',
             headers: this.auth.jwtHeader()
         })

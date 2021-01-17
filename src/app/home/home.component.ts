@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit {
   getAllBlogs() {
 
   
-      this.http.get <Page<string>> (`${K.server}api/blogs/list`, 
+      this.http.get <Page<string>> (`api/blogs/list`, 
         [
           new Param("page", (this.pageIndex+1).toString()),
           new Param('per', `${this.pageSize}`)
