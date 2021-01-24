@@ -109,13 +109,12 @@ var LocationViewComponent = /** @class */ (function () {
         document.getElementById('country').value = '';
     };
     //C R E A T E 
-    LocationViewComponent.prototype.saveCountryPlace = function (val, title, description) {
+    LocationViewComponent.prototype.saveCountryPlace = function (val, title, description, longitude, latitude) {
         var _this = this;
-        console.log(title);
-        console.log(this.willCreateNew);
         if (this.willCreateNew == 'place') {
             if (val && this.selected != '') {
-                this.httpClient.post(Constants_1.Constants.server + "api/places/", JSON.stringify({ title: title, description: description, countryId: this.selected }), { headers: new http_1.HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) }).subscribe(function (val) {
+                this.httpClient.post(Constants_1.Constants.server + "api/places/", JSON.stringify({ title: title, description: description, longitude: parseFloat(longitude), latitude: parseFloat(latitude), countryId: this.selected }), { headers: new http_1.HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) })
+                    .subscribe(function (val) {
                     _this.willCreateNew = '';
                     _this.places = undefined;
                     _this.updateCountryList();

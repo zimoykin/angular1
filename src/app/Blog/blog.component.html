@@ -38,10 +38,31 @@
                 </div>
             </div>
     
-            <picture>
-                <img src="{{ (currentImage$|async) }}" style="object-fit: cover;" loading="lazy"
-                    [style.width]="getImageSize()" height="450px" (click)="clickPictures()" />
-            </picture>
+            <div *ngIf="updating$|async"
+            [style.minWidth]="getImageSize()" height="450px"
+            >
+            <div class="loader">
+                <div>
+                    <div class="lds-roller">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+          
+                <picture>
+                    <img src="{{ (currentImage$|async) }}" style="object-fit: cover;" loading="lazy"
+                        [style.width]="getImageSize()" height="450px" (click)="clickPictures()" />
+                </picture>
+          
     
             <div class='description p-1' [ngStyle]="{'width': isMobile() ? '100%': '50%' }"
             >

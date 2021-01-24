@@ -41,6 +41,9 @@ var paginator_1 = require("@angular/material/paginator");
 var search_view_component_1 = require("./search-view/search-view.component");
 var loader_view_component_1 = require("./loader-view/loader-view.component");
 var place_view_short_component_1 = require("./place-view-short/place-view-short.component");
+var emotion_view_component_1 = require("./emotion-view/emotion-view.component");
+var core_2 = require("@agm/core");
+var Constants_1 = require("../app/_model/Constants");
 //https://www.design-seeds.com/in-nature/nature-made/nature-tones-40/
 var AppModule = /** @class */ (function () {
     function AppModule() {
@@ -67,7 +70,8 @@ var AppModule = /** @class */ (function () {
                 place_view_component_1.PlaceViewComponent,
                 search_view_component_1.SearchViewComponent,
                 loader_view_component_1.LoaderViewComponent,
-                place_view_short_component_1.PlaceViewShortComponent
+                place_view_short_component_1.PlaceViewShortComponent,
+                emotion_view_component_1.EmotionViewComponent
             ],
             imports: [
                 angular_bootstrap_md_1.MDBBootstrapModule.forRoot(),
@@ -82,7 +86,10 @@ var AppModule = /** @class */ (function () {
                 select_1.MatSelectModule,
                 menu_1.MatMenuModule,
                 icon_1.MatIconModule,
-                paginator_1.MatPaginatorModule
+                paginator_1.MatPaginatorModule,
+                core_2.AgmCoreModule.forRoot({
+                    apiKey: "" + Constants_1.Constants.google_key
+                })
             ],
             providers: [],
             bootstrap: [app_component_1.AppComponent]

@@ -4,7 +4,6 @@ exports.ElemntMenu = exports.Constants = void 0;
 var Constants = /** @class */ (function () {
     function Constants() {
     }
-    //public static server: string = 'http://10.0.0.85:8000/'
     Constants.defaultMenu = function () {
         var menus = new Array();
         menus.push(new ElemntMenu('home', '/home'));
@@ -25,6 +24,8 @@ var Constants = /** @class */ (function () {
     };
     //public static server: string = 'http://10.0.0.102:8000/'
     Constants.server = 'http://10.0.1.7:8000/';
+    //public static server: string = 'http://10.0.0.85:8000/'
+    Constants.google_key = 'AIzaSyAGwMH5o_Mt2DLG-aNhW4E64BKDq5wIs3Q';
     Constants.imagePath = Constants.server + 'images/system/earth-globe.png';
     Constants.imageLike = Constants.server + 'images/system/like.png';
     Constants.imageDislike = Constants.server + 'images/system/dislike.png';

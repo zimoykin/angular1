@@ -33,6 +33,8 @@ import { SearchViewComponent } from './search-view/search-view.component';
 import { LoaderViewComponent } from './loader-view/loader-view.component';
 import { PlaceViewShortComponent } from './place-view-short/place-view-short.component';
 import { EmotionViewComponent } from './emotion-view/emotion-view.component';
+import { AgmCoreModule } from '@agm/core';
+import { Constants as K } from '../app/_model/Constants'
 
 
 
@@ -75,7 +77,10 @@ import { EmotionViewComponent } from './emotion-view/emotion-view.component';
     MatSelectModule,
     MatMenuModule,
     MatIconModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    AgmCoreModule.forRoot({
+      apiKey: `${K.google_key}`
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

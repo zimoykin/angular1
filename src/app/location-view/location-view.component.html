@@ -14,14 +14,18 @@ transition: 1s;">
         <h2 style="text-align: center; font-weight: lighter;"> Create new {{willCreateNew}} </h2>
         <form #new_country action="javascript:void(0);">
             <div class='w-100'>
-                <input class='w-100 mb-3 form-control' placeholder='title' id='title' type='text' aria-label="Text"
+                <input class='w-100 mb-3 form-control' placeholder='title' id='title' type='text' aria-label="Text" required>
+                <input class='w-100 mb-3 form-control' placeholder='description' id='description' type='text' aria-label="Text"
                     required>
-                <input class='w-100 mb-3 form-control' placeholder='description' id='description' type='text'
-                    aria-label="Text" required>
+                    <div class='d-flex' *ngIf="(willCreateNew.toLowerCase() == 'place')">
+                        <input class='w-100 mb-3 form-control' placeholder='latitude' id='latitude' type='number' required>
+                        <input class='w-100 mb-3 form-control' placeholder='longitude' id='longitude' type='number' required>
+                    </div>
             </div>
             <div class='w-100' style='display: inline; justify-items: center;'>
                 <button type="submit" class="btn btn-success mr-1"
-                    (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value)"> save
+                    (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value, new_country.longitude.value, new_country.latitude.value)"> 
+                    save
                 </button>
                 <button type="reset" class="btn btn-danger mr-1" (click)="saveCountryPlace(false)"> cancel </button>
             </div>
@@ -33,14 +37,16 @@ transition: 1s;">
         <h2 style="text-align: center; font-weight: lighter;"> Create new {{willCreateNew}} </h2>
         <form #new_country action="javascript:void(0);">
             <div class='w-100'>
-                <input class='w-100 mb-3 form-control' placeholder='title' id='title' type='text' aria-label="Text"
-                    required>
-                <input class='w-100 mb-3 form-control' placeholder='description' id='description' type='text'
-                    aria-label="Text" required>
+                <input class='w-100 mb-3 form-control' placeholder='title' id='title' type='text' required>
+                <input class='w-100 mb-3 form-control' placeholder='description' id='description' type='text' required>
+                <div class='d-flex' *ngIf="(willCreateNew.toLowerCase() == 'place')">
+                    <input class='w-100 mb-3 form-control' placeholder='latitude' id='latitude' type='number' required>
+                    <input class='w-100 mb-3 form-control' placeholder='longitude' id='longitude' type='number' required>
+                </div>
             </div>
 
             <button type="button" class="btn btn-success mr-1"
-                (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value)"> save </button>
+                (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value, new_country.longitude.value, new_country.latitude.value)"> save </button>
             <button type="button" class="btn btn-danger mr-1" (click)="saveCountryPlace(false)"> cancel </button>
 
         </form>
@@ -73,6 +79,10 @@ transition: 1s;">
         </button>
 
     </div>
+    <span> maps</span>
+    <agm-map [latitude]="12" [longitude]="12">
+        <agm-marker [latitude]="12" [longitude]="12"></agm-marker>
+       </agm-map>
 
 </div>
 

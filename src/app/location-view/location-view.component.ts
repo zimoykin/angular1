@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Country, Place } from '../_model/BlogModel';
 import { Authorization } from '../_services/AuthrizationService';
 import { Constants as K } from '../_model/Constants'
@@ -138,17 +138,16 @@ export class LocationViewComponent implements OnInit {
   }
 
   //C R E A T E 
-  saveCountryPlace(val: boolean, title?: string, description?: string) {
-
-    console.log(title)
-    console.log(this.willCreateNew)
+  saveCountryPlace(val: boolean, title?: string, description?: string, longitude?: string, latitude?: string) {
 
     if (this.willCreateNew == 'place') {
 
       if (val && this.selected != '') {
 
-        this.httpClient.post<Place>(`${K.server}api/places/`, JSON.stringify({ title: title, description: description, countryId: this.selected }),
-          { headers: new HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) }).subscribe((val) => {
+        this.httpClient.post<Place>(`${K.server}api/places/`,
+        JSON.stringify({ title: title, description: description, longitude: parseFloat(longitude), latitude: parseFloat(latitude), countryId: this.selected }),
+          { headers: new HttpHeaders({ 'Authorization': this.auth.token, 'Content-Type': 'application/json' }) })
+          .subscribe((val) => {
             this.willCreateNew = ''
             this.places = undefined
 

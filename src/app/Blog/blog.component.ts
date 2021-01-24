@@ -20,6 +20,7 @@ export class blogComponent implements OnInit {
     @Input() isFullVersion: boolean
 
     isLoaded$: Subject<boolean> = new BehaviorSubject(false)
+    updating$: Subject<boolean> = new BehaviorSubject(false)
 
     imagePath = K.imagePath
 
@@ -54,7 +55,7 @@ export class blogComponent implements OnInit {
 
         let user_id = localStorage.getItem('user_id');
 
-        this.emotions$.subscribe( (emotion) => {
+        this.emotions$.subscribe((emotion) => {
             if (emotion != undefined && emotion.length > 0) {
                 let filtred = emotion.filter(val => {
                     return val.user.id == user_id;
@@ -76,15 +77,15 @@ export class blogComponent implements OnInit {
             observe: 'response',
             headers: this.auth.jwtHeader()
         })
-        .subscribe(response => {
-            if (response.status == 200) {
-                console.log("got it!")
-                this.emotions$.next (response.body)
-                this.updateUserEmotion().then ( () => {
-                    console.log("updated it!")  
-                })
-            }
-        })
+            .subscribe(response => {
+                if (response.status == 200) {
+                    console.log("got it!")
+                    this.emotions$.next(response.body)
+                    this.updateUserEmotion().then(() => {
+                        console.log("updated it!")
+                    })
+                }
+            })
     }
 
     ngOnDestroy() {
@@ -92,10 +93,10 @@ export class blogComponent implements OnInit {
     }
 
     getImageSize(): string {
-        if ( this.isMobile() ) {
+        if (this.isMobile()) {
             return document.getElementById('mainWindow').clientWidth + "px"
         } else {
-            return document.getElementById('mainWindow').clientWidth/2 + "px"
+            return document.getElementById('mainWindow').clientWidth / 2 + "px"
         }
     }
 
@@ -126,22 +127,18 @@ export class blogComponent implements OnInit {
 
     clickPictures() {
 
-        console.log('change pictures started')
-        this.isLoaded$.next(true)
-
+        this.updating$.next(true)
         if (this.imageList == undefined) {
-            console.log('getting image list')
+
             this.http.get<[string]>(`${K.server}api/blogs/images/list?blogid=${this.blogid}`,
                 { headers: this.auth.jwtHeader() }).subscribe((val) => {
                     this.imageList = val
-                    console.log('changing image of new list')
-                    this.isLoaded$.next(true)
+                    this.updating$.next(false)
                     this.changePictures()
                 })
 
         } else {
-            console.log('change image old list')
-            this.isLoaded$.next(true)
+            this.updating$.next(false)
             this.changePictures()
         }
 
@@ -153,7 +150,7 @@ export class blogComponent implements OnInit {
         this.currentImage$.next(this.imageList[this.currentPictures])
     }
 
-    isMobile () : boolean {
-        return K.isMobile ()
+    isMobile(): boolean {
+        return K.isMobile()
     }
 }
