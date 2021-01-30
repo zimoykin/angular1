@@ -46,4 +46,8 @@ testem.log
 Thumbs.db
 
 /src/environments/environment.prod.ts
+environments/environment.prod.ts
+environment.prod.ts
 /src/environments/environment.ts
+environments/environment.ts
+environment.ts

@@ -4,7 +4,7 @@ export class Constants {
     //public static server: string = 'http://10.0.0.102:8000/'
     public static server: string = 'http://10.0.1.7:8000/'
     //public static server: string = 'http://10.0.0.85:8000/'
-    public static google_key: string = 'AIzaSyAGwMH5o_Mt2DLG-aNhW4E64BKDq5wIs3Q'
+   
     public static defaultMenu () : Array<ElemntMenu> {
 
         let menus = new Array<ElemntMenu>()
