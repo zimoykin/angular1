@@ -24,7 +24,8 @@ var Constants = /** @class */ (function () {
         }
     };
     //public static server: string = 'http://10.0.0.102:8000/'
-    Constants.server = 'http://10.0.1.7:8000/';
+    Constants.server = 'http://10.0.1.6:8000/';
+    Constants.wsserver = Constants.server.replace('http', 'ws');
     Constants.imagePath = Constants.server + 'images/system/earth-globe.png';
     Constants.imageLike = Constants.server + 'images/system/like.png';
     Constants.imageDislike = Constants.server + 'images/system/dislike.png';

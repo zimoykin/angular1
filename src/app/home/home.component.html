@@ -23,7 +23,7 @@
         [blogid]="iterPost" 
         [isFullVersion]=false>
         </app-blog>
-
+        <div> {{online$|async}} </div>
         <div class='{{ isMobile() ? "card w-100" : "card w-50"}}'>
             <mat-paginator 
             style="background-color: transparent;"

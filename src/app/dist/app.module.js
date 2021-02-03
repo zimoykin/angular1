@@ -43,7 +43,7 @@ var loader_view_component_1 = require("./loader-view/loader-view.component");
 var place_view_short_component_1 = require("./place-view-short/place-view-short.component");
 var emotion_view_component_1 = require("./emotion-view/emotion-view.component");
 var core_2 = require("@agm/core");
-var Constants_1 = require("../app/_model/Constants");
+var websocket_service_1 = require("./websocket.service");
 //https://www.design-seeds.com/in-nature/nature-made/nature-tones-40/
 var AppModule = /** @class */ (function () {
     function AppModule() {
@@ -88,10 +88,10 @@ var AppModule = /** @class */ (function () {
                 icon_1.MatIconModule,
                 paginator_1.MatPaginatorModule,
                 core_2.AgmCoreModule.forRoot({
-                    apiKey: "" + Constants_1.Constants.google_key
+                    apiKey: ""
                 })
             ],
-            providers: [],
+            providers: [websocket_service_1.WebsocketService],
             bootstrap: [app_component_1.AppComponent]
         })
     ], AppModule);

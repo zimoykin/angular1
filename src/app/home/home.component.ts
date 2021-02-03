@@ -7,7 +7,8 @@ import { Authorization } from '../_services/AuthrizationService'
 import {PageEvent} from '@angular/material/paginator';
 import { Page } from '../_model/Pagination';
 import { Http, Param } from '../_services/httpClient';
-
+import { WebsocketService } from '../websocket.service';
+import { UserPublic } from '../_model/User';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +22,10 @@ export class HomeComponent implements OnInit {
   isLoaded$: Subject<boolean> = new BehaviorSubject ( false )
   nextPage$: Subject<void> = new BehaviorSubject ( undefined )
 
-  constructor( private httpClient: HttpClient, private cookieService: CookieService ) { }
+  constructor( private httpClient: HttpClient, 
+    private cookieService: CookieService,
+    private ws: WebsocketService) { }
+
   auth = new Authorization(this.cookieService, this.httpClient)
   http = new Http(this.cookieService, this.httpClient)
 
@@ -31,15 +35,30 @@ export class HomeComponent implements OnInit {
   pageIndex = 0;
   pageEvent: PageEvent;
 
+  ws$: Subject<WebsocketService> = new BehaviorSubject ( undefined )
+  online$: Subject<[UserPublic]> = new BehaviorSubject ( undefined )
+
   ngOnInit(): void {
 
     this.nextPage$.next()
+    this.ws$.next ( this.ws )
+   
+    this.online$.subscribe( (obser) => {
+      console.log(obser)
+    })
+
+    this.ws$.subscribe ( (obser) => {
+      if ( obser.connected ) {
+        this.ws.sendMessage('whoisonline?')
+        this.ws.component = this
+      }
+      console.log(obser) 
+    });
 
     this.nextPage$.subscribe ( ()  => {
       console.log ('currentPage: ' + this.pageIndex)
       this.isLoaded$.next(false)
       this.getAllBlogs()
-
     })
   }
 
@@ -52,7 +71,6 @@ export class HomeComponent implements OnInit {
 
   getAllBlogs() {
 
-  
       this.http.get <Page<string>> (`api/blogs/list`, 
         [
           new Param("page", (this.pageIndex+1).toString()),

@@ -13,9 +13,10 @@ var Constants_1 = require("../_model/Constants");
 var AuthrizationService_1 = require("../_services/AuthrizationService");
 var httpClient_1 = require("../_services/httpClient");
 var HomeComponent = /** @class */ (function () {
-    function HomeComponent(httpClient, cookieService) {
+    function HomeComponent(httpClient, cookieService, ws) {
         this.httpClient = httpClient;
         this.cookieService = cookieService;
+        this.ws = ws;
         this.list$ = new rxjs_1.BehaviorSubject(undefined);
         this.isLoaded$ = new rxjs_1.BehaviorSubject(false);
         this.nextPage$ = new rxjs_1.BehaviorSubject(undefined);
@@ -25,10 +26,23 @@ var HomeComponent = /** @class */ (function () {
         this.length = 0;
         this.pageSize = 10;
         this.pageIndex = 0;
+        this.ws$ = new rxjs_1.BehaviorSubject(undefined);
+        this.online$ = new rxjs_1.BehaviorSubject(undefined);
     }
     HomeComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.nextPage$.next();
+        this.ws$.next(this.ws);
+        this.online$.subscribe(function (obser) {
+            console.log(obser);
+        });
+        this.ws$.subscribe(function (obser) {
+            if (obser.connected) {
+                _this.ws.sendMessage('whoisonline?');
+                _this.ws.component = _this;
+            }
+            console.log(obser);
+        });
         this.nextPage$.subscribe(function () {
             console.log('currentPage: ' + _this.pageIndex);
             _this.isLoaded$.next(false);

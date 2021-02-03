@@ -35,6 +35,7 @@ import { PlaceViewShortComponent } from './place-view-short/place-view-short.com
 import { EmotionViewComponent } from './emotion-view/emotion-view.component';
 import { AgmCoreModule } from '@agm/core';
 import { Constants as K } from '../app/_model/Constants'
+import { WebsocketService } from './websocket.service';
 
 
 
@@ -79,10 +80,10 @@ import { Constants as K } from '../app/_model/Constants'
     MatIconModule,
     MatPaginatorModule,
     AgmCoreModule.forRoot({
-      apiKey: `${K.google_key}`
+      apiKey: ``
     })
   ],
-  providers: [],
+  providers: [WebsocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

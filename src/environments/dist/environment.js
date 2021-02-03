@@ -6,7 +6,7 @@ exports.__esModule = true;
 exports.environment = void 0;
 exports.environment = {
     production: false,
-    server: 'http://10.0.1.7:8000/'
+    server: 'http://10.0.1.6:8000/'
 };
 /*
  * For easier debugging in development mode, you can import the following file

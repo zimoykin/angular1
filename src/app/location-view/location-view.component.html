@@ -17,14 +17,16 @@ transition: 1s;">
                 <input class='w-100 mb-3 form-control' placeholder='title' id='title' type='text' aria-label="Text" required>
                 <input class='w-100 mb-3 form-control' placeholder='description' id='description' type='text' aria-label="Text"
                     required>
-                    <div class='d-flex' *ngIf="(willCreateNew.toLowerCase() == 'place')">
-                        <input class='w-100 mb-3 form-control' placeholder='latitude' id='latitude' type='number' required>
-                        <input class='w-100 mb-3 form-control' placeholder='longitude' id='longitude' type='number' required>
-                    </div>
+                   
+                    <input class='w-100 mb-3 form-control' placeholder='latitude' id='latitude' type='number' required>
+                    <input class='w-100 mb-3 form-control' placeholder='longitude' id='longitude' type='number' required>
+                  
             </div>
             <div class='w-100' style='display: inline; justify-items: center;'>
                 <button type="submit" class="btn btn-success mr-1"
-                    (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value, new_country.longitude.value, new_country.latitude.value)"> 
+                    (click)="saveCountryPlace(true, new_country.title.value, new_country.description.value, 
+                    new_country.longitude.value, 
+                    new_country.latitude.value)"> 
                     save
                 </button>
                 <button type="reset" class="btn btn-danger mr-1" (click)="saveCountryPlace(false)"> cancel </button>
