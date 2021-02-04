@@ -46,16 +46,16 @@ exports.blogComponent = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
 var Constants_1 = require("../_model/Constants");
-var AuthrizationService_1 = require("../_services/AuthrizationService");
+var http_service_service_1 = require("../_services/http-service.service");
 var blogComponent = /** @class */ (function () {
-    function blogComponent(cookie, http) {
-        this.cookie = cookie;
+    function blogComponent(http, ws) {
         this.http = http;
+        this.ws = ws;
         this.isLoaded$ = new rxjs_1.BehaviorSubject(false);
         this.updating$ = new rxjs_1.BehaviorSubject(false);
         this.imagePath = Constants_1.Constants.imagePath;
         this.imagePathEmotions$ = new rxjs_1.BehaviorSubject(Constants_1.Constants.imageNoEmotion);
-        this.userID$ = new rxjs_1.BehaviorSubject('init');
+        this.userID$ = new rxjs_1.BehaviorSubject("init");
         this.blog$ = new rxjs_1.BehaviorSubject(undefined);
         this.emotions$ = new rxjs_1.BehaviorSubject(undefined);
         //
@@ -65,14 +65,17 @@ var blogComponent = /** @class */ (function () {
         this.imageNoEmotion = Constants_1.Constants.imageNoEmotion;
         //
         this.currentPictures = 0;
-        this.currentImage$ = new rxjs_1.BehaviorSubject('');
-        this.auth = new AuthrizationService_1.Authorization(this.cookie, this.http);
+        this.currentImage$ = new rxjs_1.BehaviorSubject("");
     }
     blogComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.userID$.next(localStorage.getItem('user_id'));
-        this.getBlog(this.blogid).then(function () {
-            _this.updateUserEmotion();
+        this.userID$.next(localStorage.getItem("user_id"));
+        this.getBlog(this.blogid);
+        this.updateUserEmotion();
+        this.ws.online$.subscribe(function (obser) {
+            if (obser != undefined) {
+                _this.onlineUsers = obser;
+            }
         });
     };
     blogComponent.prototype.updateUserEmotion = function () {
@@ -80,7 +83,7 @@ var blogComponent = /** @class */ (function () {
             var user_id;
             var _this = this;
             return __generator(this, function (_a) {
-                user_id = localStorage.getItem('user_id');
+                user_id = localStorage.getItem("user_id");
                 this.emotions$.subscribe(function (emotion) {
                     if (emotion != undefined && emotion.length > 0) {
                         var filtred = emotion.filter(function (val) {
@@ -104,11 +107,9 @@ var blogComponent = /** @class */ (function () {
     blogComponent.prototype.clickLike = function (emotion) {
         var _this = this;
         console.log(emotion);
-        this.http.post(Constants_1.Constants.server + "api/emotions/set?blogid=" + this.blogid + "&emotion=" + emotion, null, {
-            observe: 'response',
-            headers: this.auth.jwtHeader()
-        })
-            .subscribe(function (response) {
+        this.http
+            .post("api/emotions/set?blogid=" + this.blogid + "&emotion=" + emotion, null)
+            .then(function (response) {
             if (response.status == 200) {
                 console.log("got it!");
                 _this.emotions$.next(response.body);
@@ -123,43 +124,34 @@ var blogComponent = /** @class */ (function () {
     };
     blogComponent.prototype.getImageSize = function () {
         if (this.isMobile()) {
-            return document.getElementById('mainWindow').clientWidth + "px";
+            return document.getElementById("mainWindow").clientWidth + "px";
         }
         else {
-            return document.getElementById('mainWindow').clientWidth / 2 + "px";
+            return document.getElementById("mainWindow").clientWidth / 2 + "px";
         }
     };
     blogComponent.prototype.getBlog = function (blogid) {
-        return __awaiter(this, void 0, Promise, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                return [2 /*return*/, new Promise(function (response) {
-                        if (_this.auth.token == '' || _this.auth.token == null) {
-                            response();
-                            console.error('error');
-                        }
-                        _this.isLoaded$.next(false);
-                        _this.http.get(Constants_1.Constants.server + "api/blogs/id?blogid=" + blogid, {
-                            headers: { Authorization: _this.auth.token }
-                        }).subscribe(function (blog) {
-                            setTimeout(function () {
-                                _this.blog$.next(blog);
-                                _this.emotions$.next(blog.emotions);
-                                _this.currentImage$.next(blog.image);
-                                _this.isLoaded$.next(true);
-                                response();
-                            }, 0);
-                        });
-                    })];
-            });
+        var _this = this;
+        this.isLoaded$.next(false);
+        this.http
+            .get("api/blogs/id", [new http_service_service_1.Param('blogid', blogid)])
+            .then(function (val) {
+            _this.blog$.next(val.body);
+            _this.emotions$.next(val.body.emotions);
+            _this.currentImage$.next(val.body.image);
+            _this.isLoaded$.next(true);
+        })["catch"](function () {
+            _this.isLoaded$.next(true);
         });
     };
     blogComponent.prototype.clickPictures = function () {
         var _this = this;
         this.updating$.next(true);
         if (this.imageList == undefined) {
-            this.http.get(Constants_1.Constants.server + "api/blogs/images/list?blogid=" + this.blogid, { headers: this.auth.jwtHeader() }).subscribe(function (val) {
-                _this.imageList = val;
+            this.http
+                .get("api/blogs/images/list?blogid=" + this.blogid)
+                .then(function (val) {
+                _this.imageList = val.body;
                 _this.updating$.next(false);
                 _this.changePictures();
             });
@@ -172,8 +164,11 @@ var blogComponent = /** @class */ (function () {
     blogComponent.prototype.changePictures = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                this.currentPictures = this.currentPictures + 1 > this.imageList.length - 1 ? 0 : this.currentPictures + 1;
-                console.log('set' + this.currentPictures);
+                this.currentPictures =
+                    this.currentPictures + 1 > this.imageList.length - 1
+                        ? 0
+                        : this.currentPictures + 1;
+                console.log("set" + this.currentPictures);
                 this.currentImage$.next(this.imageList[this.currentPictures]);
                 return [2 /*return*/];
             });
@@ -181,6 +176,12 @@ var blogComponent = /** @class */ (function () {
     };
     blogComponent.prototype.isMobile = function () {
         return Constants_1.Constants.isMobile();
+    };
+    blogComponent.prototype.userOnline = function (userid) {
+        console.log('is online? ' + userid);
+        return this.onlineUsers.filter(function (val) {
+            return val.id == userid;
+        }).length > 0;
     };
     __decorate([
         core_1.Input()
@@ -193,9 +194,9 @@ var blogComponent = /** @class */ (function () {
     ], blogComponent.prototype, "isFullVersion");
     blogComponent = __decorate([
         core_1.Component({
-            selector: 'app-blog',
-            templateUrl: './blog.component.html',
-            styleUrls: ['./blog.component.scss']
+            selector: "app-blog",
+            templateUrl: "./blog.component.html",
+            styleUrls: ["./blog.component.scss"]
         })
     ], blogComponent);
     return blogComponent;

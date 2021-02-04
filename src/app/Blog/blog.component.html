@@ -81,7 +81,7 @@
             
                 <span style='background-color: rgba(195, 178, 180, .4); width: 100%;'>
                     <a routerLink="/user/{{ (blog$|async).user.id }}">
-                        {{ " &#183; " + (blog$|async).created + " &#183; " + (blog$|async).user.username }}
+                        {{ " &#183; " + (blog$|async).created + " &#183; " + (userOnline((blog$|async).user.id) ? '@' : "") + (blog$|async).user.username }}
                     </a>
                 </span>
             <div style="display: flex;">

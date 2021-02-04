@@ -3,11 +3,11 @@ import { HttpClient} from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { Constants as K } from '../_model/Constants';
-import { Authorization } from '../_services/AuthrizationService'
+import {  } from '../_services/authorization-service.service'
 import {PageEvent} from '@angular/material/paginator';
 import { Page } from '../_model/Pagination';
-import { Http, Param } from '../_services/httpClient';
-import { WebsocketService } from '../websocket.service';
+import { Http, Param } from '../_services/http-service.service';
+import { WebsocketService } from '../_services/websocket.service';
 import { UserPublic } from '../_model/User';
 
 @Component({
@@ -22,12 +22,10 @@ export class HomeComponent implements OnInit {
   isLoaded$: Subject<boolean> = new BehaviorSubject ( false )
   nextPage$: Subject<void> = new BehaviorSubject ( undefined )
 
-  constructor( private httpClient: HttpClient, 
-    private cookieService: CookieService,
-    private ws: WebsocketService) { }
+  constructor(
+    private http: Http
+  ) {}
 
-  auth = new Authorization(this.cookieService, this.httpClient)
-  http = new Http(this.cookieService, this.httpClient)
 
   // MatPaginator Output
   length = 0;
@@ -35,25 +33,9 @@ export class HomeComponent implements OnInit {
   pageIndex = 0;
   pageEvent: PageEvent;
 
-  ws$: Subject<WebsocketService> = new BehaviorSubject ( undefined )
-  online$: Subject<[UserPublic]> = new BehaviorSubject ( undefined )
-
-  ngOnInit(): void {
+  ngOnInit() : void {
 
     this.nextPage$.next()
-    this.ws$.next ( this.ws )
-   
-    this.online$.subscribe( (obser) => {
-      console.log(obser)
-    })
-
-    this.ws$.subscribe ( (obser) => {
-      if ( obser.connected ) {
-        this.ws.sendMessage('whoisonline?')
-        this.ws.component = this
-      }
-      console.log(obser) 
-    });
 
     this.nextPage$.subscribe ( ()  => {
       console.log ('currentPage: ' + this.pageIndex)

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { User, UserFullInfo, UserPublic } from '../_model/User';
-import { Authorization } from '../_services/AuthrizationService'
 import { Constants as K } from '../_model/Constants'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { Http } from '../_services/http-service.service';
 
 @Component({
   selector: 'app-user-view',
@@ -14,10 +14,9 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class UserViewComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private coockie: CookieService) { }
+  constructor(private route: ActivatedRoute, private http: Http) { }
 
   user: UserFullInfo
-  auth = new Authorization(this.coockie, this.http)
   avatarPath: string
 
   ngOnInit(): void {
@@ -25,7 +24,7 @@ export class UserViewComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       let userID = params.get('userid')
       if (userID != '') {
-        this.getUserInfo(userID).subscribe(val => {
+        this.getUserInfo(userID).then( val => {
           this.user = val
           this.avatarPath = val.image
           console.log(val)
@@ -35,9 +34,9 @@ export class UserViewComponent implements OnInit {
 
   }
 
-  getUserInfo(userID: string): Observable<UserFullInfo> {
-    return this.http.get<UserFullInfo>(`${K.server}api/users/full?user_id=${userID}`, {
-      headers: { Authorization: this.auth.token }
+  getUserInfo(userID: string): Promise<UserFullInfo> {
+    return this.http.get<UserFullInfo>(`api/users/full?user_id=${userID}`).then ( (val) => { 
+      return val.body 
     })
   }
 
@@ -53,14 +52,9 @@ export class UserViewComponent implements OnInit {
     const data = new FormData()
     data.append('file', file[0])
 
-    this.http.post(`${K.server}api/users/avatar`, data, {
-      headers: new HttpHeaders({
-        'Authorization': this.auth.token
-      })
-    }).subscribe ( (val: UserPublic) => {
+    this.http.post<UserPublic> (`api/users/avatar`,null,data ).then ( (val) => {
       console.log ( val );
       window.location.reload();
-      //this.user.image = val.image
     })
 
   }

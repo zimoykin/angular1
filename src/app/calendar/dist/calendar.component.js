@@ -10,13 +10,10 @@ exports.CalendarComponent = void 0;
 var core_1 = require("@angular/core");
 var Month_1 = require("../_model/Month");
 var Constants_1 = require("../_model/Constants");
-var AuthrizationService_1 = require("../_services/AuthrizationService");
 var CalendarComponent = /** @class */ (function () {
-    function CalendarComponent(http, cookie) {
+    function CalendarComponent(http) {
         this.http = http;
-        this.cookie = cookie;
         this.$dt = new Date();
-        this.auth = new AuthrizationService_1.Authorization(this.cookie, this.http);
     }
     CalendarComponent.prototype.ngOnInit = function () {
         this.GetBuildThisMonth();
@@ -31,13 +28,9 @@ var CalendarComponent = /** @class */ (function () {
     };
     CalendarComponent.prototype.getBlogsOnDay = function (date) {
         var _this = this;
-        this.http.get(Constants_1.Constants.server + "api/blogs/onday/" + date.prepareDateConvertToString(), {
-            headers: {
-                Authorization: this.auth.token
-            }
-        })
-            .subscribe(function (blogs) {
-            _this.blogs = blogs;
+        this.http.get("api/blogs/onday/" + date.prepareDateConvertToString())
+            .then(function (val) {
+            _this.blogs = val.body;
         });
     };
     CalendarComponent.prototype.GetBuildThisMonth = function () {

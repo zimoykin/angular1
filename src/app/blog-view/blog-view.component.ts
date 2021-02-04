@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { BehaviorSubject, Observable, Subject } from 'rxjs'
-import { Authorization } from '../_services/AuthrizationService'
 import { HttpClient } from '@angular/common/http'
 import { CookieService } from 'ngx-cookie-service'
 import { Constants as K } from '../_model/Constants'
 import { BlogModel } from '../_model/BlogModel'
-import { Http, Param } from '../_services/httpClient'
+import { Http, Param } from '../_services/http-service.service'
 import { map } from 'rxjs/operators'
+import { WebsocketService } from '../_services/websocket.service'
+import { UserPublic } from '../_model/User'
 
 @Component({
   selector: 'app-blog-view',
@@ -16,15 +17,17 @@ import { map } from 'rxjs/operators'
 })
 export class BlogViewComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private httpClient: HttpClient, private cookieService: CookieService) { }
-  auth = new Authorization(this.cookieService, this.httpClient)
-  http = new Http(this.cookieService, this.httpClient)
+  constructor(
+    private route: ActivatedRoute, 
+    private httpClient: Http,
+    private ws: WebsocketService) { }
 
   blog$: Subject<BlogModel> = new BehaviorSubject(undefined)
   blogid: string
   imageList$: Subject<[string]> = new BehaviorSubject([''])
   isLoaded$: Subject<boolean> = new BehaviorSubject(false)
   userID: Observable<string>
+  onlineUsers: [UserPublic]
 
 
   ngOnInit() {
@@ -34,10 +37,16 @@ export class BlogViewComponent implements OnInit {
       obser.next(localStorage.getItem('user_id'))
     })
 
+    this.ws.online$.subscribe ( (obser) => {
+      if (obser != undefined) {
+        this.onlineUsers = obser
+      }
+    });
+
     this.route.paramMap.subscribe((val) => {
       this.blogid = val.get('blogid')
 
-      this.http.get<BlogModel>(`api/blogs/id`,
+      this.httpClient.get<BlogModel>(`api/blogs/id`,
         [
           new Param('blogid', this.blogid)
         ]
@@ -85,7 +94,7 @@ export class BlogViewComponent implements OnInit {
 
   getImages () {
 
-    this.http.get<[string]>(`api/blogs/images/list`, 
+    this.httpClient.get<[string]>(`api/blogs/images/list`, 
     [
       new Param('blogid',  this.blogid )
     ])
@@ -97,6 +106,14 @@ export class BlogViewComponent implements OnInit {
 
   isMobile() {
     return K.isMobile()
+  }
+
+
+  userOnline (userid: string) : boolean {
+    console.log('is online? ' + userid) 
+    return this.onlineUsers.filter( (val) => {
+      return val.id == userid
+    }).length > 0
   }
 
 }

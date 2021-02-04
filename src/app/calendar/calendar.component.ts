@@ -3,8 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { BlogModel } from '../_model/BlogModel';
 import { Day, Month, Week } from '../_model/Month';
 import { Constants as K } from '../_model/Constants'
-import { Authorization } from '../_services/AuthrizationService' 
-import { CookieService } from 'ngx-cookie-service';
+import { Http } from '../_services/http-service.service';
 
 @Component({
   selector: 'app-calendar',
@@ -16,9 +15,11 @@ export class CalendarComponent implements OnInit {
   month: Month
   blogs: [BlogModel]
   $dt = new Date()
-  auth: Authorization = new Authorization(this.cookie, this.http)
 
-  constructor( private http: HttpClient, private cookie: CookieService ) { }
+
+  constructor( 
+    private http: Http 
+  ) { }
 
   ngOnInit(): void {
     this.GetBuildThisMonth()
@@ -36,12 +37,9 @@ export class CalendarComponent implements OnInit {
 
   getBlogsOnDay (date: Date) {
 
-    this.http.get<[BlogModel]>(`${K.server}api/blogs/onday/${date.prepareDateConvertToString()}`, { 
-      headers: {
-        Authorization: this.auth.token
-      }})
-      .subscribe ( blogs => {
-        this.blogs = blogs
+    this.http.get<[BlogModel]>(`api/blogs/onday/${date.prepareDateConvertToString()}`)
+      .then ( val => {
+        this.blogs = val.body
       }
     )
   }

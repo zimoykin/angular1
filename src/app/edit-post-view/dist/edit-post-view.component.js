@@ -43,34 +43,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.EditPostViewComponent = void 0;
-var http_1 = require("@angular/common/http");
 var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
 var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
-var AuthrizationService_1 = require("../_services/AuthrizationService");
 var Constants_1 = require("../_model/Constants");
 var resizeImage_1 = require("../_services/resizeImage");
+var environment_1 = require("src/environments/environment");
 var EditPostViewComponent = /** @class */ (function () {
-    function EditPostViewComponent(route, httpClient, cookieService, sanitizer) {
+    function EditPostViewComponent(route, httpClient, sanitizer) {
         this.route = route;
         this.httpClient = httpClient;
-        this.cookieService = cookieService;
         this.sanitizer = sanitizer;
         this.imagePathPlanet = Constants_1.Constants.imagePath;
         this.uploadProgress$ = new rxjs_1.BehaviorSubject(0);
         this.myControlPlace = new forms_1.FormControl();
         this.myControlCountry = new forms_1.FormControl();
-        this.imagePreview$ = new rxjs_1.BehaviorSubject(Constants_1.Constants.server + "images/system/imageSelect.jpg");
-        this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
+        this.imagePreview$ = new rxjs_1.BehaviorSubject(environment_1.environment.server + "images/system/imageSelect.jpg");
     }
     EditPostViewComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.httpClient.get(Constants_1.Constants.server + "api/countries", {
-            headers: { Authorization: this.auth.token }
-        }).subscribe(function (countries) {
-            console.log(countries);
-            _this.countries = countries;
+        this.httpClient.get("api/countries")
+            .then(function (val) {
+            console.log(val.body);
+            _this.countries = val.body;
             _this.filteredCountry = _this.myControlCountry.valueChanges
                 .pipe(operators_1.startWith(''), operators_1.map(function (value) { return _this._filterCountry(value); }));
             _this.places = new Array();
@@ -87,42 +83,23 @@ var EditPostViewComponent = /** @class */ (function () {
             _this.route.paramMap.subscribe(function (param) {
                 obser.next(param.get('blogid'));
             });
-        }).subscribe(function (val) {
+        })
+            .subscribe(function (val) {
             if (val != 'new') {
-                if (_this.auth.isJwtOk) {
-                    _this.uploadProgress$.next(1);
-                    _this.httpClient.get(Constants_1.Constants.server + "api/blogs/id?blogid=" + val, {
-                        headers: { Authorization: _this.auth.token }
-                    })
-                        .subscribe(function (blogObject) {
-                        console.log(blogObject);
-                        _this.blogObj = blogObject;
-                        document.getElementById('place').value = blogObject.place.title;
-                        document.getElementById('country').value = blogObject.place.country.title;
-                        _this.placeid = blogObject.place.id;
-                        _this.countryid = blogObject.place.country.id;
-                        _this.uploadProgress$.next(0);
-                        console.log(blogObject.image);
-                        if (blogObject.image != '') {
-                            _this.imagePreview$.next(blogObject.image);
-                        }
-                    });
-                }
-            }
-            else {
-                console.log('unlock view');
-                _this.uploadProgress$.next(0);
-                if (localStorage.getItem('blog')) {
-                    var draft = JSON.parse(localStorage.getItem('blog'));
-                    var title = document.getElementById('title');
-                    title.value = draft.title;
-                    var description = document.getElementById('description');
-                    description.value = draft.description;
-                    var place = document.getElementById('place');
-                    place.value = draft.place;
-                    var tags = document.getElementById('tags');
-                    tags.value = draft.tags;
-                }
+                _this.uploadProgress$.next(1);
+                _this.httpClient.get("api/blogs/id?blogid=" + val)
+                    .then(function (val) {
+                    _this.blogObj = val.body;
+                    document.getElementById('place').value = val.body.place.title;
+                    document.getElementById('country').value = val.body.place.country.title;
+                    _this.placeid = val.body.place.id;
+                    _this.countryid = val.body.place.country.id;
+                    _this.uploadProgress$.next(0);
+                    console.log(val.body.image);
+                    if (val.body.image != '') {
+                        _this.imagePreview$.next(val.body.image);
+                    }
+                });
             }
         });
     };
@@ -139,24 +116,19 @@ var EditPostViewComponent = /** @class */ (function () {
     };
     EditPostViewComponent.prototype.save = function (title, description, tags) {
         return __awaiter(this, void 0, void 0, function () {
-            var headers;
             var _this = this;
             return __generator(this, function (_a) {
-                headers = new http_1.HttpHeaders({
-                    'Authorization': this.auth.token,
-                    'Content-Type': 'application/json'
-                });
                 console.log(this.file);
                 this.uploadProgress$.next(this.files != undefined ? this.files.length : 1);
                 if (this.blogObj != null) {
-                    this.httpClient.put(Constants_1.Constants.server + "api/blogs?blogid=" + this.blogObj.id, JSON.stringify({
+                    this.httpClient.put("api/blogs?blogid=" + this.blogObj.id, JSON.stringify({
                         title: title, description: description, placeId: this.placeid, tags: tags
-                    }), { headers: headers })
-                        .subscribe(function (blog) { return __awaiter(_this, void 0, void 0, function () {
+                    }))
+                        .then(function (val) { return __awaiter(_this, void 0, void 0, function () {
                         var _this = this;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, this.uploadFiles(blog).then(function () {
+                                case 0: return [4 /*yield*/, this.uploadFiles(val.body).then(function () {
                                         _this.uploadProgress$.next(0);
                                         window.location.href = '/home';
                                     })];
@@ -168,14 +140,12 @@ var EditPostViewComponent = /** @class */ (function () {
                     }); });
                 }
                 else {
-                    this.httpClient.post(Constants_1.Constants.server + "api/blogs/", JSON.stringify({
-                        title: title, description: description, placeId: this.placeid, tags: tags
-                    }), { headers: headers })
-                        .subscribe(function (blog) { return __awaiter(_this, void 0, void 0, function () {
+                    this.httpClient.post("api/blogs/", JSON.stringify({ title: title, description: description, placeId: this.placeid, tags: tags }))
+                        .then(function (resp) { return __awaiter(_this, void 0, void 0, function () {
                         var _this = this;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, this.uploadFiles(blog).then(function () {
+                                case 0: return [4 /*yield*/, this.uploadFiles(resp.body).then(function () {
                                         _this.uploadProgress$.next(0);
                                         window.location.href = '/home';
                                     })];
@@ -236,18 +206,9 @@ var EditPostViewComponent = /** @class */ (function () {
     EditPostViewComponent.prototype["delete"] = function () {
         if (confirm("Are you sure to delete blog?")) {
             console.log("delete confirmed here");
-            this.httpClient["delete"](Constants_1.Constants.server + "api/blogs?blogid=" + this.blogObj.id, {
-                observe: 'response',
-                headers: this.auth.jwtHeader()
-            })
-                .subscribe(function (response) {
+            this.httpClient["delete"]("api/blogs?blogid=" + this.blogObj.id)
+                .then(function (response) {
                 console.log(response);
-                if (response.status == 200) {
-                    window.location.href = '/home';
-                }
-                else {
-                    alert(response.statusText);
-                }
             });
         }
     };
@@ -266,7 +227,7 @@ var EditPostViewComponent = /** @class */ (function () {
                             var data = new FormData();
                             data.append('file', resizedFile);
                             data.append('filename', file.name);
-                            _this.httpClient.post(Constants_1.Constants.server + "api/blogs/uploads?blogid=" + blogid + "&asMain=" + asMain, data, { headers: _this.auth.jwtHeader() }).subscribe(function (val) {
+                            _this.httpClient.post("api/blogs/uploads?blogid=" + blogid + "&asMain=" + asMain, null, data).then(function (val) {
                                 console.log(val);
                                 response();
                             });

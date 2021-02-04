@@ -45,16 +45,11 @@ exports.__esModule = true;
 exports.PlaceViewShortComponent = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
-var Constants_1 = require("../_model/Constants");
-var AuthrizationService_1 = require("../_services/AuthrizationService");
-var httpClient_1 = require("../_services/httpClient");
+var environment_1 = require("src/environments/environment");
 var PlaceViewShortComponent = /** @class */ (function () {
-    function PlaceViewShortComponent(cookie, httpclient) {
-        this.cookie = cookie;
-        this.httpclient = httpclient;
-        this.imagePreview$ = new rxjs_1.BehaviorSubject(Constants_1.Constants.server + "images/system/world-map.png");
-        this.auth = new AuthrizationService_1.Authorization(this.cookie, this.httpclient);
-        this.http = new httpClient_1.Http(this.cookie, this.httpclient);
+    function PlaceViewShortComponent(http) {
+        this.http = http;
+        this.imagePreview$ = new rxjs_1.BehaviorSubject(environment_1.environment.server + "images/system/world-map.png");
     }
     PlaceViewShortComponent.prototype.ngOnInit = function () {
         if (this.place.image != undefined) {

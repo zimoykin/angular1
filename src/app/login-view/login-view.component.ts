@@ -4,9 +4,9 @@ import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { HeaderComponent } from '../header/header.component';
 import { User, UserFullInfo } from '../_model/User';
-import { Authorization } from '../_services/AuthrizationService';
 import { Constants as K } from '../_model/Constants'
-import { Http, Param } from '../_services/httpClient';
+import { Http, Param } from '../_services/http-service.service';
+import { Auth } from '../_services/authorization-service.service';
 
 @Component({
   selector: 'app-login-view',
@@ -15,10 +15,11 @@ import { Http, Param } from '../_services/httpClient';
 })
 export class LoginViewComponent implements OnInit {
 
-  constructor(private httpClient: HttpClient, private cookieService: CookieService) { }
+  constructor(
+    private http: Http,
+    private auth: Auth
+    ) { }
 
-  auth = new Authorization(this.cookieService, this.httpClient)
-  http = new Http (this.cookieService, this.httpClient)
   logined: string
   username: string
   imagePath$: Subject<string> = new BehaviorSubject ('')
@@ -31,7 +32,7 @@ export class LoginViewComponent implements OnInit {
       this.logined = localStorage.getItem('user_id')
       this.username = localStorage.getItem('username')
 
-      this.http.get<UserFullInfo> (`${K.server}api/users/full`, [new Param('user_id', this.logined)])
+      this.http.get<UserFullInfo> (`api/users/full`, [new Param('user_id', this.logined)])
       .then ( val => {
         this.imagePath$.next ( val.body.image )
       })

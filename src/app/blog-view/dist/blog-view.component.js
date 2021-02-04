@@ -9,16 +9,13 @@ exports.__esModule = true;
 exports.BlogViewComponent = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
-var AuthrizationService_1 = require("../_services/AuthrizationService");
 var Constants_1 = require("../_model/Constants");
-var httpClient_1 = require("../_services/httpClient");
+var http_service_service_1 = require("../_services/http-service.service");
 var BlogViewComponent = /** @class */ (function () {
-    function BlogViewComponent(route, httpClient, cookieService) {
+    function BlogViewComponent(route, httpClient, ws) {
         this.route = route;
         this.httpClient = httpClient;
-        this.cookieService = cookieService;
-        this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
-        this.http = new httpClient_1.Http(this.cookieService, this.httpClient);
+        this.ws = ws;
         this.blog$ = new rxjs_1.BehaviorSubject(undefined);
         this.imageList$ = new rxjs_1.BehaviorSubject(['']);
         this.isLoaded$ = new rxjs_1.BehaviorSubject(false);
@@ -29,10 +26,15 @@ var BlogViewComponent = /** @class */ (function () {
             console.log(localStorage.getItem('user_id'));
             obser.next(localStorage.getItem('user_id'));
         });
+        this.ws.online$.subscribe(function (obser) {
+            if (obser != undefined) {
+                _this.onlineUsers = obser;
+            }
+        });
         this.route.paramMap.subscribe(function (val) {
             _this.blogid = val.get('blogid');
-            _this.http.get("api/blogs/id", [
-                new httpClient_1.Param('blogid', _this.blogid)
+            _this.httpClient.get("api/blogs/id", [
+                new http_service_service_1.Param('blogid', _this.blogid)
             ]).then(function (response) {
                 _this.blog$.next(response.body);
                 _this.isLoaded$.next(true);
@@ -73,8 +75,8 @@ var BlogViewComponent = /** @class */ (function () {
     };
     BlogViewComponent.prototype.getImages = function () {
         var _this = this;
-        this.http.get("api/blogs/images/list", [
-            new httpClient_1.Param('blogid', this.blogid)
+        this.httpClient.get("api/blogs/images/list", [
+            new http_service_service_1.Param('blogid', this.blogid)
         ])
             .then(function (response) {
             console.log(response);
@@ -83,6 +85,12 @@ var BlogViewComponent = /** @class */ (function () {
     };
     BlogViewComponent.prototype.isMobile = function () {
         return Constants_1.Constants.isMobile();
+    };
+    BlogViewComponent.prototype.userOnline = function (userid) {
+        console.log('is online? ' + userid);
+        return this.onlineUsers.filter(function (val) {
+            return val.id == userid;
+        }).length > 0;
     };
     BlogViewComponent = __decorate([
         core_1.Component({

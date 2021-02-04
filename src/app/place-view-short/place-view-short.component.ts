@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, from, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { BlogModel, Place } from '../_model/BlogModel';
 import { Constants as K } from '../_model/Constants'
-import { Authorization } from '../_services/AuthrizationService';
-import { Http, Param, Resp } from '../_services/httpClient';
+import { Http, Param } from '../_services/http-service.service';
 
 @Component({
   selector: 'app-place-view-short',
@@ -16,11 +16,10 @@ export class PlaceViewShortComponent implements OnInit {
 
   @Input() place: Place
   isload: false
-  imagePreview$ : Subject<string> = new BehaviorSubject(`${K.server}images/system/world-map.png`);
-  auth = new Authorization (this.cookie, this.httpclient)
-  http = new Http (this.cookie, this.httpclient)
+  imagePreview$ : Subject<string> = new BehaviorSubject(`${environment.server}images/system/world-map.png`);
 
-  constructor(private cookie: CookieService, private httpclient: HttpClient) { }
+
+  constructor(private http: Http) { }
 
   ngOnInit() : void {
     if ( this.place.image != undefined ) {

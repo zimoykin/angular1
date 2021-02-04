@@ -1,17 +1,15 @@
-import { HttpClient, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, SecurityContext } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { BlogDraft, BlogModel, Country, Place } from '../_model/BlogModel'
-import { Authorization } from '../_services/AuthrizationService'
+import { BlogModel, Country, Place } from '../_model/BlogModel'
 import { Constants as K } from '../_model/Constants'
 import { DomSanitizer } from '@angular/platform-browser';
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { ImageSearch } from '@material-ui/icons';
 import { ImageService } from '../_services/resizeImage';
+import { Http } from '../_services/http-service.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-edit-post-view',
@@ -40,18 +38,21 @@ export class EditPostViewComponent implements OnInit {
   filteredCountry: Observable<Country[]>
   selected: string
 
-  imagePreview$: Subject<string> = new BehaviorSubject(`${K.server}images/system/imageSelect.jpg`);
+  imagePreview$: Subject<string> = new BehaviorSubject(`${environment.server}images/system/imageSelect.jpg`);
 
-  constructor(private route: ActivatedRoute, private httpClient: HttpClient, private cookieService: CookieService, private sanitizer: DomSanitizer) { }
-  auth = new Authorization(this.cookieService, this.httpClient)
+  constructor(
+    private route: ActivatedRoute, 
+    private httpClient: Http, 
+    private sanitizer: DomSanitizer) { }
+
 
   ngOnInit(): void {
 
-    this.httpClient.get<Country[]>(`${K.server}api/countries`, {
-      headers: { Authorization: this.auth.token }
-    }).subscribe(countries => {
-      console.log(countries)
-      this.countries = countries
+    this.httpClient.get<Country[]>(
+      `api/countries`)
+      .then( (val)  => {
+      console.log(val.body)
+      this.countries = val.body
       this.filteredCountry = this.myControlCountry.valueChanges
         .pipe(
           startWith(''),
@@ -80,48 +81,30 @@ export class EditPostViewComponent implements OnInit {
       this.route.paramMap.subscribe((param) => {
         obser.next(param.get('blogid'))
       })
-    }).subscribe((val) => {
+    })
+    .subscribe((val) => {
       if (val != 'new') {
-        if (this.auth.isJwtOk) {
+  
           this.uploadProgress$.next (1)
-          this.httpClient.get<BlogModel>(`${K.server}api/blogs/id?blogid=${val}`,
-            {
-              headers:
-                { Authorization: this.auth.token }
-            })
-            .subscribe((blogObject: BlogModel) => {
-              console.log(blogObject)
-              this.blogObj = blogObject;
-              (<HTMLInputElement>document.getElementById('place')).value = blogObject.place.title;
-              (<HTMLInputElement>document.getElementById('country')).value = blogObject.place.country.title;
-              this.placeid = blogObject.place.id
-              this.countryid = blogObject.place.country.id
+
+          this.httpClient.get<BlogModel>(`api/blogs/id?blogid=${val}`)
+            .then( (val) => {
+            
+              this.blogObj = val.body;
+              (<HTMLInputElement>document.getElementById('place')).value = val.body.place.title;
+              (<HTMLInputElement>document.getElementById('country')).value = val.body.place.country.title;
+              this.placeid = val.body.place.id
+              this.countryid = val.body.place.country.id
               this.uploadProgress$.next (0)
-              console.log(blogObject.image)
-              if (blogObject.image != '') {
-                this.imagePreview$.next(blogObject.image)
+              console.log(val.body.image)
+              if (val.body.image != '') {
+                this.imagePreview$.next(val.body.image)
               }
             })
-        }
-      } else {
-        console.log('unlock view')
-        this.uploadProgress$.next (0)
-        if (localStorage.getItem('blog')) {
-          let draft = JSON.parse(localStorage.getItem('blog')) as BlogDraft
-          let title = document.getElementById('title') as HTMLInputElement
-          title.value = draft.title
-          let description = document.getElementById('description') as HTMLInputElement
-          description.value = draft.description
-          let place = document.getElementById('place') as HTMLInputElement
-          place.value = draft.place
-          let tags = document.getElementById('tags') as HTMLInputElement
-          tags.value = draft.tags
-        }
-      }
-    })
-
-
+          }}
+      )
   }
+
 
   getTags(blog: BlogModel): string { return '#' + blog.tags.join(' #') }
 
@@ -138,23 +121,18 @@ export class EditPostViewComponent implements OnInit {
 
   async save(title: string, description: string, tags: string) {
 
-    const headers = new HttpHeaders({
-      'Authorization': this.auth.token,
-      'Content-Type': 'application/json'
-    })
-
     console.log(this.file)
     this.uploadProgress$.next ( this.files != undefined ? this.files.length : 1 )
 
     if (this.blogObj != null) {
 
-      this.httpClient.put<BlogModel>(`${K.server}api/blogs?blogid=${this.blogObj.id}`,
+      this.httpClient.put<BlogModel>(`api/blogs?blogid=${this.blogObj.id}`,
         JSON.stringify({
           title: title, description: description, placeId: this.placeid, tags: tags
-        }),
-        { headers: headers })
-        .subscribe( async (blog) => {
-          await this.uploadFiles(blog).then ( () => {
+        })
+        )
+        .then( async (val) => {
+          await this.uploadFiles(val.body).then ( () => {
             this.uploadProgress$.next(0)
             window.location.href = '/home'
           })
@@ -162,11 +140,12 @@ export class EditPostViewComponent implements OnInit {
 
     } else {
       
-      this.httpClient.post<BlogModel>(`${K.server}api/blogs/`, JSON.stringify({
-        title: title, description: description, placeId: this.placeid, tags: tags
-      }), { headers: headers })
-        .subscribe( async (blog) => {
-          await this.uploadFiles(blog).then ( () => {
+      this.httpClient.post<BlogModel>(
+        `api/blogs/`, 
+        JSON.stringify({title: title, description: description, placeId: this.placeid, tags: tags})
+        )
+        .then( async (resp) => {
+          await this.uploadFiles(resp.body).then ( () => {
             this.uploadProgress$.next(0)
             window.location.href = '/home'
           })
@@ -198,19 +177,10 @@ export class EditPostViewComponent implements OnInit {
   delete() {
     if (confirm("Are you sure to delete blog?")) {
       console.log("delete confirmed here");
-      this.httpClient.delete(`${K.server}api/blogs?blogid=${this.blogObj.id}`,
-        {
-          observe: 'response',
-          headers: this.auth.jwtHeader()
-        }
+      this.httpClient.delete (`api/blogs?blogid=${this.blogObj.id}`
       )
-        .subscribe(response => {
+        .then(response => {
           console.log(response)
-          if (response.status == 200) {
-            window.location.href = '/home'
-          } else {
-            alert(response.statusText)
-          }
         })
 
     }
@@ -231,10 +201,11 @@ export class EditPostViewComponent implements OnInit {
             const data = new FormData();
             data.append('file', resizedFile);
             data.append('filename', file.name);
-            this.httpClient.post<BlogModel>(`${K.server}api/blogs/uploads?blogid=${blogid}&asMain=${asMain}`,
+            this.httpClient.post<BlogModel>(
+              `api/blogs/uploads?blogid=${blogid}&asMain=${asMain}`,
+              null,
               data, 
-              { headers: this.auth.jwtHeader() }
-              ).subscribe( (val) => {
+              ).then( (val) => {
                   console.log(val);
                   response()
                 }

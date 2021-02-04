@@ -9,15 +9,12 @@ exports.__esModule = true;
 exports.LoginViewComponent = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
-var AuthrizationService_1 = require("../_services/AuthrizationService");
 var Constants_1 = require("../_model/Constants");
-var httpClient_1 = require("../_services/httpClient");
+var http_service_service_1 = require("../_services/http-service.service");
 var LoginViewComponent = /** @class */ (function () {
-    function LoginViewComponent(httpClient, cookieService) {
-        this.httpClient = httpClient;
-        this.cookieService = cookieService;
-        this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
-        this.http = new httpClient_1.Http(this.cookieService, this.httpClient);
+    function LoginViewComponent(http, auth) {
+        this.http = http;
+        this.auth = auth;
         this.imagePath$ = new rxjs_1.BehaviorSubject('');
         this.mode = 'login';
     }
@@ -26,7 +23,7 @@ var LoginViewComponent = /** @class */ (function () {
         if (localStorage.getItem('user_id')) {
             this.logined = localStorage.getItem('user_id');
             this.username = localStorage.getItem('username');
-            this.http.get(Constants_1.Constants.server + "api/users/full", [new httpClient_1.Param('user_id', this.logined)])
+            this.http.get("api/users/full", [new http_service_service_1.Param('user_id', this.logined)])
                 .then(function (val) {
                 _this.imagePath$.next(val.body.image);
             });

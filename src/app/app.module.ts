@@ -34,8 +34,6 @@ import { LoaderViewComponent } from './loader-view/loader-view.component';
 import { PlaceViewShortComponent } from './place-view-short/place-view-short.component';
 import { EmotionViewComponent } from './emotion-view/emotion-view.component';
 import { AgmCoreModule } from '@agm/core';
-import { Constants as K } from '../app/_model/Constants'
-import { WebsocketService } from './websocket.service';
 
 
 
@@ -83,7 +81,7 @@ import { WebsocketService } from './websocket.service';
       apiKey: ``
     })
   ],
-  providers: [WebsocketService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

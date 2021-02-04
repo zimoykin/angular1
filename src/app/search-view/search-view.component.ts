@@ -1,11 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
-import { BlogModel } from '../_model/BlogModel';
-import { Authorization } from '../_services/AuthrizationService';
 import { Constants as K } from '../_model/Constants'
 import { Page } from '../_model/Pagination';
+import { Http, Param } from '../_services/http-service.service';
 
 @Component({
   selector: 'app-search-view',
@@ -14,24 +11,28 @@ import { Page } from '../_model/Pagination';
 })
 export class SearchViewComponent implements OnInit {
 
+  constructor(
+    private route: ActivatedRoute, 
+    private http: Http, 
+  ) { }
 
-  constructor(private route: ActivatedRoute, private httpClient: HttpClient, private cookieService: CookieService) { }
-  auth = new Authorization(this.cookieService, this.httpClient)
 
   list: String[] = []
   isLoaded: boolean = false
   tag: string
 
-
   ngOnInit(): void {
+
     this.route.paramMap.subscribe((param) => {
-      this.httpClient.get <Page<String>> (`${K.server}api/search/blogs?value=${param.get('value')}`, 
-      { headers: this.auth.jwtHeader() })
-        .subscribe(val => { 
-          this.list = val.items
-          this.isLoaded = true
-        })
+      this.http.get <Page<String>> (
+        `api/search/blogs}`, 
+         [new Param('value', param.get('value'))] 
+      ).then ( (val) => {
+        this.list = val.body.items
+        this.isLoaded = true
+      })        
     })
+
   }
 
 }

@@ -10,15 +10,11 @@ exports.TagsViewComponent = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
 var Constants_1 = require("../_model/Constants");
-var AuthrizationService_1 = require("../_services/AuthrizationService");
-var httpClient_1 = require("../_services/httpClient");
+var http_service_service_1 = require("../_services/http-service.service");
 var TagsViewComponent = /** @class */ (function () {
-    function TagsViewComponent(route, httpClient, cookieService) {
+    function TagsViewComponent(route, httpClient) {
         this.route = route;
         this.httpClient = httpClient;
-        this.cookieService = cookieService;
-        this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
-        this.http = new httpClient_1.Http(this.cookieService, this.httpClient);
         this.list = new rxjs_1.BehaviorSubject(['']);
         this.isLoaded = false;
         this.nextPage$ = new rxjs_1.BehaviorSubject(undefined);
@@ -37,7 +33,7 @@ var TagsViewComponent = /** @class */ (function () {
         this.route.paramMap.subscribe(function (param) {
             _this.nextPage$.next();
             _this.nextPage$.subscribe(function () {
-                _this.http.get("api/search/tag", [new httpClient_1.Param('tag', param.get('tag'))])
+                _this.httpClient.get("api/search/tag", [new http_service_service_1.Param('tag', param.get('tag'))])
                     .then(function (response) {
                     _this.list.next(response.body.items);
                     _this.isLoaded = true;

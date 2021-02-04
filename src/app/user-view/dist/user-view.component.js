@@ -8,22 +8,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.UserViewComponent = void 0;
 var core_1 = require("@angular/core");
-var AuthrizationService_1 = require("../_services/AuthrizationService");
-var Constants_1 = require("../_model/Constants");
-var http_1 = require("@angular/common/http");
 var UserViewComponent = /** @class */ (function () {
-    function UserViewComponent(route, http, coockie) {
+    function UserViewComponent(route, http) {
         this.route = route;
         this.http = http;
-        this.coockie = coockie;
-        this.auth = new AuthrizationService_1.Authorization(this.coockie, this.http);
     }
     UserViewComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.route.paramMap.subscribe(function (params) {
             var userID = params.get('userid');
             if (userID != '') {
-                _this.getUserInfo(userID).subscribe(function (val) {
+                _this.getUserInfo(userID).then(function (val) {
                     _this.user = val;
                     _this.avatarPath = val.image;
                     console.log(val);
@@ -32,8 +27,8 @@ var UserViewComponent = /** @class */ (function () {
         });
     };
     UserViewComponent.prototype.getUserInfo = function (userID) {
-        return this.http.get(Constants_1.Constants.server + "api/users/full?user_id=" + userID, {
-            headers: { Authorization: this.auth.token }
+        return this.http.get("api/users/full?user_id=" + userID).then(function (val) {
+            return val.body;
         });
     };
     UserViewComponent.prototype.fileBrowseHandler = function (files) {
@@ -43,14 +38,9 @@ var UserViewComponent = /** @class */ (function () {
         console.log(file[0]);
         var data = new FormData();
         data.append('file', file[0]);
-        this.http.post(Constants_1.Constants.server + "api/users/avatar", data, {
-            headers: new http_1.HttpHeaders({
-                'Authorization': this.auth.token
-            })
-        }).subscribe(function (val) {
+        this.http.post("api/users/avatar", null, data).then(function (val) {
             console.log(val);
             window.location.reload();
-            //this.user.image = val.image
         });
     };
     UserViewComponent = __decorate([

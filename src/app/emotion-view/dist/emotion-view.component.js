@@ -45,15 +45,12 @@ exports.__esModule = true;
 exports.EmotionViewComponent = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
-var environment_1 = require("src/environments/environment");
 var Constants_1 = require("../_model/Constants");
-var AuthrizationService_1 = require("../_services/AuthrizationService");
-var httpClient_1 = require("../_services/httpClient");
+var http_service_service_1 = require("../_services/http-service.service");
 var EmotionViewComponent = /** @class */ (function () {
     //
-    function EmotionViewComponent(httpClient, cookieService) {
+    function EmotionViewComponent(httpClient) {
         this.httpClient = httpClient;
-        this.cookieService = cookieService;
         this.loaded = false;
         this.imagePathEmotions$ = new rxjs_1.BehaviorSubject(Constants_1.Constants.imageNoEmotion);
         this.emotions$ = new rxjs_1.BehaviorSubject(undefined);
@@ -62,12 +59,10 @@ var EmotionViewComponent = /** @class */ (function () {
         this.imageDislike = Constants_1.Constants.imageDislike;
         this.imageReport = Constants_1.Constants.imageReport;
         this.imageNoEmotion = Constants_1.Constants.imageNoEmotion;
-        this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
-        this.http = new httpClient_1.Http(this.cookieService, this.httpClient);
     }
     EmotionViewComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.http.get("api/emotions", [new httpClient_1.Param('blogid', this.blogid)])
+        this.httpClient.get("api/emotions", [new http_service_service_1.Param('blogid', this.blogid)])
             .then(function (response) {
             _this.loaded = true;
             _this.emotions$.next(response.body);
@@ -103,11 +98,8 @@ var EmotionViewComponent = /** @class */ (function () {
     EmotionViewComponent.prototype.clickLike = function (emotion) {
         var _this = this;
         console.log(emotion);
-        this.httpClient.post(environment_1.environment.server + "api/emotions/set?blogid=" + this.blogid + "&emotion=" + emotion, null, {
-            observe: 'response',
-            headers: this.auth.jwtHeader()
-        })
-            .subscribe(function (response) {
+        this.httpClient.post("api/emotions/set?blogid=" + this.blogid + "&emotion=" + emotion)
+            .then(function (response) {
             if (response.status == 200) {
                 console.log("got it!");
                 _this.emotions$.next(response.body);

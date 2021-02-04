@@ -8,20 +8,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.HeaderComponent = void 0;
 var core_1 = require("@angular/core");
-var AuthrizationService_1 = require("../_services/AuthrizationService");
 var rxjs_1 = require("rxjs");
 var Constants_1 = require("../_model/Constants");
 var router_1 = require("@angular/router");
 var operators_1 = require("rxjs/operators");
 var HeaderComponent = /** @class */ (function () {
-    function HeaderComponent(router, httpClient, cookieService) {
+    function HeaderComponent(router, httpClient) {
         this.router = router;
         this.httpClient = httpClient;
-        this.cookieService = cookieService;
         this.navElement = null;
         this.showPanelLogin = false;
         this.showMenu = false;
-        this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
     }
     HeaderComponent.prototype.ngAfterViewInit = function () {
         this.navElement = document.getElementById('navbar');
@@ -83,15 +80,14 @@ var HeaderComponent = /** @class */ (function () {
         console.log('show nav panel');
         return this.showPanelLogin ? '45' : '0';
     };
-    HeaderComponent.prototype.login = function (login, password) {
-        var _this = this;
-        this.auth.authorize(login.value, password.value).subscribe(function (val) {
-            _this.loginName = new rxjs_1.Observable(function (obser) {
-                obser.next(val.username);
-            });
-            _this.showPanelLogin = false;
-        });
-    };
+    // login(login, password) {
+    //   this.auth.authorize(login.value, password.value).subscribe((val: User) => {
+    //     this.loginName = new Observable<string>((obser) => {
+    //       obser.next(val.username)
+    //     })
+    //     this.showPanelLogin = false
+    //   })
+    // }
     HeaderComponent.prototype.isMobile = function () {
         return Constants_1.Constants.isMobile();
     };

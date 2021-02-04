@@ -1,12 +1,12 @@
 import { Component, HostListener, ElementRef, ViewChild, OnInit } from '@angular/core'
 import { HttpClient, HttpHeaders, HttpResponseBase } from '@angular/common/http'
 import { CookieService } from 'ngx-cookie-service'
-import { Authorization } from '../_services/AuthrizationService'
 import { Observable } from 'rxjs'
 import { User } from '../_model/User'
 import { Constants as K, ElemntMenu} from '../_model/Constants'
 import { NavigationEnd, NavigationStart, Router as R, RouterEvent } from '@angular/router'
 import { filter } from 'rxjs/operators'
+import { Http } from '../_services/http-service.service'
 
 
 @Component({
@@ -21,11 +21,10 @@ export class HeaderComponent implements OnInit {
   loginName: Observable<string>
   showPanelLogin = false
   showMenu = false
-  auth = new Authorization(this.cookieService, this.httpClient)
   menu: Array<ElemntMenu>
   $routerSub: Observable<RouterEvent>
 
-  constructor( private router: R, private httpClient: HttpClient, private cookieService: CookieService) { }
+  constructor( private router: R, private httpClient: Http) { }
 
   ngAfterViewInit() {
     this.navElement = document.getElementById('navbar') as HTMLElement;
@@ -101,16 +100,16 @@ export class HeaderComponent implements OnInit {
     return this.showPanelLogin ? '45' : '0';
   }
 
-  login(login, password) {
-    this.auth.authorize(login.value, password.value).subscribe((val: User) => {
+  // login(login, password) {
+  //   this.auth.authorize(login.value, password.value).subscribe((val: User) => {
     
-      this.loginName = new Observable<string>((obser) => {
-        obser.next(val.username)
-      })
+  //     this.loginName = new Observable<string>((obser) => {
+  //       obser.next(val.username)
+  //     })
      
-      this.showPanelLogin = false
-    })
-  }
+  //     this.showPanelLogin = false
+  //   })
+  // }
 
   isMobile () : boolean {
     return K.isMobile()

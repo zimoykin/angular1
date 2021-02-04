@@ -8,8 +8,7 @@ import { map } from 'rxjs/operators';
 import { BlogModel } from '../_model/BlogModel';
 import { Constants as K } from '../_model/Constants'
 import { Page } from '../_model/Pagination';
-import { Authorization } from '../_services/AuthrizationService';
-import { Http, Param } from '../_services/httpClient';
+import { Http, Param } from '../_services/http-service.service';
 
 
 @Component({
@@ -19,9 +18,8 @@ import { Http, Param } from '../_services/httpClient';
 })
 export class TagsViewComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private httpClient: HttpClient, private cookieService: CookieService) { }
-  auth = new Authorization(this.cookieService, this.httpClient)
-  http = new Http(this.cookieService, this.httpClient)
+  constructor(private route: ActivatedRoute, private httpClient: Http) { }
+
   list: Subject<[string]> = new BehaviorSubject<[string]>(['']);
   isLoaded: boolean = false
   tag: string
@@ -44,7 +42,7 @@ export class TagsViewComponent implements OnInit {
       this.nextPage$.next()
 
       this.nextPage$.subscribe(() => {
-        this.http.get<Page<string>>("api/search/tag", [new Param('tag', param.get('tag'))])
+        this.httpClient.get<Page<string>>("api/search/tag", [new Param('tag', param.get('tag'))])
           .then(response => {
             this.list.next(response.body.items)
             this.isLoaded = true

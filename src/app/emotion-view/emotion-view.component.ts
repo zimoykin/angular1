@@ -6,8 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Emotions } from '../_model/BlogModel';
 import { Constants as K } from '../_model/Constants'
 import { Emotion } from '../_model/Emotion';
-import { Authorization } from '../_services/AuthrizationService';
-import { Http, Param } from '../_services/httpClient';
+import { Http, Param } from '../_services/http-service.service';
 
 @Component({
   selector: 'app-emotion-view',
@@ -29,14 +28,11 @@ export class EmotionViewComponent implements OnInit {
   imageNoEmotion = K.imageNoEmotion
   //
 
-  constructor(private httpClient: HttpClient, private cookieService: CookieService) { }
-  auth = new Authorization(this.cookieService, this.httpClient)
-  http = new Http (this.cookieService, this.httpClient)
-
+  constructor(private httpClient: Http) { }
 
   ngOnInit(): void {
 
-    this.http.get<[Emotions]> ( `api/emotions`, [ new Param ('blogid', this.blogid)])
+    this.httpClient.get<[Emotions]> ( `api/emotions`, [ new Param ('blogid', this.blogid)])
     .then ( response => {
       this.loaded = true
       this.emotions$.next ( response.body )
@@ -67,11 +63,8 @@ export class EmotionViewComponent implements OnInit {
 
   clickLike(emotion: string) {
     console.log(emotion)
-    this.httpClient.post<[Emotion]>(`${environment.server}api/emotions/set?blogid=${this.blogid}&emotion=${emotion}`, null, {
-        observe: 'response',
-        headers: this.auth.jwtHeader()
-    })
-    .subscribe(response => {
+    this.httpClient.post<[Emotion]>(`api/emotions/set?blogid=${this.blogid}&emotion=${emotion}`)
+    .then( (response) => {
         if (response.status == 200) {
             console.log("got it!")
             this.emotions$.next (response.body)

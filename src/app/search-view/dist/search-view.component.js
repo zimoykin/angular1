@@ -8,23 +8,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.SearchViewComponent = void 0;
 var core_1 = require("@angular/core");
-var AuthrizationService_1 = require("../_services/AuthrizationService");
-var Constants_1 = require("../_model/Constants");
+var http_service_service_1 = require("../_services/http-service.service");
 var SearchViewComponent = /** @class */ (function () {
-    function SearchViewComponent(route, httpClient, cookieService) {
+    function SearchViewComponent(route, http) {
         this.route = route;
-        this.httpClient = httpClient;
-        this.cookieService = cookieService;
-        this.auth = new AuthrizationService_1.Authorization(this.cookieService, this.httpClient);
+        this.http = http;
         this.list = [];
         this.isLoaded = false;
     }
     SearchViewComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.route.paramMap.subscribe(function (param) {
-            _this.httpClient.get(Constants_1.Constants.server + "api/search/blogs?value=" + param.get('value'), { headers: _this.auth.jwtHeader() })
-                .subscribe(function (val) {
-                _this.list = val.items;
+            _this.http.get("api/search/blogs}", [new http_service_service_1.Param('value', param.get('value'))]).then(function (val) {
+                _this.list = val.body.items;
                 _this.isLoaded = true;
             });
         });

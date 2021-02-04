@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
-import { Constants as K } from '../app/_model/Constants';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { UserPublic } from './_model/User';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Constants as K } from '../_model/Constants';
+import { UserPublic } from '../_model/User';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +10,16 @@ import { UserPublic } from './_model/User';
 export class WebsocketService {
 
   ws: WebSocket
-  connected: boolean
-  component: HomeComponent
+  online$: Subject<[UserPublic]> = new BehaviorSubject( undefined )
+  connected$: Subject<boolean> = new BehaviorSubject(false)
 
   listen() {
 
+    this.ws.send('whoisonline?')
+
     this.ws.onclose = (event) => {
       console.log(`ws closed ${event.code}`)
-      this.connected = false
+      this.connected$.next(false)
     }
 
     this.ws.onmessage = (event) => {
@@ -27,7 +27,7 @@ export class WebsocketService {
       try {
          if( JSON.parse(event.data) ) {
           let users = Object.assign([UserPublic.prototype], JSON.parse(event.data) );
-          this.component.online$.next ( users )
+          this.online$.next (users)
         }
       } catch (error) {
         console.log (error) 
@@ -49,7 +49,7 @@ export class WebsocketService {
     ws.onmessage = (event) => {
       if (event.data == 'welcome') {
         this.ws = ws
-        this.connected = true
+        this.connected$.next(true)
         this.listen()
       } else {
         console.log(event.data)
