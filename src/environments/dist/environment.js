@@ -4,9 +4,11 @@
 // The list of file replacements can be found in `angular.json`.
 exports.__esModule = true;
 exports.environment = void 0;
+var server = 'http://10.0.1.6:8000/';
 exports.environment = {
     production: false,
-    server: 'http://10.0.1.6:8000/'
+    server: server,
+    wsserver: server.replace('http', 'ws')
 };
 /*
  * For easier debugging in development mode, you can import the following file

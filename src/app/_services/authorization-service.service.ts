@@ -24,51 +24,53 @@ export class Auth {
 
 
     ///////////////////
-    isJwtOk(): boolean {
+    isJwtOk(): Promise<void> {
   
-      console.log(`func isJwtOk`)
+      return new Promise<void> ( (resolve, reject) => {
+
+        console.log(`func isJwtOk`)
   
-      const token = this.cookieService.get('jwt')
-      const ref = localStorage.getItem('ref')
-  
-      if (ref == '' || ref == null || ref == undefined) {
-        console.log(`without refresh!`)
-        return false
-      }
-  
-      console.log(`has ref`)
-  
-      if (token != undefined && token != '') {
-        console.log(`has token, it will decoded`)
-        console.log(token)
-        const decoded: DecodedToken = jwtDecode(token);
-        console.log(`token was decoded`)
-        if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
-          console.log(`jwt explaim`)
-          this.refresh().subscribe((val: User) => {
-            console.log('check again')
-            this.isJwtOk()
-          })
-        } else {
-          console.log(`jwt is ok`)
-          return true
+        const token = this.cookieService.get('jwt')
+        const ref = localStorage.getItem('ref')
+    
+        if (ref == '' || ref == null || ref == undefined) {
+          console.log(`without refresh!`)
+          reject()
         }
-      }
-  
-      if (ref != '' || ref != null || ref != undefined) {
-        console.log(`refresh?`)
-        this.refresh().subscribe(val => {
-          if (val == null) {
-            console.log('back false')
-            return false
+    
+        console.log(`has ref`)
+    
+        if (token != undefined && token != '') {
+          console.log(`has token, it will decoded`)
+          console.log(token)
+          const decoded: DecodedToken = jwtDecode(token);
+          console.log(`token was decoded`)
+          if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
+            console.log(`jwt explaim`)
+            this.refresh().subscribe((val: User) => {
+              console.log('check again')
+              this.isJwtOk()
+            })
           } else {
-            return this.isJwtOk()
+            console.log(`jwt is ok`)
+            resolve()
           }
-        })
-      } else if (token == '') {
-        console.log('back false 2')
-        return false
-      }
+        }
+    
+        if (ref != '' || ref != null || ref != undefined) {
+          console.log(`refresh?`)
+          this.refresh().subscribe(val => {
+            if (val == null) {
+              console.log('back false')
+              reject()
+            }
+          })
+        } else if (token == '') {
+          console.log('back false 2')
+          reject()
+        }
+
+      })
   
     }
   

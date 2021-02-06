@@ -2,15 +2,27 @@
  <div class='card w-100'>
 
     <div id="userView">
-        <picture *ngIf="user != undefined" class='w-50'>
-                 <img id='avatar' src="{{ avatarPath }}" loading="lazy" width='100%' height="100%" style='object-fit: cover; '/>
-                <label class='upload' for="fusk"> upload new photo </label>
-                <input id="fusk" type="file" name="photo" style="display: none;" multiple (change)="fileBrowseHandler($event.target.files)">
-        </picture>
+        <div >
+            <picture *ngIf="user != undefined" class='w-50'>
+                <img id='avatar' src="{{ avatarPath }}" loading="lazy" width='400px' height="400px" style='object-fit: cover; '/>
+               <label class='upload' for="fusk"> upload new photo </label>
+               <input id="fusk" type="file" name="photo" style="display: none;" multiple (change)="fileBrowseHandler($event.target.files)">
+            </picture>
+        </div>
         <div *ngIf="user != undefined" id='about'>
             <p>{{ "Username: " + user.username }}</p>
             <p>{{ "email: " + user.email }}</p>
             <p>{{ "Has blogs: " + user.blogs.length }}</p>
+        </div>
+        <div *ngIf="usersOnline.length > 0">
+            <span>
+                users online: 
+            </span>
+            <div *ngFor="let user of usersOnline" id='users'>
+                <span>
+                    {{user.username}}
+                </span>
+        </div>
         </div>
     </div>
 

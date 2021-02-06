@@ -1,11 +1,8 @@
 import { } from '@angular/core'
+import { environment } from 'src/environments/environment'
 
 export class Constants {
-    //public static server: string = 'http://10.0.0.102:8000/'
-    public static server: string = 'http://10.0.1.6:8000/'
-    public static wsserver: string = Constants.server.replace('http', 'ws')
-    //public static server: string = 'http://10.0.0.85:8000/'
-   
+
     public static defaultMenu () : Array<ElemntMenu> {
 
         let menus = new Array<ElemntMenu>()
@@ -21,7 +18,6 @@ export class Constants {
     }
 
     public static isMobile () : boolean {
-        //console.log (document.getElementById('navbar').clientHeight / document.getElementById('backgroundImage').clientHeight  * 100)
         if ( navigator.appVersion.toLocaleLowerCase().includes('android') || navigator.appVersion.toLocaleLowerCase().includes('ios')) {
             return true
         } else {
@@ -29,12 +25,12 @@ export class Constants {
         }
     }
 
-    public static imagePath = Constants.server + 'images/system/earth-globe.png'
+    public static imagePath = environment.server + 'images/system/earth-globe.png'
 
-    public static imageLike = Constants.server + 'images/system/like.png'
-    public static imageDislike = Constants.server + 'images/system/dislike.png'
-    public static imageReport = Constants.server + 'images/system/report.png'
-    public static imageNoEmotion = Constants.server + 'images/system/noemotions.png'
+    public static imageLike = environment.server + 'images/system/like.png'
+    public static imageDislike = environment.server + 'images/system/dislike.png'
+    public static imageReport = environment.server + 'images/system/report.png'
+    public static imageNoEmotion = environment.server + 'images/system/noemotions.png'
     
 }
 

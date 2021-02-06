@@ -1,10 +1,10 @@
 "use strict";
 exports.__esModule = true;
 exports.ElemntMenu = exports.Constants = void 0;
+var environment_1 = require("src/environments/environment");
 var Constants = /** @class */ (function () {
     function Constants() {
     }
-    //public static server: string = 'http://10.0.0.85:8000/'
     Constants.defaultMenu = function () {
         var menus = new Array();
         menus.push(new ElemntMenu('home', '/home'));
@@ -15,7 +15,6 @@ var Constants = /** @class */ (function () {
         return menus;
     };
     Constants.isMobile = function () {
-        //console.log (document.getElementById('navbar').clientHeight / document.getElementById('backgroundImage').clientHeight  * 100)
         if (navigator.appVersion.toLocaleLowerCase().includes('android') || navigator.appVersion.toLocaleLowerCase().includes('ios')) {
             return true;
         }
@@ -23,14 +22,11 @@ var Constants = /** @class */ (function () {
             return (document.getElementById("backgroundImage").clientWidth < document.getElementById("backgroundImage").clientHeight);
         }
     };
-    //public static server: string = 'http://10.0.0.102:8000/'
-    Constants.server = 'http://10.0.1.6:8000/';
-    Constants.wsserver = Constants.server.replace('http', 'ws');
-    Constants.imagePath = Constants.server + 'images/system/earth-globe.png';
-    Constants.imageLike = Constants.server + 'images/system/like.png';
-    Constants.imageDislike = Constants.server + 'images/system/dislike.png';
-    Constants.imageReport = Constants.server + 'images/system/report.png';
-    Constants.imageNoEmotion = Constants.server + 'images/system/noemotions.png';
+    Constants.imagePath = environment_1.environment.server + 'images/system/earth-globe.png';
+    Constants.imageLike = environment_1.environment.server + 'images/system/like.png';
+    Constants.imageDislike = environment_1.environment.server + 'images/system/dislike.png';
+    Constants.imageReport = environment_1.environment.server + 'images/system/report.png';
+    Constants.imageNoEmotion = environment_1.environment.server + 'images/system/noemotions.png';
     return Constants;
 }());
 exports.Constants = Constants;

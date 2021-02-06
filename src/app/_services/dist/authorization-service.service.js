@@ -22,47 +22,46 @@ var Auth = /** @class */ (function () {
     ///////////////////
     Auth.prototype.isJwtOk = function () {
         var _this = this;
-        console.log("func isJwtOk");
-        var token = this.cookieService.get('jwt');
-        var ref = localStorage.getItem('ref');
-        if (ref == '' || ref == null || ref == undefined) {
-            console.log("without refresh!");
-            return false;
-        }
-        console.log("has ref");
-        if (token != undefined && token != '') {
-            console.log("has token, it will decoded");
-            console.log(token);
-            var decoded = jwt_decode_1["default"](token);
-            console.log("token was decoded");
-            if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
-                console.log("jwt explaim");
-                this.refresh().subscribe(function (val) {
-                    console.log('check again');
-                    _this.isJwtOk();
-                });
+        return new Promise(function (resolve, reject) {
+            console.log("func isJwtOk");
+            var token = _this.cookieService.get('jwt');
+            var ref = localStorage.getItem('ref');
+            if (ref == '' || ref == null || ref == undefined) {
+                console.log("without refresh!");
+                reject();
             }
-            else {
-                console.log("jwt is ok");
-                return true;
-            }
-        }
-        if (ref != '' || ref != null || ref != undefined) {
-            console.log("refresh?");
-            this.refresh().subscribe(function (val) {
-                if (val == null) {
-                    console.log('back false');
-                    return false;
+            console.log("has ref");
+            if (token != undefined && token != '') {
+                console.log("has token, it will decoded");
+                console.log(token);
+                var decoded = jwt_decode_1["default"](token);
+                console.log("token was decoded");
+                if (Math.floor((new Date).getTime() / 1000) > decoded.exp) {
+                    console.log("jwt explaim");
+                    _this.refresh().subscribe(function (val) {
+                        console.log('check again');
+                        _this.isJwtOk();
+                    });
                 }
                 else {
-                    return _this.isJwtOk();
+                    console.log("jwt is ok");
+                    resolve();
                 }
-            });
-        }
-        else if (token == '') {
-            console.log('back false 2');
-            return false;
-        }
+            }
+            if (ref != '' || ref != null || ref != undefined) {
+                console.log("refresh?");
+                _this.refresh().subscribe(function (val) {
+                    if (val == null) {
+                        console.log('back false');
+                        reject();
+                    }
+                });
+            }
+            else if (token == '') {
+                console.log('back false 2');
+                reject();
+            }
+        });
     };
     Auth.prototype.saveUser = function (user) {
         console.log('4 save user');

@@ -37,10 +37,12 @@ export class Http {
 
     let result = new Promise<Resp<t>>((result, reject) => {
       //token
-      if (this.auth.isJwtOk()) {
+      this.auth.isJwtOk().then ( () => {
+
         let timeout = setTimeout(() => {
           reject(new Error("timeout"));
         }, 10000);
+
         //request
         let request = this.http
           .get<t>(url, { headers: this.auth.jwtHeader(), observe: "response" })
@@ -51,8 +53,13 @@ export class Http {
             })
           )
           .subscribe();
+
       }
+    ).catch ( () => {
+      reject('token did not refreshed')
+    })
     });
+
     return result;
   }
 

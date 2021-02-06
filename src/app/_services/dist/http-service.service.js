@@ -30,19 +30,21 @@ var Http = /** @class */ (function () {
         }
         var result = new Promise(function (result, reject) {
             //token
-            if (_this.auth.isJwtOk()) {
-                var timeout_1 = setTimeout(function () {
+            _this.auth.isJwtOk().then(function () {
+                var timeout = setTimeout(function () {
                     reject(new Error("timeout"));
                 }, 10000);
                 //request
                 var request = _this.http
                     .get(url, { headers: _this.auth.jwtHeader(), observe: "response" })
                     .pipe(operators_1.map(function (response) {
-                    clearTimeout(timeout_1);
+                    clearTimeout(timeout);
                     result(new Resp(response.status, response.body));
                 }))
                     .subscribe();
-            }
+            })["catch"](function () {
+                reject('token did not refreshed');
+            });
         });
         return result;
     };
@@ -52,7 +54,7 @@ var Http = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             //token
             if (_this.auth.isJwtOk()) {
-                var timeout_2 = setTimeout(function () {
+                var timeout_1 = setTimeout(function () {
                     reject(new Error("timeout"));
                 }, 10000);
                 //request
@@ -61,7 +63,7 @@ var Http = /** @class */ (function () {
                     observe: "response"
                 })
                     .pipe(operators_1.map(function (response) {
-                    clearTimeout(timeout_2);
+                    clearTimeout(timeout_1);
                     resolve(new Resp(response.status, response.body));
                 }))
                     .subscribe();
@@ -74,7 +76,7 @@ var Http = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             //token
             if (_this.auth.isJwtOk()) {
-                var timeout_3 = setTimeout(function () {
+                var timeout_2 = setTimeout(function () {
                     reject(new Error("timeout"));
                 }, 10000);
                 //request
@@ -84,7 +86,7 @@ var Http = /** @class */ (function () {
                     observe: "response"
                 })
                     .pipe(operators_1.map(function (response) {
-                    clearTimeout(timeout_3);
+                    clearTimeout(timeout_2);
                     resolve(new Resp(response.status, response.body));
                 }))
                     .subscribe();
@@ -97,7 +99,7 @@ var Http = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             //token
             if (_this.auth.isJwtOk()) {
-                var timeout_4 = setTimeout(function () {
+                var timeout_3 = setTimeout(function () {
                     reject(new Error("timeout"));
                 }, 10000);
                 //request
@@ -106,7 +108,7 @@ var Http = /** @class */ (function () {
                     observe: "response"
                 })
                     .pipe(operators_1.map(function (response) {
-                    clearTimeout(timeout_4);
+                    clearTimeout(timeout_3);
                     resolve(new Resp(response.status, response.body));
                 }))
                     .subscribe();

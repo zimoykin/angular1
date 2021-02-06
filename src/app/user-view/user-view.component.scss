@@ -1,8 +1,6 @@
 
 #userView {
-    background-color: rgba($color: #B9DEDF, $alpha: .5);
-   
-    height: 15rem;
+    background-color: rgba($color: #B9DEDF, $alpha: .5);   
     display: flex;
 }
 .card {
@@ -12,6 +10,18 @@
     display: inline-block;
     padding: .5rem;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+#users{
+    display: block;
+    width: 2
+    
+    00px;
+    background-color: #65A1A0;
+    padding: 1rem;
+    color: wheat;
+    font-weight: 200;
+    text-align: left; 
+    right: 0;
 }
 
 #about {
@@ -51,9 +61,9 @@
     bottom: 0;
     text-align: center;
     border-radius: 1rem;
-    left: 50%;
-    -ms-transform: translateX(-50%);
-    transform: translateX(-50%);
+    left: 50px;
+    // -ms-transform: translateX(-50%);
+    // transform: translateX(-50%);
     font-weight: lighter;
     border-style: none;
     background-color: rgba($color: #B9DEDF, $alpha: .5);

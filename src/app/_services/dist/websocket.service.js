@@ -9,7 +9,7 @@ exports.__esModule = true;
 exports.WebsocketService = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
-var Constants_1 = require("../_model/Constants");
+var environment_1 = require("src/environments/environment");
 var User_1 = require("../_model/User");
 var WebsocketService = /** @class */ (function () {
     function WebsocketService(cookieService) {
@@ -18,7 +18,7 @@ var WebsocketService = /** @class */ (function () {
         this.online$ = new rxjs_1.BehaviorSubject(undefined);
         this.connected$ = new rxjs_1.BehaviorSubject(false);
         var accessToken = cookieService.get('jwt');
-        var ws = new WebSocket(Constants_1.Constants.wsserver + "api/ws");
+        var ws = new WebSocket(environment_1.environment.wsserver + "api/ws");
         ws.onopen = function (event) {
             console.log(event);
             ws.send(accessToken);

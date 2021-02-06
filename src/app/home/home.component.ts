@@ -66,6 +66,10 @@ export class HomeComponent implements OnInit {
         this.length = (<Page<string>>response.body).metadata.total
 
       })
+      .catch ( (answer) => {
+        alert (answer)
+        this.isLoaded$.next( true )
+      })
 
     }
 

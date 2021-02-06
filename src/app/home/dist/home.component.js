@@ -46,6 +46,9 @@ var HomeComponent = /** @class */ (function () {
             _this.isLoaded$.next(true);
             _this.list$.next(response.body.items);
             _this.length = response.body.metadata.total;
+        })["catch"](function (answer) {
+            alert(answer);
+            _this.isLoaded$.next(true);
         });
     };
     HomeComponent.prototype.ngOnDestroy = function () {

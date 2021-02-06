@@ -6,6 +6,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { Http } from '../_services/http-service.service';
+import { WebsocketService } from '../_services/websocket.service';
 
 @Component({
   selector: 'app-user-view',
@@ -14,12 +15,23 @@ import { Http } from '../_services/http-service.service';
 })
 export class UserViewComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private http: Http) { }
+  constructor(
+    private route: ActivatedRoute, 
+    private http: Http,
+    private ws: WebsocketService
+    ) { }
 
   user: UserFullInfo
   avatarPath: string
+  usersOnline: [UserPublic]
 
   ngOnInit(): void {
+
+    this.ws.online$.subscribe ( obser => {
+      if ( obser != undefined) {
+        this.usersOnline = obser
+      }
+    })
 
     this.route.paramMap.subscribe(params => {
       let userID = params.get('userid')

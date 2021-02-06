@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Constants as K } from '../_model/Constants';
 import { UserPublic } from '../_model/User';
 
@@ -39,7 +40,7 @@ export class WebsocketService {
   constructor (private cookieService: CookieService) {
     
     const accessToken = cookieService.get('jwt')
-    const ws = new WebSocket(`${K.wsserver}api/ws`);
+    const ws = new WebSocket(`${environment.wsserver}api/ws`);
     
     ws.onopen = (event) => {
       console.log(event)

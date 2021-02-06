@@ -9,12 +9,18 @@ exports.__esModule = true;
 exports.UserViewComponent = void 0;
 var core_1 = require("@angular/core");
 var UserViewComponent = /** @class */ (function () {
-    function UserViewComponent(route, http) {
+    function UserViewComponent(route, http, ws) {
         this.route = route;
         this.http = http;
+        this.ws = ws;
     }
     UserViewComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.ws.online$.subscribe(function (obser) {
+            if (obser != undefined) {
+                _this.usersOnline = obser;
+            }
+        });
         this.route.paramMap.subscribe(function (params) {
             var userID = params.get('userid');
             if (userID != '') {
