@@ -2,6 +2,7 @@
 #userView {
     background-color: rgba($color: #B9DEDF, $alpha: .5);   
     display: flex;
+    background-color: #65A1A0;
 }
 .card {
     //padding-top: .5rem;
@@ -13,17 +14,23 @@
 }
 #users{
     display: block;
-    width: 2
-    
-    00px;
     background-color: #65A1A0;
     padding: 1rem;
     color: wheat;
     font-weight: 200;
     text-align: left; 
+    border-style: solid;
+    border-width: 1px;
     right: 0;
+  
 }
-
+#linkUser{
+    color: wheat;
+}
+#userOnline{
+    color: wheat;
+    text-align: center;
+}
 #about {
     display: block;
     width: 100%;
