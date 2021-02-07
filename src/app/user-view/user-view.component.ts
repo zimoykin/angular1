@@ -71,4 +71,8 @@ export class UserViewComponent implements OnInit {
 
   }
 
+  isMobile () : boolean {
+    return K.isMobile()
+  }
+
 }

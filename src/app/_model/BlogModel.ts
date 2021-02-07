@@ -11,6 +11,7 @@ export class BlogModel {
     place: Place
     created: string
     emotions: [Emotions]
+    messages: [Message]
 
   }
 
@@ -20,6 +21,12 @@ export class BlogModel {
     description: string
     country: Country
     image?: [string]
+  }
+
+  export class Message {
+    id: string
+    message: string
+    user: UserPublic
   }
 
   export class PlaceFull {

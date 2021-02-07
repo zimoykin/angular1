@@ -34,6 +34,8 @@ import { LoaderViewComponent } from './loader-view/loader-view.component';
 import { PlaceViewShortComponent } from './place-view-short/place-view-short.component';
 import { EmotionViewComponent } from './emotion-view/emotion-view.component';
 import { AgmCoreModule } from '@agm/core';
+import { MessageViewComponent } from './message-view/message-view.component';
+import { MessageViewShortComponent } from './message-view-short/message-view-short.component';
 
 
 
@@ -61,7 +63,9 @@ import { AgmCoreModule } from '@agm/core';
     SearchViewComponent,
     LoaderViewComponent,
     PlaceViewShortComponent,
-    EmotionViewComponent
+    EmotionViewComponent,
+    MessageViewComponent,
+    MessageViewShortComponent
   ],
   imports: [
     MDBBootstrapModule.forRoot(),

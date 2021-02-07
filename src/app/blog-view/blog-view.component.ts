@@ -110,7 +110,6 @@ export class BlogViewComponent implements OnInit {
 
 
   userOnline (userid: string) : boolean {
-    console.log('is online? ' + userid) 
     return this.onlineUsers.filter( (val) => {
       return val.id == userid
     }).length > 0

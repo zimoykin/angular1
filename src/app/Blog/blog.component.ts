@@ -147,7 +147,7 @@ export class blogComponent implements OnInit {
       this.currentPictures + 1 > this.imageList.length - 1
         ? 0
         : this.currentPictures + 1;
-    console.log("set" + this.currentPictures);
+   
     this.currentImage$.next(this.imageList[this.currentPictures]);
   }
 
@@ -156,7 +156,6 @@ export class blogComponent implements OnInit {
   }
 
   userOnline (userid: string) : boolean {
-    console.log('is online? ' + userid) 
     return this.onlineUsers.filter( (val) => {
       return val.id == userid
     }).length > 0

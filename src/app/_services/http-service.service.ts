@@ -142,6 +142,36 @@ export class Http {
       }
     });
   }
+
+
+  register<t>(path: string, body?: string): Promise<Resp<t>> {
+   
+    let url = this.server + path;
+
+    return new Promise( (resolve, reject) => {
+     
+        let timeout = setTimeout(() => {
+          reject(new Error("timeout"));
+        }, 10000);
+       
+        let request = this.http
+          .post<t>(
+            url,
+            body,
+            { observe: "response" }
+          )
+          .pipe(
+            map((response) => {
+              clearTimeout(timeout);
+              resolve(new Resp(response.status, response.body));
+            })
+          )
+          .subscribe();
+    });
+  }
+
+
+
 }
 
 export class Param {

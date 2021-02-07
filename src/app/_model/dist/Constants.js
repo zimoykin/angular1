@@ -27,6 +27,7 @@ var Constants = /** @class */ (function () {
     Constants.imageDislike = environment_1.environment.server + 'images/system/dislike.png';
     Constants.imageReport = environment_1.environment.server + 'images/system/report.png';
     Constants.imageNoEmotion = environment_1.environment.server + 'images/system/noemotions.png';
+    Constants.imageComment = environment_1.environment.server + 'images/system/message.png';
     return Constants;
 }());
 exports.Constants = Constants;

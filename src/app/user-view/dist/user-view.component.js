@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.UserViewComponent = void 0;
 var core_1 = require("@angular/core");
+var Constants_1 = require("../_model/Constants");
 var UserViewComponent = /** @class */ (function () {
     function UserViewComponent(route, http, ws) {
         this.route = route;
@@ -48,6 +49,9 @@ var UserViewComponent = /** @class */ (function () {
             console.log(val);
             window.location.reload();
         });
+    };
+    UserViewComponent.prototype.isMobile = function () {
+        return Constants_1.Constants.isMobile();
     };
     UserViewComponent = __decorate([
         core_1.Component({

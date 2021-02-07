@@ -168,7 +168,6 @@ var blogComponent = /** @class */ (function () {
                     this.currentPictures + 1 > this.imageList.length - 1
                         ? 0
                         : this.currentPictures + 1;
-                console.log("set" + this.currentPictures);
                 this.currentImage$.next(this.imageList[this.currentPictures]);
                 return [2 /*return*/];
             });
@@ -178,7 +177,6 @@ var blogComponent = /** @class */ (function () {
         return Constants_1.Constants.isMobile();
     };
     blogComponent.prototype.userOnline = function (userid) {
-        console.log('is online? ' + userid);
         return this.onlineUsers.filter(function (val) {
             return val.id == userid;
         }).length > 0;

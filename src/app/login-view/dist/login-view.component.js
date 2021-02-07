@@ -15,52 +15,61 @@ var LoginViewComponent = /** @class */ (function () {
     function LoginViewComponent(http, auth) {
         this.http = http;
         this.auth = auth;
-        this.imagePath$ = new rxjs_1.BehaviorSubject('');
-        this.mode = 'login';
+        this.imagePath$ = new rxjs_1.BehaviorSubject("");
+        this.mode = "login";
     }
     LoginViewComponent.prototype.ngOnInit = function () {
         var _this = this;
-        if (localStorage.getItem('user_id')) {
-            this.logined = localStorage.getItem('user_id');
-            this.username = localStorage.getItem('username');
-            this.http.get("api/users/full", [new http_service_service_1.Param('user_id', this.logined)])
+        if (localStorage.getItem("user_id")) {
+            this.logined = localStorage.getItem("user_id");
+            this.username = localStorage.getItem("username");
+            this.http
+                .get("api/users/full", [
+                new http_service_service_1.Param("user_id", this.logined),
+            ])
                 .then(function (val) {
                 _this.imagePath$.next(val.body.image);
             });
         }
         else {
-            this.logined = '';
+            this.logined = "";
         }
     };
     LoginViewComponent.prototype.login = function (cred) {
-        if (this.mode != 'login') {
-            this.mode = 'login';
+        if (this.mode != "login") {
+            this.mode = "login";
             return;
         }
-        if (cred.emailLogin.value != '' && cred.passwordLogin.value != '') {
-            this.auth.authorize(cred.emailLogin.value, cred.passwordLogin.value).subscribe(function (user) {
+        if (cred.emailLogin.value != "" && cred.passwordLogin.value != "") {
+            this.auth
+                .authorize(cred.emailLogin.value, cred.passwordLogin.value)
+                .subscribe(function (user) {
                 if (user != null) {
-                    window.location.href = '/home';
+                    window.location.href = "/home";
                 }
             });
         }
     };
     LoginViewComponent.prototype.registerNew = function (username, email, password) {
-        console.log('register' + password.value);
-        if (email.value != '' && password.value != '' && username.value != '') {
-            this.auth.register(username.value, email.value, password.value)
-                .subscribe(function (user) {
-                if (user != null) {
-                    window.location.href = '/home';
-                }
-            });
-        }
+        this.http
+            .register("api/users/signin", JSON.stringify({
+            username: username.value,
+            email: email.value,
+            password: password.value
+        }))
+            .then(function (response) {
+            if (response.status == 200) {
+                alert("check your email and confirm your account!");
+            }
+        })["catch"](function (error) {
+            alert(error);
+        });
     };
     LoginViewComponent.prototype.clickLogOut = function () {
         var _this = this;
         this.auth.logout().subscribe(function (val) {
             if (val) {
-                _this.logined = '';
+                _this.logined = "";
             }
         });
     };
@@ -68,13 +77,13 @@ var LoginViewComponent = /** @class */ (function () {
         return Constants_1.Constants.isMobile();
     };
     LoginViewComponent.prototype.changeMode = function () {
-        this.mode = this.mode == 'login' ? 'register' : 'login';
+        this.mode = this.mode == "login" ? "register" : "login";
     };
     LoginViewComponent = __decorate([
         core_1.Component({
-            selector: 'app-login-view',
-            templateUrl: './login-view.component.html',
-            styleUrls: ['./login-view.component.scss']
+            selector: "app-login-view",
+            templateUrl: "./login-view.component.html",
+            styleUrls: ["./login-view.component.scss"]
         })
     ], LoginViewComponent);
     return LoginViewComponent;

@@ -115,7 +115,7 @@ export class Auth {
     }
   
     register(username: string, email: string, password: string) : Observable<User> {
-      console.log("register")
+    
       const uri = `${environment.server}api/users/signin`;
   
       const user$ = new Observable<User>(obser => {

@@ -87,7 +87,6 @@ var BlogViewComponent = /** @class */ (function () {
         return Constants_1.Constants.isMobile();
     };
     BlogViewComponent.prototype.userOnline = function (userid) {
-        console.log('is online? ' + userid);
         return this.onlineUsers.filter(function (val) {
             return val.id == userid;
         }).length > 0;

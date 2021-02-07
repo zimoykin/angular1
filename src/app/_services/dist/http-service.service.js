@@ -115,6 +115,22 @@ var Http = /** @class */ (function () {
             }
         });
     };
+    Http.prototype.register = function (path, body) {
+        var _this = this;
+        var url = this.server + path;
+        return new Promise(function (resolve, reject) {
+            var timeout = setTimeout(function () {
+                reject(new Error("timeout"));
+            }, 10000);
+            var request = _this.http
+                .post(url, body, { observe: "response" })
+                .pipe(operators_1.map(function (response) {
+                clearTimeout(timeout);
+                resolve(new Resp(response.status, response.body));
+            }))
+                .subscribe();
+        });
+    };
     Http = __decorate([
         core_1.Injectable({
             providedIn: "root"

@@ -1,6 +1,5 @@
-#userView {
+.userView {
   background-color: rgba(185, 222, 223, 0.5);
-  display: flex;
   background-color: #65A1A0;
 }
 
@@ -12,20 +11,20 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-#users {
+.users {
+  display: flex;
+  justify-items: start;
+}
+
+.usersMobile {
   display: block;
-  background-color: #65A1A0;
-  padding: 1rem;
-  color: wheat;
-  font-weight: 200;
-  text-align: left;
-  border-style: solid;
-  border-width: 1px;
-  right: 0;
 }
 
 #linkUser {
   color: wheat;
+  font-weight: 100;
+  font-size: 12;
+  text-transform: lowercase;
 }
 
 #userOnline {
@@ -33,7 +32,7 @@
   text-align: center;
 }
 
-#about {
+.about {
   display: block;
   width: 100%;
   background-color: #65A1A0;
@@ -63,14 +62,13 @@
 }
 
 .upload {
-  margin-bottom: 1rem;
-  padding: 0.3rem;
-  z-index: 2;
-  position: absolute;
-  bottom: 0;
-  text-align: center;
+  top: 0;
+  left: 0;
+  margin: 1rem;
+  padding: 0.5rem;
   border-radius: 1rem;
-  left: 50px;
+  position: absolute;
+  z-index: 10;
   font-weight: lighter;
   border-style: none;
   background-color: rgba(185, 222, 223, 0.5);

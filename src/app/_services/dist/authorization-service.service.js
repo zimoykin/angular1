@@ -92,7 +92,6 @@ var Auth = /** @class */ (function () {
     };
     Auth.prototype.register = function (username, email, password) {
         var _this = this;
-        console.log("register");
         var uri = environment_1.environment.server + "api/users/signin";
         var user$ = new rxjs_1.Observable(function (obser) {
             _this.http.post(uri, JSON.stringify({

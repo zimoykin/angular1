@@ -31,7 +31,7 @@ export class Constants {
     public static imageDislike = environment.server + 'images/system/dislike.png'
     public static imageReport = environment.server + 'images/system/report.png'
     public static imageNoEmotion = environment.server + 'images/system/noemotions.png'
-    
+    public static imageComment = environment.server + 'images/system/message.png'
 }
 
 export interface DecodedToken {
