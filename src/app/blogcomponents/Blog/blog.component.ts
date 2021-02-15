@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { BehaviorSubject, Subject, observable, Observable } from "rxjs";
-import { BlogModel, Emotions } from "../_model/BlogModel";
-import { Constants as K } from "../_model/Constants";
-import { Emotion } from "../_model/Emotion";
-import { UserPublic } from "../_model/User";
-import { Http, Param } from "../_services/http-service.service";
-import { WebsocketService } from "../_services/websocket.service";
+import { BlogModel, Emotions } from "../../_model/BlogModel";
+import { Constants as K } from "../../_model/Constants";
+import { Emotion } from "../../_model/Emotion";
+import { UserPublic } from "../../_model/User";
+import { Http, Param } from "../../_services/http-service.service";
+import { WebsocketService } from "../../_services/websocket.service";
 
 @Component({
   selector: "app-blog",
@@ -97,7 +97,7 @@ export class blogComponent implements OnInit {
   }
 
   getImageSize(): string {
-    if (this.isMobile()) {
+    if (this.isMobile() ) {
       return document.getElementById("mainWindow").clientWidth + "px";
     } else {
       return document.getElementById("mainWindow").clientWidth / 2 + "px";

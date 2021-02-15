@@ -3,12 +3,12 @@ import { ActivatedRoute } from '@angular/router'
 import { BehaviorSubject, Observable, Subject } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
 import { CookieService } from 'ngx-cookie-service'
-import { Constants as K } from '../_model/Constants'
-import { BlogModel } from '../_model/BlogModel'
-import { Http, Param } from '../_services/http-service.service'
+import { Constants as K } from '../../_model/Constants'
+import { BlogModel } from '../../_model/BlogModel'
+import { Http, Param } from '../../_services/http-service.service'
 import { map } from 'rxjs/operators'
-import { WebsocketService } from '../_services/websocket.service'
-import { UserPublic } from '../_model/User'
+import { WebsocketService } from '../../_services/websocket.service'
+import { UserPublic } from '../../_model/User'
 
 @Component({
   selector: 'app-blog-view',

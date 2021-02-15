@@ -15,14 +15,10 @@
         </div>
     </div>
 
-    <div class='title d-flex' id='mainWindow' *ngIf="(isLoaded$|async) && (blog$|async)!=undefined">
-        <div class='w-100'>
-            <h2><a routerLink="/blog/{{ (blog$|async).id }}">{{ (blog$|async).title }}</a></h2>
-        </div>
-        <div *ngIf=" (userID$|async) == (blog$|async).user.id " class=''>
-            <h2 style="text-align: right;"><a routerLink="/edit/{{ (blog$|async).id }}">(edit)</a></h2>
-        </div>
+    <div class="w-100" id='mainWindow' *ngIf="(blog$|async)!=undefined">
+        <app-blogtitle [blog]="(blog$|async)"></app-blogtitle>
     </div>
+   
     <div *ngIf="(isLoaded$|async) && (blog$|async)!=undefined">
     
         <div class='blog' [ngStyle]="{'display': isMobile() ? 'block': 'flex'}">
@@ -64,8 +60,7 @@
                 </picture>
           
     
-            <div class='description p-1' [ngStyle]="{'width': isMobile() ? '100%': '50%' }"
-            >
+            <div class='description p-1' [ngStyle]="{'width': isMobile() ? '100%': '50%' }">
                 <span> {{ (blog$|async).description }} </span>
             </div>
     

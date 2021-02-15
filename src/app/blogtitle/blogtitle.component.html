@@ -1,0 +1,22 @@
+
+<div class="main">
+    <img 
+    src="{{blog.user.image}}"
+    width="50px"
+    height="50px"
+    />
+    <div class='subMain'>
+        <a routerLink="/blog/{{ blog.id }}">
+            <h4>{{ blog.title }}</h4>
+        </a>
+        <a routerLink="/user/{{ blog.user.id }}">
+            <div class="author">
+                <h5>{{ blog.user.username.toUpperCase() + " &#183; " }}</h5>
+                <h5>{{ blog.place.title.toUpperCase() + " &#183;  " + blog.place.country.title.toUpperCase() }}</h5>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+<!-- isUserOnline(blog.user.id) ? " border-style: solid; border-color: red; border-width: 1px;" -->

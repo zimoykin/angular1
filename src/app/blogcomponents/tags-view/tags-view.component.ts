@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BlogModel } from '../_model/BlogModel';
-import { Constants as K } from '../_model/Constants'
-import { Page } from '../_model/Pagination';
-import { Http, Param } from '../_services/http-service.service';
+import { BlogModel } from '../../_model/BlogModel';
+import { Constants as K } from '../../_model/Constants'
+import { Page } from '../../_model/Pagination';
+import { Http, Param } from '../../_services/http-service.service';
 
 
 @Component({

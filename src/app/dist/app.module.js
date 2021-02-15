@@ -13,12 +13,12 @@ var menu_1 = require("@angular/material/menu");
 var icon_1 = require("@angular/material/icon");
 var app_routing_module_1 = require("./app-routing.module");
 var app_component_1 = require("./app.component");
-var blog_component_1 = require("./blog/blog.component");
+var blog_component_1 = require("./blogcomponents/Blog/blog.component");
 var header_component_1 = require("./header/header.component");
 var angular_bootstrap_md_1 = require("angular-bootstrap-md");
 var http_1 = require("@angular/common/http");
 var home_component_1 = require("./home/home.component");
-var blog_view_component_1 = require("./blog-view/blog-view.component");
+var blog_view_component_1 = require("./blogcomponents/blog-view/blog-view.component");
 var contact_view_component_1 = require("./contact-view/contact-view.component");
 var user_view_component_1 = require("./user-view/user-view.component");
 var edit_post_view_component_1 = require("./edit-post-view/edit-post-view.component");
@@ -31,7 +31,7 @@ var animations_1 = require("@angular/platform-browser/animations");
 var select_1 = require("@angular/material/select/");
 var upload_image_view_component_1 = require("./upload-image-view/upload-image-view.component");
 var footerview_component_1 = require("./footerview/footerview.component");
-var tags_view_component_1 = require("./tags-view/tags-view.component");
+var tags_view_component_1 = require("./blogcomponents/tags-view/tags-view.component");
 var location_view_component_1 = require("./location-view/location-view.component");
 var author_view_component_1 = require("./author-view/author-view.component");
 var login_view_component_1 = require("./login-view/login-view.component");
@@ -41,8 +41,12 @@ var paginator_1 = require("@angular/material/paginator");
 var search_view_component_1 = require("./search-view/search-view.component");
 var loader_view_component_1 = require("./loader-view/loader-view.component");
 var place_view_short_component_1 = require("./place-view-short/place-view-short.component");
-var emotion_view_component_1 = require("./emotion-view/emotion-view.component");
+var emotion_view_component_1 = require("./blogcomponents/emotion-view/emotion-view.component");
 var core_2 = require("@agm/core");
+var message_view_component_1 = require("./Message/message-view/message-view.component");
+var message_view_short_component_1 = require("./Message/message-view-short/message-view-short.component");
+var write_message_component_1 = require("./Message/write-message/write-message.component");
+var blogtitle_component_1 = require("./blogtitle/blogtitle.component");
 //https://www.design-seeds.com/in-nature/nature-made/nature-tones-40/
 var AppModule = /** @class */ (function () {
     function AppModule() {
@@ -70,7 +74,11 @@ var AppModule = /** @class */ (function () {
                 search_view_component_1.SearchViewComponent,
                 loader_view_component_1.LoaderViewComponent,
                 place_view_short_component_1.PlaceViewShortComponent,
-                emotion_view_component_1.EmotionViewComponent
+                emotion_view_component_1.EmotionViewComponent,
+                message_view_component_1.MessageViewComponent,
+                message_view_short_component_1.MessageViewShortComponent,
+                write_message_component_1.WriteMessageComponent,
+                blogtitle_component_1.BlogtitleComponent
             ],
             imports: [
                 angular_bootstrap_md_1.MDBBootstrapModule.forRoot(),

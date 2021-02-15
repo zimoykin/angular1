@@ -9,8 +9,8 @@ exports.__esModule = true;
 exports.TagsViewComponent = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
-var Constants_1 = require("../_model/Constants");
-var http_service_service_1 = require("../_services/http-service.service");
+var Constants_1 = require("../../_model/Constants");
+var http_service_service_1 = require("../../_services/http-service.service");
 var TagsViewComponent = /** @class */ (function () {
     function TagsViewComponent(route, httpClient) {
         this.route = route;

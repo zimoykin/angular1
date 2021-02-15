@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.MessageViewShortComponent = void 0;
 var core_1 = require("@angular/core");
-var Constants_1 = require("../_model/Constants");
+var Constants_1 = require("../../_model/Constants");
 var MessageViewShortComponent = /** @class */ (function () {
     function MessageViewShortComponent() {
         this.imageIcon = Constants_1.Constants.imageComment;

@@ -3,10 +3,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Emotions } from '../_model/BlogModel';
-import { Constants as K } from '../_model/Constants'
-import { Emotion } from '../_model/Emotion';
-import { Http, Param } from '../_services/http-service.service';
+import { Emotions } from '../../_model/BlogModel';
+import { Constants as K } from '../../_model/Constants'
+import { Emotion } from '../../_model/Emotion';
+import { Http, Param } from '../../_services/http-service.service';
 
 @Component({
   selector: 'app-emotion-view',

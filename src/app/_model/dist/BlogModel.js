@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.Emotions = exports.Author = exports.BlogDraft = exports.Country = exports.PlaceFull = exports.Message = exports.Place = exports.BlogModel = void 0;
+exports.Emotions = exports.BlogDraft = exports.Country = exports.PlaceFull = exports.Message = exports.Place = exports.BlogModel = void 0;
 var BlogModel = /** @class */ (function () {
     function BlogModel() {
     }
@@ -37,12 +37,6 @@ var BlogDraft = /** @class */ (function () {
     return BlogDraft;
 }());
 exports.BlogDraft = BlogDraft;
-var Author = /** @class */ (function () {
-    function Author() {
-    }
-    return Author;
-}());
-exports.Author = Author;
 var Emotions = /** @class */ (function () {
     function Emotions() {
     }
